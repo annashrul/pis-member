@@ -1,5 +1,5 @@
 import { Card, Carousel } from 'antd';
-import { HeartTwoTone, PushpinTwoTone, StarTwoTone } from '@ant-design/icons';
+import { SafetyOutlined,HeartTwoTone, PushpinTwoTone, StarTwoTone } from '@ant-design/icons';
 const { Meta } = Card;
 
 import PropTypes from 'prop-types';
@@ -75,52 +75,40 @@ const Content = styled.div`
 `;
 
 const PostCard = ({ title, subtitle, text, images, imageHeight,price,handleClick }) => (
-  <StyledCard>
-    <Card
-        hoverable
-      cover={
-        <Cover style={{ height: imageHeight }}>
-          <Carousel
-            autoplay
-            autoplaySpeed={6000}
-            className="rounded-top overflow-hidden"
-          >
-            {images.map((image, index) => (
-              <div key={index}>
-                <div
-                  className="image"
-                  css={`
-                    background-image: url(${image});
-                    height: ${imageHeight}px;
-                  `}
-                />
-              </div>
-            ))}
-          </Carousel>
-          <div className="title p-4">
-            <h6 className="mb-0 text-white">{title}</h6>
-            <small className="mb-0 text-white-50">{subtitle}</small>
-          </div>
-        </Cover>
-      }
-      actions={[
-          <HeartTwoTone style={{fontSize: '20px'}} key={"checkout"} onClick={handleClick} />
-      ]}
-
-    >
-        <Meta title={Helper.toRp(price)}/>
-
-      <Content>{Helper.rmHtml(text)}</Content>
-    </Card>
-  </StyledCard>
+    <StyledCard>
+        <Card
+            hoverable
+            cover={
+                <Cover style={{ height: imageHeight }}>
+                    <Carousel autoplay autoplaySpeed={6000} className="rounded-top overflow-hidden">
+                        {images.map((image, index) => (
+                            <div key={index}>
+                                <div className="image" css={`background-image: url(${image});height: ${imageHeight}px;`}/>
+                            </div>
+                        ))}
+                    </Carousel>
+                    <div className="title p-4">
+                        <h6 className="mb-0 text-white">{title}</h6>
+                        <small className="mb-0 text-white-50">{subtitle}</small>
+                    </div>
+                </Cover>
+            }
+            actions={handleClick?[
+                <SafetyOutlined style={{fontSize: '24px'}} key={"checkout"} onClick={handleClick} />
+            ]:[]}
+        >
+            <Meta title={Helper.toRp(price)}/>
+            <Content>{Helper.rmHtml(text)}</Content>
+        </Card>
+    </StyledCard>
 );
 
 PostCard.propTypes = {
-  title: PropTypes.string,
-  subtitle: PropTypes.string,
-  text: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  imageHeight: PropTypes.number.isRequired
+    title: PropTypes.string,
+    subtitle: PropTypes.string,
+    text: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    imageHeight: PropTypes.number.isRequired
 };
 
 export default PostCard;

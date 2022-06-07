@@ -87,7 +87,8 @@ const SidebarContent = ({
         >
             {appRoutes.map((route, index) => {
                 const hasChildren = !!route.children;
-                if (!hasChildren)
+                if (!hasChildren){
+                    
                     return (
                         <Menu.Item
                             key={getKey(route.name, index)}
@@ -108,6 +109,8 @@ const SidebarContent = ({
                             </Link>
                         </Menu.Item>
                     );
+                }
+
 
                 if (hasChildren)
                     return (

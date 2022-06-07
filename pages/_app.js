@@ -18,7 +18,6 @@ axios.defaults.headers.common['X-Requested-From'] = `apps`;
 // LogRocket.init('9razfl/prowara');
 const coo=Cookies.get('_prowara');
 if(coo!==undefined) {
-    console.log("token",atob(coo));
     axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
     const decodedToken = jwt_decode(atob(coo));
     const dateNow = new Date();
@@ -27,7 +26,6 @@ if(coo!==undefined) {
         window.location.href = '/signin';
     }
     else{
-        console.log("abuuuuuuuuuuuuuuuuuuus")
     }
 
 }

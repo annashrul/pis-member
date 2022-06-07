@@ -46,7 +46,7 @@ const ListProduct = () => {
         <Row gutter={16}>
             {
                 (arrDatum.data!==undefined&&arrDatum.data.length>0)&&arrDatum.data.map((val,key)=>{
-                    return <Col xs={24} sm={12} md={6} key={key}>
+                    return <Col className="mb-2" xs={24} sm={12} md={6} key={key}>
                         <PostCard
                             title={val.title}
                             subtitle={val.category}

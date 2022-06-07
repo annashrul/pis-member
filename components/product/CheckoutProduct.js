@@ -14,6 +14,7 @@ const CheckoutProduct = () =>{
 
     const [state] = useAppState();
     const [arrKurir,setArrKurir]= useState([]);
+    const [arrChannel,setArrChannel]= useState([]);
     const [arrLayanan,setArrLayanan]= useState([]);
     const [idxKurir,setIdxKurir]= useState(0);
     const [idxAddress,setIdxAddress]= useState(0);
@@ -28,6 +29,7 @@ const CheckoutProduct = () =>{
 
     useEffect(() => {
         handleLoadAddress();
+        handleLoadChannel();
     }, []);
     const handleLoadAddress = async()=>{
         await handleGet("address?page=1",(datum,isLoading)=>{
@@ -39,7 +41,7 @@ const CheckoutProduct = () =>{
     const handleLoadKurir = async()=>{
         await handleGet("transaction/kurir/show",(datum,isLoading)=>{
             setArrKurir(datum.data);
-            setTimeout(()=>handleLayanan(idxKurir,Router.query.kd_kec,datum.data[0].kurir),100);
+            handleLayanan(idxKurir,Router.query.kd_kec,datum.data[idxKurir].kurir)
         })
     };
 
@@ -48,10 +50,20 @@ const CheckoutProduct = () =>{
         const field={"ke":addr, "berat":"100", "kurir":kurir};
         await handlePost('transaction/kurir/cek/ongkir',field,(datum,status,msg)=>{
             setIdxKurir(idx);
+            setIdxLayanan(0);
             setArrLayanan(datum.data.ongkir);
             setOngkir(parseInt(datum.data.ongkir.length>0?datum.data.ongkir[0].cost:0,10))
         })
     };
+    const handleLoadChannel = async()=>{
+        await handleGet("transaction/channel",(datum,isLoading)=>{
+            setArrChannel(datum.data);
+            console.log("channel",datum.data)
+        })
+    };
+
+
+
     return (
         <div>
 
@@ -89,14 +101,14 @@ const CheckoutProduct = () =>{
                                         return (
                                             <Button
                                                 key={key}
-                                                size="medium"
+                                                size="small"
                                                 type={idxKurir===key?`primary`:`info`}
                                                 className={'mr-2 mb-2 mt-2'}
                                                 onClick={()=>{
                                                     handleLayanan(key,objAddress[idxAddress].kd_kec,val.kurir)
                                                 }}
                                             >
-                                                {val.title}
+                                                <small>{val.title}</small>
                                             </Button>
                                         );
                                     })
@@ -110,16 +122,15 @@ const CheckoutProduct = () =>{
                                         return (
                                             <Button
                                                 key={key}
-                                                size="medium"
+                                                size="small"
                                                 type={idxLayanan===key?'primary':'info'}
-                                                className={'mr-2 mb-2 mt-2'}
+                                                className={'mb-2 mt-2 mr-2'}
                                                 onClick={()=>{
-                                                    // setIdxKurir(0);
                                                     setIdxLayanan(key);
                                                     setOngkir(parseInt(val.cost,10));
                                                 }}
                                             >
-                                                {val.service} | {val.description} | {Helper.toRp(val.cost)}
+                                                <small>{val.description} | {Helper.toRp(val.cost)} | {val.estimasi}</small>
                                             </Button>
                                         );
                                     }):"tidak ada layanan yang tersedia"
@@ -170,6 +181,19 @@ const CheckoutProduct = () =>{
                                     <Col xs={12} md={12}><p>Total Belanja</p></Col>
                                     <Col xs={12} md={12}><p className="text-right">{Helper.toRp(total+ongkir)}</p></Col>
                                 </Row>
+                            </Card>
+
+                            <Card>
+                                <Button
+                                    style={{width:"100%"}}
+                                    size="medium"
+                                    type={'primary'}
+                                    onClick={()=>{
+
+                                    }}
+                                >
+                                    Bayar
+                                </Button>
                             </Card>
                         </Col>
                     </Row>

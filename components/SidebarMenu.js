@@ -127,7 +127,7 @@ const SidebarContent = ({
                                 return <Menu.Item
                                     key={getKey(subitem.name, index)}
                                     className={
-                                        pathname === subitem.path ? 'ant-menu-item-selected' : ''
+                                        pathname==='/checkout'||pathname === subitem.path ? 'ant-menu-item-selected' : ''
                                     }
                                     onClick={() => {
                                         if (state.mobile) dispatch({ type: 'mobileDrawer' });

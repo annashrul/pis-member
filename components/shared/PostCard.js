@@ -80,13 +80,10 @@ const PostCard = ({ title, subtitle, text, images, imageHeight,price,handleClick
             hoverable
             cover={
                 <Cover style={{ height: imageHeight }}>
-                    <Carousel autoplay autoplaySpeed={6000} className="rounded-top overflow-hidden">
-                        {images.map((image, index) => (
-                            <div key={index}>
-                                <div className="image" css={`background-image: url(${image});height: ${imageHeight}px;`}/>
-                            </div>
-                        ))}
-                    </Carousel>
+                    <div>
+                        <div className="image" css={`background-image: url(${images});height: ${imageHeight}px;`}/>
+                    </div>
+
                     <div className="title p-4">
                         <h6 className="mb-0 text-white">{title}</h6>
                         <small className="mb-0 text-white-50">{subtitle}</small>

@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96ecd1f0-23e0-4588-9a07-2544726d67bb" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/components/product/CheckoutProduct.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pages/alamat.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pages/checkout.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/action/baseAction.js" afterPath="$PROJECT_DIR$/action/baseAction.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/components/SidebarMenu.js" afterPath="$PROJECT_DIR$/components/SidebarMenu.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/components/product/ListProduct.js" afterPath="$PROJECT_DIR$/components/product/ListProduct.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/components/shared/PostCard.js" afterPath="$PROJECT_DIR$/components/shared/PostCard.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/components/shared/StatCard.js" afterPath="$PROJECT_DIR$/components/shared/StatCard.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/routes.js" afterPath="$PROJECT_DIR$/lib/routes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pages/_app.js" afterPath="$PROJECT_DIR$/pages/_app.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,11 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CheckoutProduct.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CheckoutProduct.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/components/product/CheckoutProduct.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="116" column="67" lean-forward="false" selection-start-line="116" selection-start-column="67" selection-end-line="116" selection-end-column="67" />
+            <state relative-caret-position="177">
+              <caret line="113" column="85" lean-forward="false" selection-start-line="113" selection-start-column="85" selection-end-line="113" selection-end-column="85" />
               <folding>
                 <element signature="e#0#65#0" expanded="true" />
                 <element signature="e#2312#3798#0" expanded="false" />
@@ -49,13 +40,33 @@
       <file leaf-file-name="ListProduct.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/components/product/ListProduct.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
+            <state relative-caret-position="32">
+              <caret line="49" column="30" lean-forward="false" selection-start-line="49" selection-start-column="30" selection-end-line="49" selection-end-column="30" />
               <folding>
                 <element signature="e#0#95#0" expanded="true" />
                 <element signature="e#655#775#0" expanded="false" />
                 <element signature="e#818#939#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PostCard.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/components/shared/PostCard.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="151">
+              <caret line="80" column="19" lean-forward="false" selection-start-line="80" selection-start-column="19" selection-end-line="80" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SidebarMenu.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/components/SidebarMenu.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="192">
+              <caret line="129" column="53" lean-forward="false" selection-start-line="129" selection-start-column="53" selection-end-line="129" selection-end-column="53" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -128,15 +139,15 @@
         <option value="$PROJECT_DIR$/pages/alamat.js" />
         <option value="$PROJECT_DIR$/lib/routes.js" />
         <option value="$PROJECT_DIR$/pages/_app.js" />
-        <option value="$PROJECT_DIR$/components/SidebarMenu.js" />
         <option value="$PROJECT_DIR$/pages/signin.js" />
         <option value="$PROJECT_DIR$/pages/checkout.js" />
         <option value="$PROJECT_DIR$/components/shared/StatCard.js" />
         <option value="$PROJECT_DIR$/components/Widgets.js" />
         <option value="$PROJECT_DIR$/components/product/ListProduct.js" />
         <option value="$PROJECT_DIR$/action/baseAction.js" />
-        <option value="$PROJECT_DIR$/components/shared/PostCard.js" />
         <option value="$PROJECT_DIR$/components/product/CheckoutProduct.js" />
+        <option value="$PROJECT_DIR$/components/shared/PostCard.js" />
+        <option value="$PROJECT_DIR$/components/SidebarMenu.js" />
       </list>
     </option>
   </component>
@@ -191,12 +202,6 @@
               <item name="pis-member" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="components" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="product" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="pis-member" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pis-member" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="components" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="shared" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="pis-member" type="b2602c69:ProjectViewProjectNode" />
@@ -262,12 +267,12 @@
       <workItem from="1654511153806" duration="17000" />
       <workItem from="1654525642269" duration="14486000" />
       <workItem from="1654577439952" duration="15000" />
-      <workItem from="1654585451259" duration="17489000" />
+      <workItem from="1654585451259" duration="17761000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54544000" />
+    <option name="totallyTimeSpent" value="54816000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -291,7 +296,7 @@
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36842105" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -551,16 +556,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/components/SidebarMenu.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="90" column="20" lean-forward="false" selection-start-line="90" selection-start-column="20" selection-end-line="90" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#166#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pages/alamat.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="80">
@@ -711,18 +706,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/components/shared/PostCard.js">
+    <entry file="file://$PROJECT_DIR$/components/product/CheckoutProduct.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="97" column="16" lean-forward="false" selection-start-line="97" selection-start-column="16" selection-end-line="97" selection-end-column="16" />
-          <folding />
+        <state relative-caret-position="177">
+          <caret line="113" column="85" lean-forward="false" selection-start-line="113" selection-start-column="85" selection-end-line="113" selection-end-column="85" />
+          <folding>
+            <element signature="e#0#65#0" expanded="true" />
+            <element signature="e#2312#3798#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/components/product/ListProduct.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
+        <state relative-caret-position="32">
+          <caret line="49" column="30" lean-forward="false" selection-start-line="49" selection-start-column="30" selection-end-line="49" selection-end-column="30" />
           <folding>
             <element signature="e#0#95#0" expanded="true" />
             <element signature="e#655#775#0" expanded="false" />
@@ -731,14 +729,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/components/product/CheckoutProduct.js">
+    <entry file="file://$PROJECT_DIR$/components/shared/PostCard.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="116" column="67" lean-forward="false" selection-start-line="116" selection-start-column="67" selection-end-line="116" selection-end-column="67" />
-          <folding>
-            <element signature="e#0#65#0" expanded="true" />
-            <element signature="e#2312#3798#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="151">
+          <caret line="80" column="19" lean-forward="false" selection-start-line="80" selection-start-column="19" selection-end-line="80" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/components/SidebarMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="129" column="53" lean-forward="false" selection-start-line="129" selection-start-column="53" selection-end-line="129" selection-end-column="53" />
+          <folding />
         </state>
       </provider>
     </entry>

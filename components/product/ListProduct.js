@@ -1,6 +1,5 @@
 import { BellOutlined, BookOutlined, MessageOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Col, Message, Row } from 'antd';
-import MockFeed from '../../demos/mock/feed';
 import PostCard from '../shared/PostCard';
 import React, { useEffect, useState } from 'react';
 import {handleGet} from "../../action/baseAction";
@@ -69,6 +68,7 @@ const ListProduct = () => {
                                         if(parseInt(val.stock,10) < 1){
                                             Message.info("stock tidak tersedia");
                                         }else{
+                                            Object.assign(val,{id_paket:val.id});
                                             Object.assign(objAddress,val);
                                             Router.push({pathname:'/checkout',query:objAddress},'/checkout',)
                                         }

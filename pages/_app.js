@@ -11,10 +11,10 @@ import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import Action from "../action/auth.action"
 
-
 axios.defaults.headers.common['Content-Type'] = `application/x-www-form-urlencoded`;
 axios.defaults.headers.common['X-Project-ID'] = `296cd1b03960e8c8176fe06464c58ab8`;
 axios.defaults.headers.common['X-Requested-From'] = `apps`;
+
 // LogRocket.init('9razfl/prowara');
 const coo=Cookies.get('_prowara');
 if(coo!==undefined) {

@@ -1,6 +1,7 @@
 
 import Action from "./httpService";
 import { Col, Message, Row } from 'antd';
+import axios from "axios";
 
 export const handleGet = async(url,callback)=>{
     try{
@@ -13,12 +14,48 @@ export const handleGet = async(url,callback)=>{
 };
 
 export const handlePost = async (url, data, callback) => {
-    let hide = Message.loading('tunggu sebentar..');
+    // const hide = Message.loading('tunggu sebentar..');
+    console.log("loading .....")
+
     try {
         const submitData = await Action.post(Action.apiUrl+url, data);
         const datum = submitData.data;
-        if (datum.status === 'success') {
-            callback(datum, true, 'Berhasil memproses permintaan.');
+        if (submitData.status===200) {
+            callback(datum, true, 'Berhasil');
+        } else {
+            callback(datum, false, 'gagal memproses permintaan.');
+        }
+
+    } catch (err) {
+        callback([], false, 'gagal');
+        console.log(err);
+        Message.info("terjadi kesalahan server")
+    }
+};
+
+export const handlePut = async (url, data, callback) => {
+    let hide = Message.loading('tunggu sebentar..');
+    try {
+        const submitData = await Action.put(Action.apiUrl+url, data);
+        const datum = submitData.data;
+        if (submitData.status===200) {
+            callback(datum, true, 'Berhasil');
+        } else {
+            callback(datum, false, 'gagal memproses permintaan.');
+        }
+        setTimeout(hide,200);
+    } catch (err) {
+        setTimeout(hide,200);
+        Message.info("terjadi kesalahan server")
+    }
+};
+export const handleDelete = async (url, callback) => {
+    let hide = Message.loading('tunggu sebentar..');
+    try {
+        const submitData = await Action.delete(Action.apiUrl+url);
+        const datum = submitData.data;
+        if (submitData.status===200) {
+            callback(datum, true, 'Berhasil');
         } else {
             callback(datum, false, 'gagal memproses permintaan.');
         }

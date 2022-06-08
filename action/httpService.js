@@ -5,6 +5,14 @@ const coo=Cookies.get('_prowara');
 if(coo!==undefined) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
 }
+// axios.create({
+//     timeout:1000,
+//     validateStatus: function (status)
+//     {
+//         console.log("status",status);
+//         return status === 200;
+//     }
+// });
 
 export default {
     axios:axios,

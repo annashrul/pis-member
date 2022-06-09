@@ -51,7 +51,7 @@ const StatCard = ({ type, title, value, icon, color, clickHandler }) => {
 StatCard.propTypes = {
     type: PropTypes.oneOf(['fill']),
     title: PropTypes.string,
-    value: PropTypes.number,
+    value: PropTypes.any,
     icon: PropTypes.element,
     color: PropTypes.string
 };

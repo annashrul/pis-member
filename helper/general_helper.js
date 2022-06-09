@@ -12,23 +12,47 @@ const setCookie=(name,data)=>{
 const removeCookie=(name)=>{
     Cookies.remove(name);
 };
-const toRp=(angka)=>{
+const toRp=(angka,isInput=false)=>{
     if(angka===undefined) return 0;
     const number_string = angka.toString().replace(/[^,\d]/g, '');
     const split = number_string.split('.');
     const sisa = split[0].length % 3;
     let rupiah = split[0].substr(0, sisa);
     const ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-    // tambahkan titik jika yang di input sudah menjadi angka ribuan
     if (ribuan) {
         const separator = sisa ? '.' : '';
         rupiah += separator + ribuan.join('.');
     }
 
     rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
-    return "Rp "+rupiah;
+
+    return isInput?rupiah:"Rp "+rupiah;
 };
+
+const rmRp = (angka) => {
+    let numbers = 0;
+    if (parseFloat(angka) === 0) return 0;
+    if (parseFloat(angka) < 0) {
+        numbers = angka.toString().replace("-", "");
+    } else {
+        numbers = angka;
+    }
+    let number_string = numbers === "" || numbers === undefined ? String(0.0) : numbers.toString().replace(/,|\D/g, ""),
+        split = number_string.split("."),
+        sisa = split[0].length % 3,
+        rupiah = split[0].substr(0, sisa),
+        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+    if (ribuan) {
+        rupiah += ribuan.join("");
+    }
+
+    rupiah = split[1] !== undefined ? rupiah + "" + split[1] : rupiah;
+    rupiah = parseFloat(angka) < 0 ? "-" + rupiah.replace(/^0+/, "") : rupiah.replace(/^0+/, "");
+    return parseInt(numbers,10);
+};
+
+
 const rmHtml=(str)=>{
     const regex = /(&#39;|&nbsp;|<([^>]+)>)/gi;
     let cek = str.replace(regex, '');
@@ -59,31 +83,10 @@ const dateRange = (onApply, isLabel = true,value) => {
         <div className={`form-group`}>
             <label style={{ display: isLabel || isLabel === undefined ? "block" : "none" }}> Periode </label>
             <RangePicker
-
                 defaultValue={value}
                 ranges={rangeDate}
                 onChange={onApply}
             />
-            {/*<DateRangePicker*/}
-                {/*ranges={rangeDate}*/}
-                {/*alwaysShowCalendars={true}*/}
-                {/*autoUpdateInput={true}*/}
-                {/*onShow={(event, picker) => {*/}
-                    {/*if (isEmptyOrUndefined(isActive)) {*/}
-                        {/*let rmActiveDefault = document.querySelector(`.ranges>ul>li[data-range-key="Hari Ini"]`);*/}
-                        {/*rmActiveDefault.classList.remove("active");*/}
-                        {/*let setActive = document.querySelector(`.ranges>ul>li[data-range-key="` + isActive + `"]`);*/}
-                        {/*setActive.classList.add("active");*/}
-                    {/*}*/}
-                {/*}}*/}
-                {/*onApply={(event, picker) => {*/}
-                    {/*const firstDate = moment(picker.startDate._d).format("YYYY-MM-DD");*/}
-                    {/*const lastDate = moment(picker.endDate._d).format("YYYY-MM-DD");*/}
-                    {/*onApply(firstDate, lastDate, picker.chosenLabel || "");*/}
-                {/*}}*/}
-            {/*>*/}
-                {/*<input readOnly={true} type="text" className={`form-control`} name="date" value={value} />*/}
-            {/*</DateRangePicker>*/}
         </div>
     );
 };
@@ -103,5 +106,6 @@ export default {
     setCookie,
     removeCookie,
     toRp,
-    rmHtml
+    rmHtml,
+    rmRp
 };

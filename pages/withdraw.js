@@ -1,5 +1,5 @@
-import Widgets from '../components/Widgets';
+import CreateWithdraw from '../components/withdraw/createWithdraw';
 
-const WidgetsPage = () => <Widgets />;
+const Withdraw = () => <CreateWithdraw />;
 
-export default WidgetsPage;
+export default Withdraw;

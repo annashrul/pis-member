@@ -28,8 +28,13 @@ export const handlePost = async (url, data, callback) => {
 
     } catch (err) {
         callback([], false, 'gagal');
-        console.log(err);
-        Message.info("terjadi kesalahan server")
+        if(err.response.data.meta!==undefined){
+            Message.info(err.response.data.meta.message)
+        }else{
+            Message.info("Terjadi Kesalahan Jaringan")
+        }
+        // if()
+        // Message.info(err.response.data.meta.message)
     }
 };
 

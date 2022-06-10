@@ -1845,7 +1845,7 @@ const GlobalStyles = createGlobalStyle`
     stroke-width: 0;
   }
   
-  .ant-input-number{width:100%!important;}
+  
 `;
 
 export { GlobalStyles, theme };

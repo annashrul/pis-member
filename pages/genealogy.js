@@ -124,18 +124,11 @@ const Genealogy = () => {
                                <Table.Summary.Cell colSpan={5} index={0}>Total Perhalaman</Table.Summary.Cell>
                                <Table.Summary.Cell index={1}>
                                    <span style={{float:"right"}}>{totalSponsor}</span>
-                                   {/*<Text type="danger" style={{textAlign:"right"}}>{totalBorrow}</Text>*/}
                                </Table.Summary.Cell>
                                <Table.Summary.Cell index={2}>
                                    <span style={{float:"right"}}>{totalSaldo}</span>
                                </Table.Summary.Cell>
                            </Table.Summary.Row>
-                           {/*<Table.Summary.Row>*/}
-                               {/*<Table.Summary.Cell index={0}>Balance</Table.Summary.Cell>*/}
-                               {/*<Table.Summary.Cell index={1} colSpan={2}>*/}
-                                   {/*<Text type="danger">{totalBorrow - totalRepayment}</Text>*/}
-                               {/*</Table.Summary.Cell>*/}
-                           {/*</Table.Summary.Row>*/}
                            </>
                        );
                    }}
@@ -144,7 +137,6 @@ const Genealogy = () => {
                 <Column title="Nama" dataIndex="fullname" key="fullname"/>
                 <Column title="No Handphone" dataIndex="mobile_no" key="mobile_no"/>
                 <Column title="Referral" dataIndex="referral" key="referral" />
-
                 <ColumnGroup title="Sponsor">
                     <Column title="Referral" dataIndex="sponsor_referral" key="sponsor_referral"/>
                     <Column title="Jumlah" dataIndex="jumlah_sponsor" key="jumlah_sponsor"  align={"right"}/>

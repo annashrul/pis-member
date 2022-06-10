@@ -1,4 +1,4 @@
-import { notification,Col, Message, Row,Button,Card,List,Avatar,Spin,Modal} from 'antd';
+import { notification,Col, PageHeader,Message, Row,Button,Card,List,Avatar,Spin,Modal} from 'antd';
 import { ExclamationCircleOutlined,CheckCircleOutlined } from '@ant-design/icons';
 import { useAppState } from '../shared/AppProvider';
 import React, { useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ import Helper from "../../helper/general_helper";
 import {StringLink} from "../../helper/string_link_helper";
 import PinInput from 'react-pin-input';
 import { theme } from '../styles/GlobalStyles';
+import ModalPin from "../ModalPin";
 
 const { confirm } = Modal;
 
@@ -87,7 +88,7 @@ const CheckoutProduct = () =>{
         })
     };
 
-    const handleCheckout = async()=>{
+    const handleCheckout = async(pin)=>{
         // const hide=Message.loading("tunggu sebentar ...");
         const data={
             "pin":pin,
@@ -129,195 +130,184 @@ const CheckoutProduct = () =>{
     return (
         <div>
 
-            <Row gutter={16}>
-                <Col xs={24} sm={12} md={18}>
-                    <Row>
-                        <Col xs={24} sm={24} md={24}>
-                            <Card className="mb-2" title="Alamat Pengiriman" extra={
-                                <Button
-                                    size="small"
-                                    type="primary"
-                                    className={`${state.direction === 'rtl' ? 'ml-4' : ''}`}
-                                    onClick={()=>{}}
-                                >
-                                    Ganti Alamat
-                                </Button>
-                            }>
-                                <List
-                                    dataSource={objAddress}
-                                    renderItem={(item,key) => (
-                                        <List.Item className="border-bottom-0" key={key}>
-                                            <List.Item.Meta
-                                                title={<span>{item.penerima}, {item.no_hp}</span>}
-                                                description={<span className="">{objAddress.length>0&&`${objAddress[0].main_address}, kecamatan ${objAddress[0].kecamatan}, kota ${objAddress[0].kota}, provinsi ${objAddress[0].provinsi}`}</span>}
-                                            />
-                                        </List.Item>
-                                    )}
-                                />
-                            </Card>
-                        </Col>
-                        <Col xs={24} sm={24} md={24}>
-                            <Card className="mb-2" title="Kurir Pengiriman">
-                                {
-                                    arrKurir.length>0&&arrKurir.map((val,key)=>{
-                                        return (
-                                            <Button
-                                                key={key}
-                                                size="small"
-                                                type={idxKurir===key?`primary`:`info`}
-                                                className={'mr-2 mb-2 mt-2'}
-                                                onClick={()=>{
-                                                    handleLayanan(key,objAddress[idxAddress].kd_kec,val.kurir)
-                                                }}
-                                            >
-                                                <small>{val.title}</small>
-                                            </Button>
-                                        );
-                                    })
-                                }
-                            </Card>
-                        </Col>
-                        <Col xs={24} sm={24} md={24}>
-                            <Spin spinning={loadingLayanan}>
-                                <Card className="mb-2" title={`Layanan Pengiriman ${arrKurir.length>0&&arrKurir[idxKurir]['title']}`}>
+                <Row gutter={16}>
+                    <Col xs={24} sm={24} md={24}>
+                        <PageHeader
+                            className="site-page-header"
+                            onBack={() => Router.back()}
+                            title={`Pembayaran`}
+                        />
+                    </Col>
+                    <Col xs={24} sm={12} md={18}>
+
+                        <Row>
+                            <Col xs={24} sm={24} md={24}>
+                                <Card className="mb-2" title="Alamat Pengiriman" extra={
+                                    <Button
+                                        size="small"
+                                        type="primary"
+                                        className={`${state.direction === 'rtl' ? 'ml-4' : ''}`}
+                                        onClick={()=>{}}
+                                    >
+                                        Ganti Alamat
+                                    </Button>
+                                }>
+                                    <List
+                                        dataSource={objAddress}
+                                        renderItem={(item,key) => (
+                                            <List.Item className="border-bottom-0" key={key}>
+                                                <List.Item.Meta
+                                                    title={<span>{item.penerima}, {item.no_hp}</span>}
+                                                    description={<span className="">{objAddress.length>0&&`${objAddress[0].main_address}, kecamatan ${objAddress[0].kecamatan}, kota ${objAddress[0].kota}, provinsi ${objAddress[0].provinsi}`}</span>}
+                                                />
+                                            </List.Item>
+                                        )}
+                                    />
+                                </Card>
+                            </Col>
+                            <Col xs={24} sm={24} md={24}>
+                                <Card className="mb-2" title="Kurir Pengiriman">
                                     {
-                                        arrLayanan.length>0?arrLayanan.map((val,key)=>{
+                                        arrKurir.length>0&&arrKurir.map((val,key)=>{
                                             return (
                                                 <Button
                                                     key={key}
                                                     size="small"
-                                                    type={idxLayanan===key?'primary':'info'}
-                                                    className={'mb-2 mt-2 mr-2'}
+                                                    type={idxKurir===key?`primary`:`info`}
+                                                    className={'mr-2 mb-2 mt-2'}
                                                     onClick={()=>{
-                                                        setIdxLayanan(key);
-                                                        setOngkir(parseInt(val.cost,10));
+                                                        handleLayanan(key,objAddress[idxAddress].kd_kec,val.kurir)
                                                     }}
                                                 >
-                                                    <small>{val.description} | {Helper.toRp(val.cost)} | {val.estimasi}</small>
+                                                    <small>{val.title}</small>
                                                 </Button>
                                             );
-                                        }):"tidak ada layanan yang tersedia"
+                                        })
                                     }
                                 </Card>
-                            </Spin>
-
-                        </Col>
-                        <Col xs={24} sm={24} md={24}>
-                            <Card className="mb-2" title={`Channel Pembayaran`}>
-                                <List
-                                    bordered={false}
-                                    itemLayout="horizontal"
-                                    dataSource={arrChannel}
-                                    renderItem={(item,key) => (
-                                        <List.Item onClick={()=>{setIdxPayment(key)}} style={{cursor:"pointer"}}>
-                                            <List.Item.Meta
-                                                avatar={<Avatar src={item.logo} />}
-                                                title={<a href="https://ant.design">{item.name}</a>}
-                                                description={`${item.group} - ${Helper.toRp(item.fee_customer.flat)}`}
-                                            />
-                                            {key===idxPayment&&<div><CheckCircleOutlined/></div>}
-
-                                        </List.Item>
-                                    )}
-                                />
-
-                            </Card>
-
-                        </Col>
-                    </Row>
-                </Col>
-                <Col xs={24} sm={12} md={6}>
-                    <Row>
-                        <Col xs={24} sm={24} md={24}>
-                            <Card className="mb-2" title="Ringkasan Produk">
-                                <List
-                                    dataSource={Object.keys(objProduct).length>0?[objProduct]:[]}
-                                    renderItem={(item,key) => (
-                                        <List.Item className="border-bottom-0" key={key}>
-                                            <List.Item.Meta
-                                                avatar={
-                                                    <Avatar
-                                                        size={48}
-                                                        style={{
-                                                            color: "rgb(143, 0, 245)",
-                                                            backgroundColor: "rgb(214, 207, 253)"
+                            </Col>
+                            <Col xs={24} sm={24} md={24}>
+                                <Spin spinning={loadingLayanan}>
+                                    <Card className="mb-2" title={`Layanan Pengiriman ${arrKurir.length>0&&arrKurir[idxKurir]['title']}`}>
+                                        {
+                                            arrLayanan.length>0?arrLayanan.map((val,key)=>{
+                                                return (
+                                                    <Button
+                                                        key={key}
+                                                        size="small"
+                                                        type={idxLayanan===key?'primary':'info'}
+                                                        className={'mb-2 mt-2 mr-2'}
+                                                        onClick={()=>{
+                                                            setIdxLayanan(key);
+                                                            setOngkir(parseInt(val.cost,10));
                                                         }}
                                                     >
-                                                        {item.gambar}
-                                                    </Avatar>
-                                                }
-                                                title={item.title}
-                                                description={<span className="">{Helper.toRp(item.price)}</span>}
-                                            />
-                                        </List.Item>
+                                                        <small>{val.description} | {Helper.toRp(val.cost)} | {val.estimasi}</small>
+                                                    </Button>
+                                                );
+                                            }):"tidak ada layanan yang tersedia"
+                                        }
+                                    </Card>
+                                </Spin>
 
-                                    )}
-                                />
-                            </Card>
-                            <Card className="mb-2">
-                                <Row>
-                                    <Col xs={12} md={12}><p>Subtotal</p></Col>
-                                    <Col xs={12} md={12}><p className="text-right">{Helper.toRp(subtotal)}</p></Col>
-                                </Row>
-                                <Row>
-                                    <Col xs={12} md={12}><p>Ongkos Kirim</p></Col>
-                                    <Col xs={12} md={12}><p className="text-right">{Helper.toRp(ongkir)}</p></Col>
-                                </Row>
-                                <hr/>
-                                <Row>
-                                    <Col xs={12} md={12}><p>Total Belanja</p></Col>
-                                    <Col xs={12} md={12}><p className="text-right">{Helper.toRp(total+ongkir)}</p></Col>
-                                </Row>
-                            </Card>
+                            </Col>
+                            <Col xs={24} sm={24} md={24}>
+                                <Card className="mb-2" title={`Channel Pembayaran`}>
+                                    <List
+                                        bordered={false}
+                                        itemLayout="horizontal"
+                                        dataSource={arrChannel}
+                                        renderItem={(item,key) => (
+                                            <List.Item onClick={()=>{setIdxPayment(key)}} style={{cursor:"pointer"}}>
+                                                <List.Item.Meta
+                                                    avatar={<Avatar src={item.logo} />}
+                                                    title={<a href="https://ant.design">{item.name}</a>}
+                                                    description={`${item.group} - ${Helper.toRp(item.fee_customer.flat)}`}
+                                                />
+                                                {key===idxPayment&&<div><CheckCircleOutlined/></div>}
 
-                            <Card>
-                                <Button
-                                    disabled={arrLayanan.length<1}
-                                    style={{width:"100%"}}
-                                    size="medium"
-                                    type={'primary'}
-                                    onClick={()=>{
-                                        setIsModal(true);
-                                    }}
-                                >
-                                    Bayar
-                                </Button>
-                            </Card>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
+                                            </List.Item>
+                                        )}
+                                    />
+
+                                </Card>
+
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col xs={24} sm={12} md={6}>
+                        <Row>
+                            <Col xs={24} sm={24} md={24}>
+                                <Card className="mb-2" title="Ringkasan Produk">
+                                    <List
+                                        dataSource={Object.keys(objProduct).length>0?[objProduct]:[]}
+                                        renderItem={(item,key) => (
+                                            <List.Item className="border-bottom-0" key={key}>
+                                                <List.Item.Meta
+                                                    avatar={
+                                                        <Avatar
+                                                            size={48}
+                                                            style={{
+                                                                color: "rgb(143, 0, 245)",
+                                                                backgroundColor: "rgb(214, 207, 253)"
+                                                            }}
+                                                        >
+                                                            {item.gambar}
+                                                        </Avatar>
+                                                    }
+                                                    title={item.title}
+                                                    description={<span className="">{Helper.toRp(item.price)}</span>}
+                                                />
+                                            </List.Item>
+
+                                        )}
+                                    />
+                                </Card>
+                                <Card className="mb-2">
+                                    <Row>
+                                        <Col xs={12} md={12}><p>Subtotal</p></Col>
+                                        <Col xs={12} md={12}><p className="text-right">{Helper.toRp(subtotal)}</p></Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={12} md={12}><p>Ongkos Kirim</p></Col>
+                                        <Col xs={12} md={12}><p className="text-right">{Helper.toRp(ongkir)}</p></Col>
+                                    </Row>
+                                    <hr/>
+                                    <Row>
+                                        <Col xs={12} md={12}><p>Total Belanja</p></Col>
+                                        <Col xs={12} md={12}><p className="text-right">{Helper.toRp(total+ongkir)}</p></Col>
+                                    </Row>
+                                </Card>
+
+                                <Card>
+                                    <Button
+                                        disabled={arrLayanan.length<1}
+                                        style={{width:"100%"}}
+                                        size="medium"
+                                        type={'primary'}
+                                        onClick={()=>{
+                                            setIsModal(true);
+                                        }}
+                                    >
+                                        Bayar
+                                    </Button>
+                                </Card>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+
+
+
             {
-                isModal&&<Modal
-                    title="Masukan Pin"
-                    visible={isModal}
-                    onOk={()=>showPin()}
-                    onCancel={()=>setIsModal(false)}
-                    okText="Simpan"
-                    cancelText="Batal"
-                    closable={true}
-                    destroyOnClose={true}
-                    maskClosable={false}
-                >
-                    <PinInput
-                        focus={true}
-                        length={6}
-                        secret
-                        onChange={(value, index) => {}}
-                        type="numeric"
-                        inputMode="number"
-                        style={{padding: '0px'}}
-                        inputStyle={{borderColor: theme.primaryColor,borderRadius:"5px",height:"30px",width:"30px"}}
-                        inputFocusStyle={{borderColor: theme.darkColor}}
-                        onComplete={(value, index) => {
-                            console.log(index,value)
-                            setPin(value);
-                        }}
-                        autoSelect={true}
-                        regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
-                    />
-                </Modal>
+                isModal&&<ModalPin submit={(pin)=>{
+                    setIsModal(false);
+                    handleCheckout(pin);
+                }} cancel={(isShow)=>{
+                    setIsModal(false)
+                } } modalPin={isModal}/>
             }
+
 
 
         </div>

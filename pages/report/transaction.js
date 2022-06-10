@@ -47,8 +47,8 @@ const TransactionReport = () => {
                     fullname: val.fullname,
                     kd_trx: val.kd_trx,
                     note: val.note,
-                    trx_in: Helper.toRp(val.trx_in),
-                    trx_out: Helper.toRp(val.trx_out),
+                    trx_in: Helper.toRp(parseInt(val.trx_in,10),true),
+                    trx_out: Helper.toRp(parseInt(val.trx_out,10),true),
                 })
             })
             setArrDatum(datas);
@@ -120,14 +120,39 @@ const TransactionReport = () => {
 
                     handleLoadData(`&page=${page}${where}`)
                 }
-            }}>
+            }}
+                   summary={pageData => {
+                       let trxIn = 0;
+                       let trxOut = 0;
+
+                       pageData.forEach(({ trx_in, trx_out }) => {
+                           console.log(parseInt(trx_in.replaceAll(".",""),10))
+                           trxIn += parseInt(trx_in.replaceAll(".",""),10);
+                           trxOut += parseInt(trx_out.replaceAll(".",""),10);
+                       });
+
+                       return (
+                           <>
+                           <Table.Summary.Row>
+                               <Table.Summary.Cell colSpan={3} index={0}>Total Perhalaman</Table.Summary.Cell>
+                               <Table.Summary.Cell index={1}>
+                                   <span style={{float:"right"}}>{Helper.toRp(trxIn,true)}</span>
+                               </Table.Summary.Cell>
+                               <Table.Summary.Cell index={2}>
+                                   <span style={{float:"right"}}>{Helper.toRp(trxOut,true)}</span>
+                               </Table.Summary.Cell>
+                           </Table.Summary.Row>
+                           </>
+                       );
+                   }}
+            >
                 <Column title="No" dataIndex="no" key="no" />
                 <Column title="Nama" dataIndex="fullname" key="fullname" />
                 <Column title="Kode Transaksi" dataIndex="kd_trx" key="kd_trx" />
 
                 <ColumnGroup title="Transaksi">
-                    <Column title="Masuk" dataIndex="trx_in" key="trx_in" />
-                    <Column title="Keluar" dataIndex="trx_out" key="trx_out" />
+                    <Column title="Masuk" dataIndex="trx_in" key="trx_in" align={"right"}/>
+                    <Column title="Keluar" dataIndex="trx_out" key="trx_out" align={"right"}/>
                 </ColumnGroup>
                 <Column title="Catatan" dataIndex="note" key="note" />
 

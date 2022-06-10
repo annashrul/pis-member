@@ -9,6 +9,7 @@ import ModalPin from "../ModalPin";
 import Messages from "../Messages";
 const Step = Steps.Step;
 const Option = Select.Option;
+import Router from 'next/router';
 
 
 
@@ -133,23 +134,27 @@ const CreateWithdraw = () => {
         let field=dataField;
         Object.assign(field,{member_pin:e});
         await handlePost("transaction/withdrawal",field,(res,status,msg)=>{
-            form.resetFields();
-            handleLoadInfo();
-            setModalPin(false);
-            setModalConfirm(false);
-            const key = `open${Date.now()}`;
-            const btn = (
-                <Button type="primary" size="small" onClick={() => notification.close(key)}>
-                    Confirm
-                </Button>
-            );
-            notification.open({
-                message: res.meta.status,
-                description:res.meta.message,
-                btn,
-                key,
-                onClose: ()=>console.log("close"),
-            });
+            if(status){
+                form.resetFields();
+                handleLoadInfo();
+                setModalPin(false);
+                setModalConfirm(false);
+                const key = `open${Date.now()}`;
+                const btn = (
+                    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+                        Confirm
+                    </Button>
+                );
+                console.log(res.meta);
+                notification.open({
+                    message: res.meta.status,
+                    description:res.meta.message,
+                    btn,
+                    key,
+                    onClose: ()=>console.log("close"),
+                });
+            }
+
         })
 
     }
@@ -219,7 +224,7 @@ const CreateWithdraw = () => {
                                 console.log("tarik")
                             }} htmlType="button" size={"small"} type={"info"}>Tarik Semua</Button>
                         }>
-                            <Form.Item  name="amount" label="Nominal" onChange={onChange}  rules={[
+                            <Form.Item hasFeedback name="amount" label="Nominal" onChange={onChange}  rules={[
                                 { required: true, message: "Tidak Boleh Kosong" },
                                 {pattern: new RegExp(/^[0-9]*$/),message: "Harus Berupa Angka"},
                                 {

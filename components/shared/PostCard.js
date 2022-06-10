@@ -1,4 +1,4 @@
-import { Card, Carousel } from 'antd';
+import { Card, Carousel,Tooltip  } from 'antd';
 import { SafetyOutlined,HeartTwoTone, PushpinTwoTone, StarTwoTone } from '@ant-design/icons';
 const { Meta } = Card;
 
@@ -91,7 +91,9 @@ const PostCard = ({ title, subtitle, text, images, imageHeight,price,handleClick
                 </Cover>
             }
             actions={handleClick?[
-                <SafetyOutlined style={{fontSize: '24px'}} key={"checkout"} onClick={handleClick} />
+                <Tooltip title="Checkout">
+                    <SafetyOutlined style={{fontSize: '24px'}} key={"checkout"} onClick={handleClick} />
+                </Tooltip>
             ]:[]}
         >
             <Meta title={Helper.toRp(price)}/>

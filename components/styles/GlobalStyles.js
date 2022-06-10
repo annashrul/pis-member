@@ -1845,7 +1845,9 @@ const GlobalStyles = createGlobalStyle`
     stroke-width: 0;
   }
   
-  
+  .ant-page-header{
+    padding:0px!important;
+  }
 `;
 
 export { GlobalStyles, theme };

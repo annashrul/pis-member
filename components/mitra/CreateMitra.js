@@ -75,7 +75,7 @@ const TambahMitra = () => {
             if(status){
                 localStorage.setItem('invoice', JSON.stringify(res.data));
                 Message.success(msg).then(() => Router.push('/invoice'));
-                // onReset();
+                onReset();
             }else{
                 Message.info(msg)
             }

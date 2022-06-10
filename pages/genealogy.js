@@ -37,8 +37,8 @@ const Genealogy = () => {
                 Object.assign(val,{
                     key:key,
                     no:Helper.generateNo(key,parseInt(datum.pagination.current_page,10)),
-                    jumlah_sponsor:parseInt(val.jumlah_sponsor,10),
-                    saldo_pending:parseInt(val.saldo_pending,10),
+                    jumlah_sponsor:Helper.toRp(parseInt(val.jumlah_sponsor,10),true),
+                    saldo_pending:Helper.toRp(parseInt(val.saldo_pending,10),true),
                 })
             });
             setArrDatum(datas);
@@ -114,8 +114,8 @@ const Genealogy = () => {
                        let totalSaldo = 0;
 
                        pageData.forEach(({ jumlah_sponsor, saldo_pending }) => {
-                           totalSponsor += jumlah_sponsor;
-                           totalSaldo += saldo_pending;
+                           totalSponsor += parseInt(jumlah_sponsor.replaceAll(".",""),10);
+                           totalSaldo += parseInt(saldo_pending.replaceAll(".",""),10);
                        });
 
                        return (
@@ -123,10 +123,10 @@ const Genealogy = () => {
                            <Table.Summary.Row>
                                <Table.Summary.Cell colSpan={5} index={0}>Total Perhalaman</Table.Summary.Cell>
                                <Table.Summary.Cell index={1}>
-                                   <span style={{float:"right"}}>{totalSponsor}</span>
+                                   <span style={{float:"right"}}>{Helper.toRp(totalSponsor,true)}</span>
                                </Table.Summary.Cell>
                                <Table.Summary.Cell index={2}>
-                                   <span style={{float:"right"}}>{totalSaldo}</span>
+                                   <span style={{float:"right"}}>{Helper.toRp(totalSaldo,true)}</span>
                                </Table.Summary.Cell>
                            </Table.Summary.Row>
                            </>

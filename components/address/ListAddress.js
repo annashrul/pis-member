@@ -1,5 +1,5 @@
 import { FormOutlined ,BellOutlined, BookOutlined, MessageOutlined, PhoneOutlined,CloseSquareOutlined } from '@ant-design/icons';
-import {Popconfirm ,Col, Message, Row, Tag , Input, Card, List, Button, Form, Select,  Skeleton} from 'antd';
+import {Popconfirm ,Col,Tooltip, Message, Row, Tag , Input, Card, List, Button, Form, Select,  Skeleton} from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import MockFeed from '../../demos/mock/feed';
 import {handleDelete, handleGet, handlePost, handlePut} from "../../action/baseAction";
@@ -176,22 +176,26 @@ const ListAddress = () => {
                     }>
                         <Row gutter={16}>
                             <Col xs={24} sm={12} md={8}>
-                                <Form.Item name={"title"} onChange={onChange} label="Title"  rules={[{ required: true,message: msgInput }]}>
+                                <Form.Item hasFeedback name={"title"} onChange={onChange} label="Title"  rules={[{ required: true,message: msgInput }]}>
                                     <Input placeholder="Ex: Rumah, Kantor"  ref={titleInput}/>
                                 </Form.Item>
                             </Col>
                             <Col xs={24} sm={12} md={8}>
-                                <Form.Item name={"penerima"} onChange={onChange} label="Penerima"  rules={[{ required: true,message:msgInput }]}>
+                                <Form.Item hasFeedback name={"penerima"} onChange={onChange} label="Penerima"  rules={[{ required: true,message:msgInput }]}>
                                     <Input placeholder="Ex: Jhon Doe" />
                                 </Form.Item>
                             </Col>
                             <Col xs={24} sm={12} md={8}>
-                                <Form.Item name={"no_hp"} onChange={onChange} label="No Handphone"  rules={[{ required: true,message: msgInput }]}>
-                                    <Input placeholder="Ex: 081223165XXX" />
+                                <Form.Item hasFeedback name="no_hp" label="No Handphone" onChange={onChange}  rules={[
+                                    { required: true, message: msgInput },
+                                    {pattern: new RegExp(/^[0-9]*$/),message: "Harus Berupa Angka"},
+                                ]}>
+                                    <Input prefix={"+62"} placeholder="81223165XXXX"/>
                                 </Form.Item>
+
                             </Col>
                             <Col xs={24} sm={24} md={8}>
-                                <Form.Item name="kd_prov" label="Provinsi"  rules={[{ required: true,message:msgInput }]}>
+                                <Form.Item hasFeedback name="kd_prov" label="Provinsi"  rules={[{ required: true,message:msgInput }]}>
                                     <Select
                                         value={"anying"}
                                         loading={loadingProvinsi}
@@ -215,7 +219,7 @@ const ListAddress = () => {
 
                             </Col>
                             <Col xs={24} sm={24} md={8}>
-                                <Form.Item name="kd_kota" label="Kota"  rules={[{ required: true,message:msgInput }]}>
+                                <Form.Item hasFeedback name="kd_kota" label="Kota"  rules={[{ required: true,message:msgInput }]}>
                                     <Select
                                         loading={loadingKota}
                                         disabled={arrKota.length<1}
@@ -239,7 +243,7 @@ const ListAddress = () => {
 
                             </Col>
                             <Col xs={24} sm={24} md={8}>
-                                <Form.Item name="kd_kec" label="Kecamatan"  rules={[{ required: true,message:msgInput }]}>
+                                <Form.Item hasFeedback name="kd_kec" label="Kecamatan"  rules={[{ required: true,message:msgInput }]}>
                                     <Select
                                         loading={loadingKecamatan}
                                         disabled={arrKecamatan.length<1}
@@ -264,7 +268,7 @@ const ListAddress = () => {
 
                             </Col>
                             <Col xs={24} sm={24} md={24}>
-                                <Form.Item name={"main_address"} onChange={onChange} label="Alamat Lengkap"  rules={[{ required: true,message: msgInput }]}>
+                                <Form.Item hasFeedback name={"main_address"} onChange={onChange} label="Alamat Lengkap"  rules={[{ required: true,message: msgInput }]}>
                                     <Input.TextArea />
                                 </Form.Item>
                             </Col>
@@ -290,17 +294,24 @@ const ListAddress = () => {
                                 key={item.id}
                                 className="border-bottom-0"
                                 actions={[
-                                    <Tag color="lime">{item.title}</Tag>,
-                                    <Button onClick={(e)=>handleEdit(e,item)} key="list-edit" type={"primary"} size={"small"}><FormOutlined/></Button>,
-                                    <Popconfirm
-                                        title="Are you sure to delete this task?"
-                                        onConfirm={(e)=>handleConfirm(e,item.id)}
-                                        onCancel={(e)=>{}}
-                                        okText="Oke"
-                                        cancelText="Batal"
-                                    >
-                                        <Button type={"primary"} size={"small"}  key="list-delete"><CloseSquareOutlined /></Button>
-                                    </Popconfirm>
+                                    <Tooltip title={`Alamat ${item.title}`}>
+                                        <Tag color="lime">{item.title}</Tag>
+                                    </Tooltip>,
+                                    <Tooltip title={`Ubah Alamat ${item.penerima}`}>
+                                        <Button onClick={(e)=>handleEdit(e,item)} key="list-edit" type={"primary"} size={"small"}><FormOutlined/></Button>
+                                    </Tooltip>,
+                                    <Tooltip title={`Hapus Alamat ${item.penerima}`}>
+                                        <Popconfirm
+                                            title={`Anda yakin akan menghapus alamat ${item.penerima} ?`}
+                                            onConfirm={(e)=>handleConfirm(e,item.id)}
+                                            onCancel={(e)=>{}}
+                                            okText="Oke"
+                                            cancelText="Batal"
+                                        >
+                                            <Button type={"primary"} size={"small"}  key="list-delete"><CloseSquareOutlined /></Button>
+                                        </Popconfirm>
+                                    </Tooltip>,
+
 
 
                                 ]}>

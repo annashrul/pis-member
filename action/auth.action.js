@@ -18,15 +18,14 @@ export function doLogout() {
 
 }
 function getUser() {
-    // const coo: string=Cookies.get('__uid')!;
-    //  try {
-    //    const datum:iUser= JSON.parse(atob(coo));
-    //    return datum;
-    // } catch (err) {
-    //     // const datum:iUser= JSON.parse();
-    //     return datum;
-    // }
+    const coo=Cookies.get('__uid');
+    return JSON.parse(atob(coo));
 }
+
+
+
+
+
 
 function getToken() {
     return Cookies.get('_prowara');

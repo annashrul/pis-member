@@ -1,5 +1,6 @@
 export const StringLink = {
     dashboard:"/",
+    tambahMitra:"/mitra",
     address:"/address",
     genealogy:"/genealogy",
     product:"/product",

@@ -1,16 +1,40 @@
-import { Avatar, Badge, Layout, List, Menu } from "antd";
+import { Avatar, Badge, Layout, List, Menu,Popconfirm } from "antd";
 import { BellTwoTone, CaretDownOutlined, InteractionTwoTone, PlaySquareTwoTone, SettingTwoTone } from '@ant-design/icons';
 import DashHeader, { Notification } from "./styles/Header";
 
 import Link from "next/link";
 import MockNotifications from "../demos/mock/notifications";
 import { useAppState } from "./shared/AppProvider";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import Routes from 'next/router';
+import Cookies from "js-cookie";
+import axios from 'axios';
+import jwt_decode from "jwt-decode";
+
+import {doLogout} from "../action/auth.action";
 
 const { SubMenu } = Menu;
 const { Header } = Layout;
 
 const MainHeader = () => {
+    useEffect(() => {
+        const coo=Cookies.get('_prowara');
+        if(coo!==undefined) {
+            axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
+            const decodedToken = jwt_decode(atob(coo));
+            const dateNow = new Date();
+            if (decodedToken.exp * 1000 < dateNow.getTime()) {
+                doLogout();
+                // window.location.href = '/signin';
+            }
+            else {
+            }
+        }
+        else{
+            doLogout();
+            Routes.push("/signin");
+        }
+    }, []);
     const [state, dispatch] = useAppState();
     const [notifications] = useState(MockNotifications);
     return (
@@ -102,9 +126,22 @@ const MainHeader = () => {
                   </Link>
                 </Menu.Item>
                 <Menu.Item>
-                  <Link href="/signin">
-                    <a>Keluar</a>
-                  </Link>
+                    <Popconfirm
+                        placement="top"
+                        title="Are you sure you want to sign out?"
+                        onConfirm={() => {
+                            doLogout();
+                            Routes.push('/signin')
+                        }}
+                        okText="Oke"
+                        cancelText="Batal"
+                    >
+                        <a>
+                            Keluar
+                        </a>
+                    </Popconfirm>
+
+
                 </Menu.Item>
               </SubMenu>
             </Menu>

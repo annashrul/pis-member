@@ -23,18 +23,19 @@ if(coo!==undefined) {
     const dateNow = new Date();
     if (decodedToken.exp * 1000 < dateNow.getTime()) {
         Action.doLogout();
-        window.location.href = '/signin';
+        // window.location.href = '/signin';
     }
-    else{
+    else {
     }
-
 }
+
 
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
 class MyApp extends App {
     static async getInitialProps({ Component, ctx, req }) {
+
         let pageProps = {};
         const userAgent = ctx.req
             ? ctx.req.headers["user-agent"]
@@ -54,7 +55,27 @@ class MyApp extends App {
         return { pageProps };
     }
 
+
     render() {
+        const coo=Cookies.get('_prowara');
+        console.log("cookies",coo)
+        if(coo!==undefined) {
+            axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
+            const decodedToken = jwt_decode(atob(coo));
+            const dateNow = new Date();
+            if (decodedToken.exp * 1000 < dateNow.getTime()) {
+                Action.doLogout();
+                // Router.push("/signin")
+            }
+            else{
+            }
+
+        }else{
+            // window.location.href="/signin"
+            // Action.doLogout();
+            // Routes.push('/signin')
+            // Router.push("/signin")
+        }
         const { Component, pageProps } = this.props;
 
         return (

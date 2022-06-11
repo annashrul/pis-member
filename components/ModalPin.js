@@ -12,7 +12,7 @@ const ModalPin = ({submit,cancel,modalPin}) =>{
     const [isModal,setIsModal]=useState(modalPin);
     const [pin,setPin]=useState('');
     useEffect(() => {
-    }, [isModal])
+    }, [isModal]);
 
     const showPin = () => {
         if(pin.length===6){

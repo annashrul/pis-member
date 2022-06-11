@@ -1,6 +1,6 @@
 
 import Action from "./httpService";
-import { Col, Message, Row } from 'antd';
+import { Col, Message, Row,notification } from 'antd';
 import axios from "axios";
 
 export const handleGet = async(url,callback)=>{
@@ -9,7 +9,18 @@ export const handleGet = async(url,callback)=>{
         const datum = getData.data;
         callback(datum,false);
     }catch (err){
-        callback([],false);
+        callback([], false, 'gagal');
+        let msg="Terjadi Kesalahan Jaringan";
+        if(err.response.data.meta!==undefined){
+            msg=err.response.data.meta.message;
+        }
+        const key = `open${Date.now()}`;
+        notification.error({
+            message: "Terjadi Kesalahan",
+            description:msg,
+            key,
+            onClose: ()=>console.log("close"),
+        });
     }
 };
 
@@ -28,13 +39,18 @@ export const handlePost = async (url, data, callback) => {
 
     } catch (err) {
         callback([], false, 'gagal');
+        let msg="Terjadi Kesalahan Jaringan";
         if(err.response.data.meta!==undefined){
-            Message.info(err.response.data.meta.message)
-        }else{
-            Message.info("Terjadi Kesalahan Jaringan")
+            msg=err.response.data.meta.message;
         }
-        // if()
-        // Message.info(err.response.data.meta.message)
+        const key = `open${Date.now()}`;
+        notification.error({
+            message: "Terjadi Kesalahan",
+            description:msg,
+            key,
+            onClose: ()=>console.log("close"),
+        });
+
     }
 };
 
@@ -50,8 +66,20 @@ export const handlePut = async (url, data, callback) => {
         }
         setTimeout(hide,200);
     } catch (err) {
+        console.log("asd");
         setTimeout(hide,200);
-        Message.info("terjadi kesalahan server")
+        callback([], false, 'gagal');
+        let msg="Terjadi Kesalahan Jaringan";
+        if(err.response.data.meta!==undefined){
+            msg=err.response.data.meta.message;
+        }
+        const key = `open${Date.now()}`;
+        notification.error({
+            message: "Terjadi Kesalahan",
+            description:msg,
+            key,
+            onClose: ()=>console.log("close"),
+        });
     }
 };
 export const handleDelete = async (url, callback) => {
@@ -67,6 +95,17 @@ export const handleDelete = async (url, callback) => {
         setTimeout(hide,200);
     } catch (err) {
         setTimeout(hide,200);
-        Message.info("terjadi kesalahan server")
+        callback([], false, 'gagal');
+        let msg="Terjadi Kesalahan Jaringan";
+        if(err.response.data.meta!==undefined){
+            msg=err.response.data.meta.message;
+        }
+        const key = `open${Date.now()}`;
+        notification.error({
+            message: "Terjadi Kesalahan",
+            description:msg,
+            key,
+            onClose: ()=>console.log("close"),
+        });
     }
 };

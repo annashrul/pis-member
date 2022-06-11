@@ -312,8 +312,6 @@ const ListAddress = () => {
                                         </Popconfirm>
                                     </Tooltip>,
 
-
-
                                 ]}>
                                 <Skeleton title={false} loading={loadingAddress} active >
                                     <List.Item.Meta

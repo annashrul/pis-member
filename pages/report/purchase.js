@@ -1,5 +1,6 @@
 import { Space, Table, Tag,Select,Row,Col,Input,Form,Message  } from 'antd';
 const { Column, ColumnGroup } = Table;
+import { CopyOutlined} from '@ant-design/icons';
 
 import Helper from "../../helper/general_helper";
 import React, { useEffect, useState } from 'react';
@@ -7,6 +8,7 @@ import moment from "moment";
 import {handleGet} from "../../action/baseAction";
 const Option = Select.Option;
 const Search = Input.Search;
+
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -20,57 +22,59 @@ const formItemLayout = {
 const PurchaseReport = () => {
     const [startDate, setStartDate] = useState(moment());
     const [endDate, setEndDate] = useState(moment());
-    const [searchby, setSearchBy] = useState('');
+    const [searchby, setSearchBy] = useState('fullname');
     const [any, setAny] = useState('');
+    const [where, setWhere] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
 
     const [loading, setLoading] = useState(false);
     const [arrDatum,setArrDatum]= useState([]);
+    const [meta,setMeta]= useState({});
     const [form] = Form.useForm();
 
     useEffect(() => {
-        handleLoadData(1);
+
+        // handleLoadData(`&page=1&datefrom=${moment(startDate).format("YYYY-MM-DD")}&dateto=${moment(endDate).format("YYYY-MM-DD")}`);
+        handleLoadData(`&page=1`);
     }, []);
-    const handleLoadData = async(val)=>{
+    const handleLoadData = async(where)=>{
         setLoading(true);
-        await handleGet(`transaction/report/member?page=${val}&perpage=10`,(datum,isLoading)=>{
-            let datas=[];
-            console.log(datum.pagination);
-            setCurrentPage(datum.pagination?datum.pagination.current_page:1);
-            datum.data.map((val,key)=>{
-                datas.push({
-                    key: key,
-                    no:Helper.generateNo(key,datum.pagination.current_page),
-                    fullname: val.fullname,
-                    saldo_awal: Helper.toRp(val.saldo_awal),
-                    saldo_akhir: Helper.toRp(val.saldo_akhir),
-                    trx_in: Helper.toRp(val.trx_in),
-                    trx_out: Helper.toRp(val.trx_out),
-                })
+        await handleGet(`transaction/penjualan/report?perpage=10${where}`,(datum,isLoading)=>{
+            let datas=datum.data;
+            setMeta(datum.pagination);
+            datas.map((val,key)=>{
+                Object.assign(val,{
+                    key:key,
+                    no:Helper.generateNo(key,parseInt(datum.pagination.current_page,10)),
+                    subtotal:Helper.toRp(parseInt(val.subtotal,10),true),
+                    ongkir:Helper.toRp(parseInt(val.ongkir,10),true),
+                    grand_total:Helper.toRp(parseInt(val.grand_total,10),true),
+                });
             })
             setArrDatum(datas);
             setTimeout(()=>setLoading(false),300)
         })
     };
     const onFinish = (values) =>{
-        let where="";
-        console.log("start date",startDate);
-        console.log("end date",endDate);
-        console.log("searchby",searchby);
-        console.log("any",values);
+        let where=``;
+        if(values!==""){
+            where+=`&searchby=${searchby}&q=${searchby==='kd_trx'?btoa(values):values}`;
+        }
+        setWhere(where);
+        handleLoadData(where);
+
     };
 
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
             <Select onChange={(e)=>setSearchBy(e)}>
-                <Option value="fullname">Fullname</Option>
-                <Option value="trx_in">Transaksi In</Option>
-                <Option value="trx_out">Transaksi Out</Option>
+                <Option value="kd_trx">Kode Transaksi</Option>
+                <Option value="title">Paket</Option>
+                <Option value="resi">No.Resi</Option>
+                <Option value="status_st">Status</Option>
             </Select>
         </Form.Item>
     );
-
-    console.log("arrat",arrDatum);
 
 
     return (
@@ -82,19 +86,11 @@ const PurchaseReport = () => {
                 name="register"
                 onFinish={onFinish}
                 initialValues={{
-                    prefix: 'fullname',
+                    prefix: 'kd_trx',
                 }}
             >
                 <Row gutter={16}>
-                    <Col xs={24} sm={12} md={6}>
-                        <Form.Item name="periode" label="Periode">
-                            {Helper.dateRange((dates,dateStrings)=>{
-                                setStartDate(dateStrings[0]);
-                                setEndDate(dateStrings[1]);
-                            },false,[startDate,endDate])}
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={12} md={8}>
+                    <Col xs={24} sm={12} md={12}>
                         <Form.Item name="any" label="Cari"  onChange={(e)=>setAny(e.target.value)}>
                             <Search
                                 addonBefore={prefixSelector}
@@ -109,26 +105,69 @@ const PurchaseReport = () => {
             <Table style={{ whiteSpace: 'nowrap '}} scroll={{ x: 400 }} bordered={true} dataSource={arrDatum}  loading={loading} pagination={{
                 defaultPageSize: 10,
                 hideOnSinglePage: false,
-                total:arrDatum.length,
-                current:currentPage,
+                total:parseInt(meta.total,10),
+                current:parseInt(meta.current_page,10),
                 onChange:(page,pageSize)=>{
-                    handleLoadData(page)
-                    console.log("page",page);
-                    console.log("pageSize",pageSize);
+
+                    handleLoadData(`&page=${page}${where}`)
                 }
-            }}>
+            }}
+                   summary={pageData => {
+                       let subTotal = 0;
+                       let ongkirs = 0;
+                       let grandTotal = 0;
+
+                       pageData.forEach(({ subtotal, ongkir,grand_total }) => {
+                           subTotal += parseInt(subtotal.replaceAll(".",""),10);
+                           ongkirs += parseInt(ongkir.replaceAll(".",""),10);
+                           grandTotal += parseInt(grand_total.replaceAll(".",""),10);
+                       });
+
+                       return (
+                           <>
+                           <Table.Summary.Row>
+                               <Table.Summary.Cell colSpan={4} index={0}>Total Perhalaman</Table.Summary.Cell>
+                               <Table.Summary.Cell index={1}>
+                                   <span style={{float:"right"}}>{Helper.toRp(subTotal,true)}</span>
+                               </Table.Summary.Cell>
+                               <Table.Summary.Cell colSpan={2} index={1}/>
+                               <Table.Summary.Cell index={2}>
+                                   <span style={{float:"right"}}>{Helper.toRp(ongkirs,true)}</span>
+                               </Table.Summary.Cell>
+                               <Table.Summary.Cell index={2}>
+                                   <span style={{float:"right"}}>{Helper.toRp(grandTotal,true)}</span>
+                               </Table.Summary.Cell>
+                           </Table.Summary.Row>
+                           </>
+                       );
+                   }}
+            >
                 <Column title="No" dataIndex="no" key="no" />
-                <Column title="Nama" dataIndex="fullname" key="fullname" />
-                <ColumnGroup title="Saldo">
-                    <Column title="Awal" dataIndex="saldo_awal" key="saldo_awal" />
-                    <Column title="Akhir" dataIndex="saldo_akhir" key="saldo_akhir" />
+                <Column title="Transaksi" dataIndex="status" key="status" render={(_,record)=>{
+                    return <p>{record.status_st}<br/>{record.kd_trx}</p>
+                }} />
+                <Column title="Resi" dataIndex="resi" key="resi" render={(_,record)=>{
+                    return <span>{record.resi} {record.resi!=="-"&&<CopyOutlined/>}</span>
+                }} />
+                <ColumnGroup title="Paket">
+                    <Column title="Nama" dataIndex="title" key="title"/>
+                    <Column title="Harga" dataIndex="subtotal" key="subtotal" align="right"/>
                 </ColumnGroup>
-                <ColumnGroup title="Transaksi">
-                    <Column title="Masuk" dataIndex="trx_in" key="trx_in" />
-                    <Column title="Keluar" dataIndex="trx_out" key="trx_out" />
+                <ColumnGroup title="Pembayaran">
+                    <Column title="Metode" dataIndex="metode_pembayaran" key="metode_pembayaran"/>
+                    <Column title="Layanan" dataIndex="layanan_pengiriman" key="layanan_pengiriman"/>
+                    <Column title="Ongkir" dataIndex="ongkir" key="ongkir" align="right"/>
                 </ColumnGroup>
+                <Column title="Total" dataIndex="grand_total" key="grand_total" align="right" />
+                <Column title="Alamat" dataIndex="main_address" key="main_address" />
+
+
 
             </Table>
+            {/*<Table columns={columns} dataSource={data} loading={loading} onChange={(page)=>{*/}
+            {/*console.log(page)*/}
+            {/*}}  pagination={{ defaultPageSize: 1,hideOnSinglePage: true,total:data.length }}/>*/}
+
         </div>
     );
 };

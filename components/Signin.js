@@ -9,6 +9,8 @@ import React, { useEffect, useState } from 'react';
 
 
 import Action from "../action/auth.action"
+import ModalPin from "./ModalPin";
+import {handlePut} from "../action/baseAction";
 
 const FormItem = Form.Item;
 
@@ -24,6 +26,8 @@ const Signin = () => {
     const [, forceUpdate] = useState();
     const [loading, setLoading] = useState(false);
     const [iconLoading, setIconLoading] = useState(false);
+    const [showModalPin, setShowModalPin] = useState(false);
+    const [dataUser, setDataUser] = useState({});
 
     useEffect(() => {
         forceUpdate({});
@@ -31,23 +35,33 @@ const Signin = () => {
     const handleSubmit = async (values) => {
         setLoading(true);
         setIconLoading(true);
-
-
         try{
             const hitLogin=await Action.http.post(Action.http.apiClient+'auth/signin', {
                 username:values.username,
                 password:values.password,
             });
             const data = hitLogin.data.data;
-            console.log(data);
-            Action.setUser(data);
-            Action.setToken(data.token);
             Action.http.axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-            setTimeout(()=>{
+            console.log("data",data.pin);
+            setDataUser(data);
+            if(data.pin==="-"){
                 setLoading(false);
                 setIconLoading(false);
-                Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
-            },3000)
+                Message.success('Anda Belum Mempunya Pin').then(() => setShowModalPin(true));
+                return;
+            }
+            if(data.status === 3){
+                console.log("status 3")
+            }
+
+            // Action.setUser(data);
+            // Action.setToken(data.token);
+            // Action.http.axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+            // setTimeout(()=>{
+            //     setLoading(false);
+            //     setIconLoading(false);
+            //     Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
+            // },3000)
         } catch (err){
             console.log(err);
             setTimeout(()=>{
@@ -56,9 +70,23 @@ const Signin = () => {
                 Message.error(err.message);
             },3000)
         }
-
-
     };
+
+
+    const handlePin = async(pin)=>{
+        console.log("pin",pin);
+        let data = Object.assign(dataUser,{pin:pin});
+        console.log("dataUser",data);
+        await handlePut(`member/pin/${data.id}`,{"pin":pin},(res,status,msg)=>{
+            if(status){
+                setDataUser(data);
+                Action.setUser(data);
+                Action.setToken(data.token);
+                Message.success('Berhasil membuat Pin. anda akan dialihkan ke halaman dashboard!').then(() => Router.push('/'));
+            }
+        })
+    }
+
     return (<Row
             type="flex"
             align="middle"
@@ -66,64 +94,72 @@ const Signin = () => {
             className="px-3 bg-white mh-page"
             style={{ minHeight: '100vh' }}
         >
-          <Content>
-            <div className="text-center mb-5">
-              <Link href="/signin">
-                <a className="brand mr-0">
-                  <PlaySquareTwoTone style={{fontSize: '32px'}} />
-                </a>
-              </Link>
-              <h5 className="mb-0 mt-3">Sign in ghgh</h5>
+            <Content>
+                <div className="text-center mb-5">
+                    <Link href="/signin">
+                        <a className="brand mr-0">
+                            <PlaySquareTwoTone style={{fontSize: '32px'}} />
+                        </a>
+                    </Link>
+                    <h5 className="mb-0 mt-3">Sign in ghgh</h5>
 
-              <p className="text-muted">get started with our service</p>
-            </div>
+                    <p className="text-muted">get started with our service</p>
+                </div>
 
-            <Form
-                layout="vertical"
-                onFinish={handleSubmit}
-                form={form}
-            >
-              <FormItem label="Username" name="username" rules={[{ required: true, message: 'Username tidak boleh kosong!' }]}>
-                <Input
-                    prefix={
-                      <MailTwoTone style={{fontSize: '16px'}} />
-                    }
-                    type="text"
-                    placeholder="Username"
-                />
-              </FormItem>
-
-              <FormItem label="Password" name="password" rules={[{ required: true, message: 'Password tidak boleh kosong!' }]}>
-                <Input
-                    prefix={
-                      <EyeTwoTone style={{fontSize: '16px'}} />
-                    }
-                    type="password"
-                    placeholder="Password"
-                />
-              </FormItem>
-
-                <Form.Item shouldUpdate={true}>
-                    {() => (
-
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            className="mt-3"
-                            loading={iconLoading}
-                            disabled={
-                                !form.isFieldsTouched(true) ||
-                                form.getFieldsError().filter(({ errors }) => errors.length).length
+                <Form
+                    layout="vertical"
+                    onFinish={handleSubmit}
+                    form={form}
+                >
+                    <FormItem label="Username" name="username" rules={[{ required: true, message: 'Username tidak boleh kosong!' }]}>
+                        <Input
+                            prefix={
+                                <MailTwoTone style={{fontSize: '16px'}} />
                             }
-                        >
-                            Log in
-                        </Button>
-                    )}
-                </Form.Item>
+                            type="text"
+                            placeholder="Username"
+                        />
+                    </FormItem>
+
+                    <FormItem label="Password" name="password" rules={[{ required: true, message: 'Password tidak boleh kosong!' }]}>
+                        <Input
+                            prefix={
+                                <EyeTwoTone style={{fontSize: '16px'}} />
+                            }
+                            type="password"
+                            placeholder="Password"
+                        />
+                    </FormItem>
+
+                    <Form.Item shouldUpdate={true}>
+                        {() => (
+
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                className="mt-3"
+                                loading={iconLoading}
+                                disabled={
+                                    !form.isFieldsTouched(true) ||
+                                    form.getFieldsError().filter(({ errors }) => errors.length).length
+                                }
+                            >
+                                Log in
+                            </Button>
+                        )}
+                    </Form.Item>
 
 
-            </Form>
-          </Content>
+                </Form>
+            </Content>
+            {
+                showModalPin&&<ModalPin submit={(pin)=>{
+                    setShowModalPin(false);
+                    handlePin(pin);
+                }} cancel={(isShow)=>{
+                    setShowModalPin(false)
+                } } modalPin={showModalPin}/>
+            }
         </Row>
     );
 }

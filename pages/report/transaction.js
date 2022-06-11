@@ -32,11 +32,11 @@ const TransactionReport = () => {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        handleLoadData("&page=1");
+
+        handleLoadData(`&page=1&datefrom=${moment(startDate).format("YYYY-MM-DD")}&dateto=${moment(endDate).format("YYYY-MM-DD")}`);
     }, []);
     const handleLoadData = async(where)=>{
         setLoading(true);
-        console.log(`transaction/report?perpage=10${where}`);
         await handleGet(`transaction/report?perpage=10${where}`,(datum,isLoading)=>{
             let datas=[];
             setMeta(datum.pagination);
@@ -126,7 +126,6 @@ const TransactionReport = () => {
                        let trxOut = 0;
 
                        pageData.forEach(({ trx_in, trx_out }) => {
-                           console.log(parseInt(trx_in.replaceAll(".",""),10))
                            trxIn += parseInt(trx_in.replaceAll(".",""),10);
                            trxOut += parseInt(trx_out.replaceAll(".",""),10);
                        });

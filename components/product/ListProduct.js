@@ -1,6 +1,4 @@
-import { BellOutlined, BookOutlined, MessageOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Col, Card,Message,PageHeader, Row } from 'antd';
-import PostCard from '../shared/PostCard';
 import React, { useEffect, useState } from 'react';
 import {handleGet} from "../../action/baseAction";
 import Router from 'next/router';
@@ -20,7 +18,6 @@ const ListProduct = () => {
         handleLoadData("");
         handleLoadInfo();
         handleLoadAddress();
-        console.log("anying")
     }, []);
     const handleLoadInfo = async()=>{
         await handleGet("site/info",(datum,isLoading)=>{

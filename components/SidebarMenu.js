@@ -89,7 +89,6 @@ const SidebarContent = ({
             {appRoutes.map((route, index) => {
                 const hasChildren = !!route.children;
                 if (!hasChildren){
-                    console.log(route);
                     const isProduct=(route.path.includes("product") && pathname.includes("product"));
                     return (
                         <Menu.Item

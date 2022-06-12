@@ -112,8 +112,6 @@ const CheckoutProduct = () =>{
 
                 return new Promise((resolve, reject) => {
                     setTimeout(reject, 1000);
-                    // setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-                    console.log("bus",reject)
                 }).catch(() => handleCheckout());
 
 

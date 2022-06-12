@@ -1,5 +1,5 @@
 import { Avatar, Badge, Layout, List, Menu,Popconfirm } from "antd";
-import { BellTwoTone, CaretDownOutlined, InteractionTwoTone, PlaySquareTwoTone, SettingTwoTone } from '@ant-design/icons';
+import { BellTwoTone, InteractionTwoTone, SettingTwoTone } from '@ant-design/icons';
 import DashHeader, { Notification } from "./styles/Header";
 
 import Link from "next/link";

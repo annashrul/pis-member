@@ -1,10 +1,8 @@
-import { Space, Table, Tag,Select,Row,Col,Input,Form,Message  } from 'antd';
+import { Table,Select,Row,Col,Input,Form  } from 'antd';
 const { Column, ColumnGroup } = Table;
 import { CopyOutlined} from '@ant-design/icons';
-
 import Helper from "../../helper/general_helper";
 import React, { useEffect, useState } from 'react';
-import moment from "moment";
 import {handleGet} from "../../action/baseAction";
 const Option = Select.Option;
 const Search = Input.Search;
@@ -20,21 +18,14 @@ const formItemLayout = {
     },
 };
 const PurchaseReport = () => {
-    const [startDate, setStartDate] = useState(moment());
-    const [endDate, setEndDate] = useState(moment());
     const [searchby, setSearchBy] = useState('fullname');
-    const [any, setAny] = useState('');
     const [where, setWhere] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-
     const [loading, setLoading] = useState(false);
     const [arrDatum,setArrDatum]= useState([]);
     const [meta,setMeta]= useState({});
     const [form] = Form.useForm();
 
     useEffect(() => {
-
-        // handleLoadData(`&page=1&datefrom=${moment(startDate).format("YYYY-MM-DD")}&dateto=${moment(endDate).format("YYYY-MM-DD")}`);
         handleLoadData(`&page=1`);
     }, []);
     const handleLoadData = async(where)=>{
@@ -91,7 +82,7 @@ const PurchaseReport = () => {
             >
                 <Row gutter={16}>
                     <Col xs={24} sm={12} md={12}>
-                        <Form.Item name="any" label="Cari"  onChange={(e)=>setAny(e.target.value)}>
+                        <Form.Item name="any" label="Cari">
                             <Search
                                 addonBefore={prefixSelector}
                                 placeholder="Tulis sesuatu disini ..."

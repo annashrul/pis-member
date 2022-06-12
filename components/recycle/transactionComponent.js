@@ -1,9 +1,9 @@
-import { Button, Form,Select, Input, Message, Row, Tooltip } from 'antd';
-import { InfoCircleOutlined,EyeTwoTone, MailTwoTone, PlaySquareTwoTone, QuestionCircleTwoTone, SkinTwoTone } from '@ant-design/icons';
+import { Button, Form,Select, Message, Row, Tooltip } from 'antd';
+import { InfoCircleOutlined,PlaySquareTwoTone,} from '@ant-design/icons';
 import Link from 'next/link';
 import Router from 'next/router';
 import styled from 'styled-components';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {handleGet, handlePost} from "../../action/baseAction";
 import Helper from "../../helper/general_helper"
 const { Option } = Select;
@@ -11,7 +11,6 @@ const msgInput='Tidak Boleh Kosong';
 import Action from "../../action/auth.action";
 import {StringLink} from "../../helper/string_link_helper"
 
-const FormItem = Form.Item;
 
 const Content = styled.div`
   max-width: 400px;

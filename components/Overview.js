@@ -1,9 +1,9 @@
-import { RightCircleOutlined,WalletOutlined, BellOutlined, BookOutlined, DatabaseTwoTone, EditTwoTone, EllipsisOutlined, FallOutlined, FileZipTwoTone, MessageOutlined, PhoneOutlined, PrinterTwoTone, RestTwoTone, RiseOutlined, SaveTwoTone } from '@ant-design/icons';
+import { RightCircleOutlined,WalletOutlined} from '@ant-design/icons';
 import {
   Col,
   Message,
-  Row,Avatar, List,
-  Card,Empty 
+  Row,
+  Card
 } from 'antd';
 import StatCard from './shared/StatCard';
 import { theme } from './styles/GlobalStyles';

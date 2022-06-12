@@ -1,13 +1,7 @@
-import { Space, Table,Button, Tag,Select,Row,Col,Input,Form,Message,Typography   } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
-const { Text } = Typography;
-
+import { Table,Tag,Select,Row,Col,Input,Form} from 'antd';
 const { Column, ColumnGroup } = Table;
-
 import Helper from "../../helper/general_helper";
-import React, { useEffect, useState,useRef } from 'react';
-import moment from "moment";
-import {handleGet} from "../../action/baseAction";
+import React, { useEffect, useState } from 'react';
 const Option = Select.Option;
 const Search = Input.Search;
 

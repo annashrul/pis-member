@@ -1,4 +1,4 @@
-import { Space, Table, Tag,Select,Row,Col,Input,Form,Message  } from 'antd';
+import { Table, Tag,Select,Row,Col,Input,Form  } from 'antd';
 const { Column, ColumnGroup } = Table;
 
 import Helper from "../../helper/general_helper";
@@ -22,10 +22,7 @@ const WithdrawReport = () => {
     const [startDate, setStartDate] = useState(moment());
     const [endDate, setEndDate] = useState(moment());
     const [searchby, setSearchBy] = useState('fullname');
-    const [any, setAny] = useState('');
     const [where, setWhere] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-
     const [loading, setLoading] = useState(false);
     const [arrDatum,setArrDatum]= useState([]);
     const [meta,setMeta]= useState({});
@@ -110,7 +107,7 @@ const WithdrawReport = () => {
                         </Form.Item>
                     </Col>
                     <Col xs={24} sm={12} md={8}>
-                        <Form.Item name="any" label="Cari"  onChange={(e)=>setAny(e.target.value)}>
+                        <Form.Item name="any" label="Cari">
                             <Search
                                 addonBefore={prefixSelector}
                                 placeholder="Tulis sesuatu disini ..."

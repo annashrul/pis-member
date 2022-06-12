@@ -1,7 +1,7 @@
 import { Button, Card,message, Col,Collapse,PageHeader, Modal,Image ,Upload , Row } from 'antd';
-import { UploadOutlined,InboxOutlined } from '@ant-design/icons';
+import { InboxOutlined } from '@ant-design/icons';
 import { useAppState } from './shared/AppProvider';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import Router from 'next/router';
 import { handleGet, handlePut } from '../action/baseAction';
 import Helper from "../helper/general_helper";
@@ -19,7 +19,6 @@ const InvoiceComponent = () => {
   useEffect(() => {
     let kdTrx=localStorage.getItem("kdTrx");
     let typeTrx=localStorage.getItem("typeTrx");
-    console.log("type",typeTrx);
     if(kdTrx===undefined || kdTrx===null || typeTrx===undefined || typeTrx===null){
         Router.back();
         Router.push("/_error");

@@ -1,6 +1,5 @@
-import { EyeTwoTone,CheckCircleOutlined,FormOutlined ,BellOutlined, BookOutlined, MessageOutlined, PhoneOutlined,CloseSquareOutlined } from '@ant-design/icons';
-import {Popconfirm, Col, Message, Row, Tag, Input, Card, List, Button, Form, Select, Skeleton, Avatar} from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import {Col, Message, Row,Input, Card, Button, Form, Select} from 'antd';
+import React, { useEffect, useState } from 'react';
 import { handleGet, handlePost} from "../../action/baseAction";
 import Action from "../../action/auth.action";
 const { Option } = Select;
@@ -29,22 +28,17 @@ const TambahMitra = () => {
     };
     const handleProduct = async()=>{
         await handleGet("paket?page=1&perpage=10&category=5d96d9f0-49bd-49e2-895f-f8171ba3a9ea",(datum,isLoading)=>{
-        // await handleGet("paket?page=1&perpage=10",(datum,isLoading)=>{
             setArrProduct(datum.data);
-            console.log("paket",datum);
         })
     };
     const handlePaymentChannel = async()=>{
         await handleGet("transaction/channel",(datum,isLoading)=>{
             setArrPaymentChannel(datum.data);
-            console.log("payment channel",datum);
         })
     };
     const handleBank = async()=>{
         await handleGet("transaction/data_bank",(datum,isLoading)=>{
-            // await handleGet("paket?page=1&perpage=10",(datum,isLoading)=>{
             setArrBank(datum.data);
-            console.log("bank",datum);
         })
     };
     const onChange = (e) => {
@@ -54,7 +48,6 @@ const TambahMitra = () => {
 
 
     const onFinish = async(e)=>{
-        console.log("is update",e);
         const data={
             "fullname":e.fullname,
             "mobile_no":e.mobile_no,
@@ -71,14 +64,13 @@ const TambahMitra = () => {
         };
         setIconLoading(true);
         await handlePost("auth/signup",data,(res,status,msg)=>{
-            console.log(res);
             setIconLoading(false)
             if(status){
                 console.log(res)
                 localStorage.setItem('typeTrx', "Mitra Baru");
                 localStorage.setItem('kdTrx', res.data.kd_trx);
                 Message.success(msg).then(() => Router.push(StringLink.invoiceMitra));
-                // onReset();
+                onReset();
             }else{
                 Message.info(msg)
             }

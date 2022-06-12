@@ -1,21 +1,14 @@
-import {Button, Select, Steps, message,notification ,Modal, Form, Row, Col, Radio, Input, InputNumber, Card, List, Avatar} from 'antd';
+import {Button, notification ,Modal, Form, Row, Col, Radio, Input, Card, List, Avatar} from 'antd';
 import React, { useRef,useEffect, useState } from 'react';
-import StatCard from '../shared/StatCard';
 import { theme } from '../styles/GlobalStyles';
-import { BellOutlined, BookOutlined, MessageOutlined, PhoneOutlined,WalletOutlined,CheckCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined } from '@ant-design/icons';
 import Helper from "../../helper/general_helper";
 import {handleGet, handlePost} from "../../action/baseAction";
 import ModalPin from "../ModalPin";
-import Messages from "../Messages";
-const Step = Steps.Step;
-const Option = Select.Option;
-import Router from 'next/router';
-
 
 
 const CreateWithdraw = () => {
     const [form] = Form.useForm();
-    const [current, setCurrent] = useState(0);
     const [idxPayment, setIdxPayment] = useState(0);
     const [modalPin, setModalPin] = useState(false);
     const [modalConfim, setModalConfirm] = useState(false);
@@ -26,7 +19,6 @@ const CreateWithdraw = () => {
     const [minWd, setMinWd] = useState(0);
     const [maxWdBonusNasional, setMaxWdBonusNasional] = useState(3000000);
     const [type, setType] = useState("0");
-    const [info, setInfo] = useState({});
     const [config, setConfig] = useState({});
     const [emailError, setEmailError] = useState({ enable: false, helpText: "-" });
     const emailErrorRef = useRef(emailError);
@@ -60,9 +52,7 @@ const CreateWithdraw = () => {
 
     const handleLoadInfo = async()=>{
         await handleGet("site/info",(datum,isLoading)=>{
-            setInfo(datum.data);
             setBonus(parseInt(datum.data.saldo,10));
-            // setBonusNasional(10000);
             setRekening([datum.data.rekening])
             setBonusNasional(parseInt(datum.data.saldo_pending,10));
         })
@@ -70,7 +60,6 @@ const CreateWithdraw = () => {
     const handleLoadConfig = async()=>{
         await handleGet("site/config",(datum,isLoading)=>{
            setMinWd(parseInt(datum.data.min_wd,10));
-           console.log(datum.data);
            setConfig(datum.data);
         })
     };
@@ -145,7 +134,6 @@ const CreateWithdraw = () => {
                         Confirm
                     </Button>
                 );
-                console.log(res.meta);
                 notification.open({
                     message: res.meta.status,
                     description:res.meta.message,
@@ -221,7 +209,6 @@ const CreateWithdraw = () => {
                             type==="0"&&<Button onClick={(e)=>{
                                 e.preventDefault();
                                 form.setFieldsValue({amount:bonus});
-                                console.log("tarik")
                             }} htmlType="button" size={"small"} type={"info"}>Tarik Semua</Button>
                         }>
                             <Form.Item hasFeedback name="amount" label="Nominal" onChange={onChange}  rules={[

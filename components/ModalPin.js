@@ -1,5 +1,5 @@
-import { Message,Modal} from 'antd';
-import { ExclamationCircleOutlined,CheckCircleOutlined } from '@ant-design/icons';
+import { Modal} from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { theme } from './styles/GlobalStyles';
 import dynamic from 'next/dynamic';
@@ -63,24 +63,7 @@ const ModalPin = ({submit,cancel,modalPin}) =>{
                 verticalAlign:"middle",
                 border: `1px solid ${theme.darkColor}`
             }} type='password' fields={6} onChange={(e)=>setPin(e)} autoFocus={true} pattern={/^[ A-Za-z0-9_@./#&+-]*$/}/>
-            {/*<PinInput*/}
-                {/*focus={true}*/}
-                {/*length={6}*/}
-                {/*secret*/}
-                {/*onChange={(value, index) => {*/}
-                    {/*setPin(value);*/}
-                {/*}}*/}
-                {/*type="numeric"*/}
-                {/*inputMode="number"*/}
-                {/*style={{padding: '0px'}}*/}
-                {/*inputStyle={{borderColor: theme.primaryColor,borderRadius:"5px",height:"30px",width:"30px"}}*/}
-                {/*inputFocusStyle={{borderColor: theme.darkColor}}*/}
-                {/*onComplete={(value, index) => {*/}
-                    {/*setPin(value);*/}
-                {/*}}*/}
-                {/*autoSelect={true}*/}
-                {/*regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}*/}
-            {/*/>*/}
+            
         </div>
     </Modal>;
 };

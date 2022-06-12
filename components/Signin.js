@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, Message, Row } from 'antd';
+import { Button, Form, Input, Message, Row } from 'antd';
 import { EyeTwoTone, MailTwoTone, PlaySquareTwoTone } from '@ant-design/icons';
 
 import Link from 'next/link';
@@ -63,17 +63,6 @@ const Signin = () => {
             }else{
                 Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
             }
-            // Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
-
-
-            // Action.setUser(data);
-            // Action.setToken(data.token);
-            // Action.http.axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-            // setTimeout(()=>{
-            //     setLoading(false);
-            //     setIconLoading(false);
-            //     Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
-            // },3000)
         } catch (err){
             setTimeout(()=>{
                 setLoading(false);

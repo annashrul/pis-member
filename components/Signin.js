@@ -6,7 +6,7 @@ import Router from 'next/router';
 import styled from 'styled-components';
 import { useAppState } from './shared/AppProvider';
 import React, { useEffect, useState } from 'react';
-
+import {StringLink} from "../helper/string_link_helper"
 
 import Action from "../action/auth.action"
 import ModalPin from "./ModalPin";
@@ -42,7 +42,6 @@ const Signin = () => {
             });
             const data = hitLogin.data.data;
             Action.http.axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-            console.log("data",data.pin);
             setDataUser(data);
             if(data.pin==="-"){
                 setLoading(false);
@@ -51,7 +50,12 @@ const Signin = () => {
                 return;
             }
             if(data.status === 3){
-                console.log("status 3")
+                Action.setUser(data);
+                Action.setToken(data.token);
+                setLoading(false);
+                setIconLoading(false);
+                Router.push(StringLink.transactionRecycle);
+                return;
             }
 
             // Action.setUser(data);
@@ -76,7 +80,6 @@ const Signin = () => {
     const handlePin = async(pin)=>{
         console.log("pin",pin);
         let data = Object.assign(dataUser,{pin:pin});
-        console.log("dataUser",data);
         await handlePut(`member/pin/${data.id}`,{"pin":pin},(res,status,msg)=>{
             if(status){
                 setDataUser(data);
@@ -95,6 +98,7 @@ const Signin = () => {
             style={{ minHeight: '100vh' }}
         >
             <Content>
+
                 <div className="text-center mb-5">
                     <Link href="/signin">
                         <a className="brand mr-0">

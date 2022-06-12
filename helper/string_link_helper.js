@@ -9,4 +9,6 @@ export const StringLink = {
     reportWithdraw:"/report/withdraw",
     reportTransaction:"/report/transaction",
     reportPurchase:"/report/purchase",
+    transactionRecycle:"/recycle",
+    invoiceRecycle:"/recycle/invoice",
 };

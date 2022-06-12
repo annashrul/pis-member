@@ -14,6 +14,8 @@ const { Content } = Layout;
 const NonDashboardRoutes = [
   "/signin",
   "/signup",
+  "/recycle",
+  "/recycle/invoice",
   "/forgot",
   "/lockscreen",
   "/_error"

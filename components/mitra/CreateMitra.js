@@ -96,7 +96,7 @@ const TambahMitra = () => {
               name="addressForm"
               onFinish={onFinish}
               initialValues={{
-                  sponsor: 'NETIND',
+                  sponsor: 'NETINDO',
               }}
         >
             <Row type="flex" justify="center" gutter={10}>

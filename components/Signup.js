@@ -1,6 +1,5 @@
 import { Button, Form, Input, Message, Row, Tooltip } from 'antd';
 import { EyeTwoTone, MailTwoTone, PlaySquareTwoTone, QuestionCircleTwoTone, SkinTwoTone } from '@ant-design/icons';
-
 import Link from 'next/link';
 import Router from 'next/router';
 import styled from 'styled-components';
@@ -23,14 +22,12 @@ const Signup = ({ form }) => (
   >
     <Content>
       <div className="text-center mb-5">
-        <Link href="/signup">
+        <Link href="/">
           <a className="brand mr-0">
             <PlaySquareTwoTone style={{fontSize: '32px'}} />
           </a>
         </Link>
-        <h5 className="mb-0 mt-3">Sign up</h5>
-
-        <p className="text-muted">create a new account</p>
+        <h5 className="mb-0 mt-3">Recycle</h5>
       </div>
 
       <Form

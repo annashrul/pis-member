@@ -12,11 +12,13 @@ import axios from 'axios';
 import jwt_decode from "jwt-decode";
 
 import {doLogout} from "../action/auth.action";
+import general_helper from "../helper/general_helper";
 
 const { SubMenu } = Menu;
 const { Header } = Layout;
 
 const MainHeader = () => {
+
     useEffect(() => {
         const coo=Cookies.get('_prowara');
         if(coo!==undefined) {
@@ -47,6 +49,7 @@ const MainHeader = () => {
                           onClick={() => dispatch({ type: "mobileDrawer" })}
                           className="trigger"
                       >
+
                         <svg width="1em" height="1em" fill="currentColor" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                              viewBox="0 0 384.97 384.97" style={{enableBackground: 'new 0 0 384.97 384.97'}} xmlSpace="preserve">
                           <g id="Menu_1_">
@@ -64,8 +67,18 @@ const MainHeader = () => {
               <Menu.Item>
                 <Link href="/">
                   <a className="brand">
-                    <PlaySquareTwoTone style={{fontSize: '20px'}} />
-                    <strong className="text-black">{state.name}</strong>
+                    {/* <img src={general_helper.imgDefault} style={{height:"30px",width:"30px"}}/> */}
+                    <Avatar size={{
+                      xs: 24,
+                      sm: 32,
+                      md: 40,
+                      lg: 64,
+                      xl: 64,
+                      xxl: 80,
+                    }} src={general_helper.imgDefault} />
+
+                    {/* <PlaySquareTwoTone style={{fontSize: '20px'}} /> */}
+                    <strong className="text-black">PROWARA</strong>
                   </a>
                 </Link>
               </Menu.Item>
@@ -79,15 +92,15 @@ const MainHeader = () => {
                       <InteractionTwoTone style={{fontSize: '20px'}} />
                     </Menu.Item>
                 )}
-              <Menu.Item onClick={() => dispatch({ type: "options" })}>
+              {!state.mobile&&(<Menu.Item onClick={() => dispatch({ type: "options" })}>
                 <SettingTwoTone style={{fontSize: '20px'}} />
-              </Menu.Item>
-              <SubMenu
+              </Menu.Item>)}
+              {!state.mobile&&(<SubMenu
                   title={
                     <Badge count={5}>
-                <span className="submenu-title-wrapper">
-                <BellTwoTone style={{fontSize: '20px'}} />
-                </span>
+                      <span className="submenu-title-wrapper">
+                        <BellTwoTone style={{fontSize: '20px'}} />
+                      </span>
                     </Badge>
                   }
               >
@@ -113,9 +126,9 @@ const MainHeader = () => {
                       )}
                   />
                 </Menu.Item>
-              </SubMenu>
+              </SubMenu>)}
 
-              <SubMenu title={<Avatar src="/images/avatar.jpg" />}>
+              {!state.mobile&&(<SubMenu title={<Avatar src="/images/avatar.jpg" />}>
                 <Menu.Item>Settings</Menu.Item>
                 <Menu.Item>Profile</Menu.Item>
                 <Menu.Item>Notifications</Menu.Item>
@@ -143,7 +156,7 @@ const MainHeader = () => {
 
 
                 </Menu.Item>
-              </SubMenu>
+              </SubMenu>)}
             </Menu>
           </Header>
         </DashHeader>

@@ -1,9 +1,12 @@
 import { BellOutlined, BookOutlined, MessageOutlined, PhoneOutlined } from '@ant-design/icons';
-import { Col, Message, Row } from 'antd';
+import { Col, Card,Message,PageHeader, Row } from 'antd';
 import PostCard from '../shared/PostCard';
 import React, { useEffect, useState } from 'react';
 import {handleGet} from "../../action/baseAction";
 import Router from 'next/router';
+import Helper from "../../helper/general_helper"
+import { StringLink } from '../../helper/string_link_helper';
+const { Meta } = Card;
 
 const ListProduct = () => {
     const [loading, setLoading] = useState(false);
@@ -33,7 +36,7 @@ const ListProduct = () => {
     };
     const handleLoadData = async(val)=>{
         setLoading(true);
-        await handleGet("paket?page=1&perpage=10",(datum,isLoading)=>{
+        await handleGet("paket?page=1&perpage=10&category=1ec17e57-0c5c-4867-958d-195e577eabeb",(datum,isLoading)=>{
             setLoading(isLoading);
             setArrDatum(datum)
         })
@@ -42,45 +45,55 @@ const ListProduct = () => {
 
     return (
         <>
-        <Row gutter={16}>
-            {
-                (arrDatum.data!==undefined&&arrDatum.data.length>0)&&arrDatum.data.map((val,key)=>{
-                    return <Col className="mb-2" xs={12} sm={12} md={6} key={key}>
-                        <PostCard
-                            title={val.title}
-                            subtitle={val.category}
-                            price={val.price}
-                            image={val.gambar}
-                            images={[
-                                val.gambar
-                            ]}
-                            imageHeight={200}
-                            text={val.caption}
-                            handleClick={(e)=>{
-                                if(!address){
-                                    Message.success('anda belum mempunya alamat, anda akan dialihkan untuk membuat alamat').then(() => Router.push('/alamat'));
-                                }
-                                else{
-                                    if(!info){
-                                        Message.info("anda belum memenuhi syarat RO");
-                                    }
-                                    else{
-                                        if(parseInt(val.stock,10) < 1){
-                                            Message.info("stock tidak tersedia");
-                                        }else{
-                                            Object.assign(val,{id_paket:val.id});
-                                            Object.assign(objAddress,val);
-                                            Router.push({pathname:'/checkout',query:objAddress},'/checkout',)
-                                        }
-                                    }
-                                }
-
-                            }}
-                        />
-                    </Col>
-                })
+        <PageHeader
+            className="site-page-header"
+            onBack={() => Router.back()}
+            title="Produk RO"
+        >
+      <Row gutter={16}>
+        
+      
+        {
+              (arrDatum.data!==undefined&&arrDatum.data.length>0)&&arrDatum.data.map((val,key)=>{
+                return(
+                  <Col xs={12} sm={8} md={6} className="mb-2" style={{cursor:"pointer"}} onClick={()=>{
+                    if(!address){
+                        Message.success('anda belum mempunya alamat, anda akan dialihkan untuk membuat alamat').then(() => Router.push('/alamat'));
+                    }
+                    else{
+                        if(!info){
+                            Message.info("anda belum memenuhi syarat RO");
+                        }
+                        else{
+                            if(parseInt(val.stock,10) < 1){
+                                Message.info("stock tidak tersedia");
+                            }else{
+                                Object.assign(val,{id_paket:val.id});
+                                Object.assign(objAddress,val);
+                                Router.push({pathname:StringLink.checkout,query:objAddress},StringLink.checkout)
+                            }
+                        }
+                    }
+                  }}>
+                    <Card
+                    title={<small>{val.title}</small>}
+                      hoverable
+                      cover={<img alt="example" src={val.gambar} onError={({ currentTarget }) => {
+                        currentTarget.onerror = null; // prevents looping
+                        currentTarget.src=Helper.imgDefault
+                      }} />}
+                    >
+                      <Meta description={Helper.toRp(val.price)}/>
+                      <small>{Helper.rmHtml(val.caption)}</small>
+                    </Card>
+                  </Col>
+                );
+              })
             }
-        </Row>
+            
+      </Row>
+      </PageHeader>
+        
         </>
     );
 };

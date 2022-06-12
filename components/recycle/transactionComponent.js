@@ -57,10 +57,10 @@ const transactionComponent = () => {
         };
         setIconLoading(true);
         await handlePost("auth/recycle",field,(res,status,msg)=>{
-            console.log("res",res);
             if(status){
+                localStorage.setItem("typeTrx","Recycle");
                 localStorage.setItem("kdTrx",res.data.kd_trx);
-                Message.success('Berhasil. anda akan dialihkan ke halaman invoice!').then(() => Router.push({pathname:StringLink.invoiceRecycle,query:{kd_trx:res.data.kd_trx}},StringLink.invoiceRecycle));
+                Message.success('Berhasil. anda akan dialihkan ke halaman invoice!').then(() => Router.push(StringLink.invoiceRecycle));
             }
             setIconLoading(false);
 

@@ -15,6 +15,7 @@ import {
 import { FolderTwoTone, PlaySquareTwoTone, PushpinTwoTone } from '@ant-design/icons';
 import { capitalize, lowercase } from '../lib/helpers';
 import { useEffect, useState } from 'react';
+import {doLogout} from "../action/auth.action";
 
 import DashHeader from './styles/Header';
 import Inner from './styles/Sidebar';
@@ -88,12 +89,13 @@ const SidebarContent = ({
             {appRoutes.map((route, index) => {
                 const hasChildren = !!route.children;
                 if (!hasChildren){
-                    
+                    console.log(route);
+                    const isProduct=(route.path.includes("product") && pathname.includes("product"));
                     return (
                         <Menu.Item
                             key={getKey(route.name, index)}
                             className={
-                                pathname === route.path ? 'ant-menu-item-selected' : ''
+                                isProduct||pathname === route.path ? 'ant-menu-item-selected' : ''
                             }
                             onClick={() => {
                                 setOpenKeys([getKey(route.name, index)]);
@@ -127,7 +129,7 @@ const SidebarContent = ({
                                 return <Menu.Item
                                     key={getKey(subitem.name, index)}
                                     className={
-                                        pathname==='/checkout'||pathname === subitem.path ? 'ant-menu-item-selected' : ''
+                                        pathname === subitem.path ? 'ant-menu-item-selected' : ''
                                     }
                                     onClick={() => {
                                         if (state.mobile) dispatch({ type: 'mobileDrawer' });
@@ -192,7 +194,10 @@ const SidebarContent = ({
                     <Popconfirm
                         placement="top"
                         title="Are you sure you want to sign out?"
-                        onConfirm={() => router.push('/signin')}
+                        onConfirm={() => {
+                            doLogout();
+                            Routes.push('/signin')
+                        }}
                         okText="Yes"
                         cancelText="Cancel"
                     >
@@ -201,7 +206,10 @@ const SidebarContent = ({
                                 sidebarTheme === 'dark' ? 'text-white' : 'text-body'
                                 }`}
                         >
+                            <Tooltip title="Keluar">
                             <PushpinTwoTone style={{ fontSize: '16px' }} />
+                            </Tooltip>
+                           
                         </a>
                     </Popconfirm>
                     </>

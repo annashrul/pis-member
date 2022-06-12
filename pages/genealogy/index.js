@@ -4,10 +4,10 @@ const { Text } = Typography;
 
 const { Column, ColumnGroup } = Table;
 
-import Helper from "../helper/general_helper";
+import Helper from "../../helper/general_helper";
 import React, { useEffect, useState,useRef } from 'react';
 import moment from "moment";
-import {handleGet} from "../action/baseAction";
+import {handleGet} from "../../action/baseAction";
 const Option = Select.Option;
 const Search = Input.Search;
 

@@ -52,7 +52,17 @@ const ModalPin = ({submit,cancel,modalPin}) =>{
     >
         <div>
             <p>Demi Keamanan & Kenyamanan Menggunakan Sistem Ini, Pastikan Pin Yang Anda Masukan Sesuai</p>
-            <ReactCodeInput type='password' fields={6} onChange={(e)=>setPin(e)} autoFocus={true} pattern={/^[ A-Za-z0-9_@./#&+-]*$/}/>
+            <ReactCodeInput inputStyle={{
+                margin:  '4px',
+                height:"30px",width:"30px",
+                paddingLeft: '0px',
+                borderRadius: '3px',
+                color: theme.primaryColor,
+                fontSize: '14px',
+                textAlign:"center",
+                verticalAlign:"middle",
+                border: `1px solid ${theme.darkColor}`
+            }} type='password' fields={6} onChange={(e)=>setPin(e)} autoFocus={true} pattern={/^[ A-Za-z0-9_@./#&+-]*$/}/>
             {/*<PinInput*/}
                 {/*focus={true}*/}
                 {/*length={6}*/}

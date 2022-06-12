@@ -54,9 +54,12 @@ class MyApp extends App {
         pageProps.ieBrowser = ie;
         return { pageProps };
     }
-
+    UnLoadWindow(){
+        return 'We strongly recommends NOT closing this window yet.'
+    }
 
     render() {
+        // window.onbeforeunload = this.UnLoadWindow;
         const coo=Cookies.get('_prowara');
         console.log("cookies",coo)
         if(coo!==undefined) {

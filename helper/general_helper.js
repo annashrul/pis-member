@@ -4,6 +4,7 @@ import { DatePicker } from 'antd';
 const RangePicker = DatePicker.RangePicker;
 
 
+const imgDefault="https://prowara.id/static/media/logo.bc4aea99.png"
 
 const setCookie=(name,data)=>{
     Cookies.set(name, btoa(data), { expires: 1 });
@@ -100,6 +101,7 @@ const generateNo = (i, current_page, perpage = 10) => {
 
 
 export default {
+    imgDefault,
     generateNo,
     isEmptyOrUndefined,
     dateRange,

@@ -1,4 +1,4 @@
-import { notification,Col, PageHeader,Message, Row,Button,Card,List,Avatar,Spin,Modal} from 'antd';
+import { Col, PageHeader,Message, Row,Button,Card,List,Avatar,Spin,Modal} from 'antd';
 import { ExclamationCircleOutlined,CheckCircleOutlined } from '@ant-design/icons';
 import { useAppState } from '../shared/AppProvider';
 import React, { useEffect, useState } from 'react';
@@ -6,8 +6,6 @@ import {handleGet, handlePost} from "../../action/baseAction";
 import Router from 'next/router';
 import Helper from "../../helper/general_helper";
 import {StringLink} from "../../helper/string_link_helper";
-import PinInput from 'react-pin-input';
-import { theme } from '../styles/GlobalStyles';
 import ModalPin from "../ModalPin";
 
 const { confirm } = Modal;
@@ -91,7 +89,7 @@ const CheckoutProduct = () =>{
     const handleCheckout = async(pin)=>{
         // const hide=Message.loading("tunggu sebentar ...");
         const data={
-            "pin":pin,
+            "pin":parseInt(pin,10),
             "payment_channel":arrChannel[idxPayment].code,
             "ongkir":ongkir,
             "jasa_pengiriman":arrKurir[idxKurir].kurir,
@@ -142,7 +140,7 @@ const CheckoutProduct = () =>{
 
                         <Row>
                             <Col xs={24} sm={24} md={24}>
-                                <Card className="mb-2" title="Alamat Pengiriman" extra={
+                                <Card className="mb-2" title="Alamat" extra={
                                     <Button
                                         size="small"
                                         type="primary"
@@ -166,7 +164,7 @@ const CheckoutProduct = () =>{
                                 </Card>
                             </Col>
                             <Col xs={24} sm={24} md={24}>
-                                <Card className="mb-2" title="Kurir Pengiriman">
+                                <Card className="mb-2" title="Kurir">
                                     {
                                         arrKurir.length>0&&arrKurir.map((val,key)=>{
                                             return (
@@ -188,7 +186,7 @@ const CheckoutProduct = () =>{
                             </Col>
                             <Col xs={24} sm={24} md={24}>
                                 <Spin spinning={loadingLayanan}>
-                                    <Card className="mb-2" title={`Layanan Pengiriman ${arrKurir.length>0&&arrKurir[idxKurir]['title']}`}>
+                                    <Card className="mb-2" title={`Layanan ${arrKurir.length>0&&arrKurir[idxKurir]['title']}`}>
                                         {
                                             arrLayanan.length>0?arrLayanan.map((val,key)=>{
                                                 return (
@@ -296,9 +294,6 @@ const CheckoutProduct = () =>{
                         </Row>
                     </Col>
                 </Row>
-
-
-
             {
                 isModal&&<ModalPin submit={(pin)=>{
                     setIsModal(false);

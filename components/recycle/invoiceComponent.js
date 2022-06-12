@@ -1,29 +1,46 @@
-import { Button, Card, Col,Collapse,PageHeader, Divider,Image , Row } from 'antd';
+import { Button, Card,message, Col,Collapse,PageHeader, Modal,Image ,Upload , Row } from 'antd';
+import { UploadOutlined,InboxOutlined } from '@ant-design/icons';
 import { useAppState } from '../shared/AppProvider';
 import React, { useEffect, useRef, useState } from 'react';
 import Router from 'next/router';
-import { handleGet } from '../../action/baseAction';
+import { handleGet, handlePut } from '../../action/baseAction';
 import Helper from "../../helper/general_helper";
 const { Panel } = Collapse;
+const { Dragger } = Upload;
+
+import TempInv from "../InvoiceComponent";
 
 const InvoiceComponent = () => {
   const [state] = useAppState();
   const [objData,setObjData]= useState({});
   const [fontSize,setFontSize]= useState("14px");
+  const [showModalUpload,setShowModalUpload]= useState(false);
+  const [loadingUpload,setLoadingUpload]= useState(false);
+  const [fileList,setFileList]= useState([]);
+
 
   useEffect(() => {
+    let kdTrx=localStorage.getItem("kdTrx");
+    if(kdTrx===undefined || kdTrx===null){
+        Router.back();
+    }
     if(state.mobile){
       setFontSize("80%");
     }
     handleGetInvoice();
-    console.log("Router.query",Router.query);
   }, []);
 
   const handleGetInvoice = async()=>{
-    await handleGet(`transaction/deposit/${btoa(Router.query.kd_trx)}/invoice`,(res,status,msg)=>{
+    await handleGet(`transaction/deposit/${btoa(localStorage.getItem("kdTrx"))}/invoice`,(res,status,msg)=>{
       setObjData(res.data);
     })
   }
+
+  const handleBack = () =>{
+    localStorage.removeItem("kdTrx");
+    Router.back();
+  }
+ 
   const tempRow = (title,desc,isRp=true) =>{
     return (
         <Row>
@@ -32,19 +49,61 @@ const InvoiceComponent = () => {
         </Row>
     );
   };
+  const props = {
+    name: 'file',
+    multiple: false,
+    onRemove: file => {
+        setFileList([])
+    },
+    beforeUpload: file => {
+        if (file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/jpeg') {
+            setFileList([file])
+            return false;
+           
+        }else{
+            message.error(`Silahkan Upload Gambar Sesuai Dengan Ketentuan`);
+            return false;
+        }
+    },
+    fileList
+}
+const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file)
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      }
+      fileReader.onerror = (error) => {
+        reject(error);
+      }
+    })
+  }
+
+  const handleUpload = async()=>{
+    setLoadingUpload(true);
+    const img = await convertBase64(fileList[0])
+    const data={bukti:img};
+    await handlePut(`transaction/deposit/${btoa(localStorage.kdTrx)}/paymentslip`,data,(res,status,msg)=>{
+        setLoadingUpload(false);
+    })
+  }
  
   return (
     <>
-    <Row type="flex" justify="center" gutter={10}>
-
+    <TempInv/>
+    {/* <Row type="flex" justify="center"   gutter={10}>
         <Col md={8} xs={24}>
-            <PageHeader
-                className="site-page-header"
-                onBack={() => Router.back()}
-                title={`#${objData.kd_trx}`}
-            >
-                <Card>
-                <Image width={200} src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+            <Card>
+                <PageHeader
+                    className="site-page-header"
+                    onBack={handleBack}
+                    title={`#${objData.kd_trx}`}
+                >
+                    <div align="middle">
+                        <Image style={{ verticalAlign: 'middle' }} width={200} src="https://prowara.id/static/media/logo.bc4aea99.png" />
+                    </div>
+                    <Row style={{margin:"5px"}}><Col/></Row>
                     {tempRow("Kode Pembayaran",objData.transaction_data&&objData.transaction_data.pay_code,false)}
                     <hr/>
                     <small style={{fontSize:fontSize}}>Silahkan transfer sebesar</small>
@@ -63,7 +122,7 @@ const InvoiceComponent = () => {
                     <Collapse bordered={false}>
                         {
                             objData.transaction_data&&<Panel header={<small style={{fontSize:fontSize}}>Rincian Biaya</small>} key={"0"}>
-                                {tempRow("Kode Unik",objData.transaction_data&&objData.transaction_data.unique_code)}
+                                {tempRow("Kode Unik",objData&&objData.unique_code)}
                                 {tempRow("Biaya Admin",objData.transaction_data&&objData.transaction_data.admin)}
                                 {tempRow("Total",objData.transaction_data&&objData.transaction_data.total_pay)}
                             </Panel>
@@ -98,22 +157,50 @@ const InvoiceComponent = () => {
                       <Col md={24} xs={24} sm={24}>
                       {
                         objData.payment_slip==="-"?(
-                          <Button style={{width:"100%"}} type="primary" size="medium">Upload Bukti Transfer</Button>  
+                          <Button onClick={()=>setShowModalUpload(true)} style={{width:"100%"}} type="primary" size="medium">Upload Bukti Transfer</Button>  
                         ):"Bukti Transfer Terkirim"
                       }
                       <Row style={{margin:"5px"}}><Col/></Row>
                       <Button style={{width:"100%"}} type="primary" danger size="medium">Batalkan Transfer</Button> 
                       <Row style={{margin:"5px"}}><Col/></Row>
-                      <Button style={{width:"100%"}} type="dashed" primary size="medium">Kembali</Button> 
+                      <Button onClick={handleBack} style={{width:"100%"}} type="dashed" primary size="medium">Kembali</Button> 
                       </Col>
                     </Row>
 
-
+                    </PageHeader>
                 </Card>
-            </PageHeader>
+            
 
         </Col>
     </Row>
+    {
+        showModalUpload&&<Modal
+        title="Upload Bukti Transfer"
+        visible={showModalUpload}
+        onOk={handleUpload}
+        onCancel={()=>{
+            setShowModalUpload(false)
+        }}
+        confirmLoading={loadingUpload}
+        okText={`Simpan`}
+        cancelText="Batal"
+        closable={true}
+        destroyOnClose={true}
+        maskClosable={false}
+    >
+        <Dragger {...props} >
+            <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">Klik atau seret file ke area ini untuk mengunggah</p>
+            <p className="ant-upload-hint">
+            Tipe gambar yang diperbolehkan hanya .PNG, .JPEG, .JPG
+            </p>
+        </Dragger>
+        
+        
+    </Modal>
+    } */}
     </>
 );
 };

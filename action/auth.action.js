@@ -22,7 +22,14 @@ function getUser() {
     return JSON.parse(atob(coo));
 }
 
+function setInfo(datum) {
+    Cookies.set('__uidInfo', btoa(JSON.stringify(datum)));
+}
 
+function getInfo() {
+    const coo=Cookies.get('__uidInfo');
+    return JSON.parse(atob(coo));
+}
 
 
 
@@ -37,5 +44,7 @@ export default {
     setUser,
     getUser,
     getToken,
-    setToken
+    setToken,
+    setInfo,
+    getInfo
 };

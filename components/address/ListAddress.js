@@ -155,7 +155,7 @@ const ListAddress = () => {
                       name="addressForm"
                       onFinish={onFinish}
                 >
-                    <Card title={"Form Alamat"} extra={
+                    <Card extra={
                         <div>
                             <Button
                                 className={"mr-2"}

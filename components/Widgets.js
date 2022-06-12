@@ -36,7 +36,7 @@ const Widgets = () => {
           */}
           <Col xs={24} sm={12} md={6}>
             <StatCard
-                title="Campaigns"
+                title="Campaigns asd"
                 value={103}
                 icon={<BookOutlined style={{ fontSize: '20px'}} />}
                 color={theme.primaryColor}

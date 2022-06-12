@@ -28,8 +28,9 @@ const Signin = () => {
     const [iconLoading, setIconLoading] = useState(false);
     const [showModalPin, setShowModalPin] = useState(false);
     const [dataUser, setDataUser] = useState({});
-
+    
     useEffect(() => {
+        
         forceUpdate({});
     }, []);
     const handleSubmit = async (values) => {
@@ -41,22 +42,29 @@ const Signin = () => {
                 password:values.password,
             });
             const data = hitLogin.data.data;
-            Action.http.axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
             setDataUser(data);
-            if(data.pin==="-"){
-                setLoading(false);
-                setIconLoading(false);
-                Message.success('Anda Belum Mempunya Pin').then(() => setShowModalPin(true));
-                return;
-            }
-            if(data.status === 3){
-                Action.setUser(data);
-                Action.setToken(data.token);
-                setLoading(false);
-                setIconLoading(false);
-                Router.push(StringLink.transactionRecycle);
-                return;
-            }
+            Action.http.axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+            Action.setUser(data);
+            Action.setToken(data.token);
+            setLoading(false);
+            setIconLoading(false);
+            // if(data.pin==="-"){
+            //     Message.success('Anda Belum Mempunya Pin').then(() => setShowModalPin(true));
+            //     return;
+            // }
+            // else if(data.status === 3){
+            //     if(data.kd_trx!==""||data.kd_trx!=="-"){
+            //         localStorage.setItem('typeTrx', "Recycle");
+            //         localStorage.setItem("kdTrx",data.kd_trx);
+            //         Router.push(StringLink.invoiceRecycle);
+            //     }else{
+            //         Router.push(StringLink.transactionRecycle);
+            //     }
+            // }else{
+            //     Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
+            // }
+            Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
+
 
             // Action.setUser(data);
             // Action.setToken(data.token);
@@ -67,7 +75,6 @@ const Signin = () => {
             //     Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
             // },3000)
         } catch (err){
-            console.log(err);
             setTimeout(()=>{
                 setLoading(false);
                 setIconLoading(false);
@@ -78,13 +85,9 @@ const Signin = () => {
 
 
     const handlePin = async(pin)=>{
-        console.log("pin",pin);
         let data = Object.assign(dataUser,{pin:pin});
         await handlePut(`member/pin/${data.id}`,{"pin":pin},(res,status,msg)=>{
             if(status){
-                setDataUser(data);
-                Action.setUser(data);
-                Action.setToken(data.token);
                 Message.success('Berhasil membuat Pin. anda akan dialihkan ke halaman dashboard!').then(() => Router.push('/'));
             }
         })
@@ -105,7 +108,7 @@ const Signin = () => {
                             <PlaySquareTwoTone style={{fontSize: '32px'}} />
                         </a>
                     </Link>
-                    <h5 className="mb-0 mt-3">Sign in ghgh</h5>
+                    <h5 className="mb-0 mt-3">Sign in</h5>
 
                     <p className="text-muted">get started with our service</p>
                 </div>

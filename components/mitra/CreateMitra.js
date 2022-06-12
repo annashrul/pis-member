@@ -6,6 +6,7 @@ import Action from "../../action/auth.action";
 const { Option } = Select;
 const msgInput='Tidak Boleh Kosong';
 import Router from 'next/router';
+import { StringLink } from '../../helper/string_link_helper';
 
 const TambahMitra = () => {
     const [form] = Form.useForm();
@@ -73,9 +74,11 @@ const TambahMitra = () => {
             console.log(res);
             setIconLoading(false)
             if(status){
-                localStorage.setItem('invoice', JSON.stringify(res.data));
-                Message.success(msg).then(() => Router.push('/invoice'));
-                onReset();
+                console.log(res)
+                localStorage.setItem('typeTrx', "Mitra Baru");
+                localStorage.setItem('kdTrx', res.data.kd_trx);
+                Message.success(msg).then(() => Router.push(StringLink.invoiceMitra));
+                // onReset();
             }else{
                 Message.info(msg)
             }
@@ -102,7 +105,7 @@ const TambahMitra = () => {
             <Row type="flex" justify="center" gutter={10}>
 
                 <Col md={8} xs={24} className={"mb-2"}>
-                    <Card title={"Pendaftaran Mitra Baru"} extra={<Button size={"small"} type={"info"}>{user.referral}</Button>}>
+                    <Card title={<Button size={"small"} type={"info"}>{user.referral}</Button>}>
 
                         <Form.Item hasFeedback name={"fullname"} onChange={onChange} label="Name"  rules={[{ required: true,message: msgInput }]}>
                             <Input placeholder="Ex: Jhon Doe"/>
@@ -146,7 +149,7 @@ const TambahMitra = () => {
                     </Card>
                 </Col>
                 <Col md={8} xs={24} className={"mb-2"}>
-                    <Card title={"Pendaftaran Mitra Baru"}>
+                    <Card>
                         <Row gutter={4}>
                             <Col xs={24} md={12}>
                                 <Form.Item hasFeedback name={"acc_name"} onChange={onChange} label="Atas Nama"  rules={[{ required: true,message: msgInput }]}>
@@ -232,7 +235,7 @@ const TambahMitra = () => {
                                         form.getFieldsError().filter(({ errors }) => errors.length).length
                                     }
                                 >
-                                    Log in
+                                    Lanjut
                                 </Button>
                             )}
                         </Form.Item>

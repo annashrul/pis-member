@@ -48,22 +48,22 @@ const Signin = () => {
             Action.setToken(data.token);
             setLoading(false);
             setIconLoading(false);
-            // if(data.pin==="-"){
-            //     Message.success('Anda Belum Mempunya Pin').then(() => setShowModalPin(true));
-            //     return;
-            // }
-            // else if(data.status === 3){
-            //     if(data.kd_trx!==""||data.kd_trx!=="-"){
-            //         localStorage.setItem('typeTrx', "Recycle");
-            //         localStorage.setItem("kdTrx",data.kd_trx);
-            //         Router.push(StringLink.invoiceRecycle);
-            //     }else{
-            //         Router.push(StringLink.transactionRecycle);
-            //     }
-            // }else{
-            //     Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
-            // }
-            Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
+            if(data.pin==="-"){
+                Message.success('Anda Belum Mempunya Pin').then(() => setShowModalPin(true));
+                return;
+            }
+            else if(data.status === 3){
+                if(data.kd_trx!==""||data.kd_trx!=="-"){
+                    localStorage.setItem('typeTrx', "Recycle");
+                    localStorage.setItem("kdTrx",data.kd_trx);
+                    Router.push(StringLink.invoiceRecycle);
+                }else{
+                    Router.push(StringLink.transactionRecycle);
+                }
+            }else{
+                Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
+            }
+            // Message.success('Sign complete. Taking you to your dashboard!').then(() => Router.push('/'));
 
 
             // Action.setUser(data);

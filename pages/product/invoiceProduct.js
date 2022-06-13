@@ -1,5 +1,5 @@
-import invoiceComponent from '../../components/invoiceComponent';
+import InvoiceComponent from '../../components/InvoiceComponent';
 
-const InvoiceProduct = () => <invoiceComponent />;
+const InvoiceProduct = () => <InvoiceComponent />;
 
 export default InvoiceProduct;

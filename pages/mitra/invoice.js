@@ -1,4 +1,4 @@
-import InvoiceComponent from '../../components/invoiceComponent';
+import InvoiceComponent from '../../components/InvoiceComponent';
 
 const InvoiceMitra = () => <InvoiceComponent />;
 

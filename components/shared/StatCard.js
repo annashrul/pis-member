@@ -28,7 +28,6 @@ const StatCard = ({ type, title, value, icon, color, clickHandler }) => {
 
     return (
         <Card
-            className="mb-4"
             style={type === 'fill' ? { backgroundColor: color } : null}
         >
           <Row type="flex" align="middle" justify="start">

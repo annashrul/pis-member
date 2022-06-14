@@ -12,7 +12,9 @@ import { handleGet } from '../action/baseAction';
 import Action from "../action/auth.action";
 import Helper from "../helper/general_helper"
 import Router from 'next/router';
+import ProfileComponent from './profile/profileComponent';
 const { Meta } = Card;
+
 const Overview = () => {
   const [objInfo, setObjInfo] = useState({});
   const [arrNews, setArrNews] = useState([]);
@@ -37,8 +39,8 @@ const Overview = () => {
 
   return (
     <div>
-      <Row gutter={16}>
-        <Col xs={24} sm={12} md={6}>
+     <Row gutter={4}>
+        <Col xs={24} sm={12} md={6} className="mb-2">
           <StatCard
             type="fill"
             title="Saldo Bonus"
@@ -48,7 +50,7 @@ const Overview = () => {
             clickHandler={() => Message.info('Campaign stat button clicked')}
           />
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={24} sm={12} md={6} className="mb-2">
           <StatCard
             type="fill"
             title="Saldo Bonus Nasional"
@@ -58,7 +60,7 @@ const Overview = () => {
             clickHandler={() => Message.info('Customers stat button clicked')}
           />
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={24} sm={12} md={6} className="mb-2">
           <StatCard
             type="fill"
             title="Total Penarikan"
@@ -68,7 +70,7 @@ const Overview = () => {
             clickHandler={() => Message.info('Queries stat button clicked')}
           />
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={24} sm={12} md={6} className="mb-2">
           <StatCard
             type="fill"
             title="Total Omset Nasional"
@@ -79,6 +81,11 @@ const Overview = () => {
           />
         </Col>
 
+      
+            
+      </Row>
+
+      <Row gutter={16}>
       {
         arrNews.length>0&&<Col xs={24} sm={24} md={24}>
           <p align="right" style={{cursor:"pointer"}} onClick={()=>Router.push(`/news`)}><a>Lihat Semua <RightCircleOutlined/></a></p>
@@ -99,8 +106,8 @@ const Overview = () => {
                 );
               })
             }
-            
       </Row>
+      
     </div>
   );
 };

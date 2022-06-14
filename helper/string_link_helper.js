@@ -3,6 +3,7 @@ export const StringLink = {
     tambahMitra:"/mitra",
     invoiceMitra:"/mitra/invoice",
     address:"/address",
+    profile:"/profile",
     genealogy:"/genealogy",
     product:"/product",
     invoiceProduct:"/product/invoice",

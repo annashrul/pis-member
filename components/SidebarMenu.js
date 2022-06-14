@@ -1,29 +1,30 @@
 import {
-    Avatar,
-    Badge,
-    Divider,
-    Drawer,
-    Dropdown,
-    Layout,
-    List,
-    Menu,
-    Popconfirm,
-    Row,
-    Switch,
-    Tooltip
-} from 'antd';
-import { FolderTwoTone,PoweroffOutlined, PlaySquareTwoTone, PushpinTwoTone } from '@ant-design/icons';
-import { capitalize, lowercase } from '../lib/helpers';
-import { useEffect, useState } from 'react';
-import {doLogout} from "../action/auth.action";
+  Avatar,
+  Badge,
+  Divider,
+  Drawer,
+  Layout,
+  List,
+  Menu,
+  Popconfirm,
+  Row,
+  Switch,
+  Tooltip,
+} from "antd";
+import { FolderTwoTone, PoweroffOutlined } from "@ant-design/icons";
+import { capitalize, lowercase } from "../lib/helpers";
+import { useEffect, useState } from "react";
+import authAction, { doLogout } from "../action/auth.action";
+import Router from "next/router";
 
-import DashHeader from './styles/Header';
-import Inner from './styles/Sidebar';
-import Link from 'next/link';
-import Routes from '../lib/routes';
-import { useAppState } from './shared/AppProvider';
-import { withRouter } from 'next/router';
-import general_helper from '../helper/general_helper';
+import DashHeader from "./styles/Header";
+import Inner from "./styles/Sidebar";
+import Link from "next/link";
+import Routes from "../lib/routes";
+import { useAppState } from "./shared/AppProvider";
+import { withRouter } from "next/router";
+import general_helper from "../helper/general_helper";
+import { StringLink } from "../helper/string_link_helper";
 
 const { SubMenu } = Menu;
 const { Header, Sider } = Layout;
@@ -31,254 +32,256 @@ const { Header, Sider } = Layout;
 let rootSubMenuKeys = [];
 
 const getKey = (name, index) => {
-    const string = `${name}-${index}`;
-    let key = string.replace(' ', '-');
-    return key.charAt(0).toLowerCase() + key.slice(1);
+  const string = `${name}-${index}`;
+  let key = string.replace(" ", "-");
+  return key.charAt(0).toLowerCase() + key.slice(1);
 };
 
-const UserMenu = (
-    <Menu>
-        <Menu.Item>Settings</Menu.Item>
-        <Menu.Item>Profile</Menu.Item>
-    </Menu>
-);
-
 const SidebarContent = ({
-                            sidebarTheme,
-                            sidebarMode,
-                            sidebarIcons,
-                            collapsed,
-                            router
-                        }) => {
-    const [state, dispatch] = useAppState();
-    const [openKeys, setOpenKeys] = useState([]);
-    const [appRoutes] = useState(Routes);
-    const { pathname } = router;
+  sidebarTheme,
+  sidebarMode,
+  sidebarIcons,
+  collapsed,
+  router,
+}) => {
+  const [state, dispatch] = useAppState();
+  const [openKeys, setOpenKeys] = useState([]);
+  const [user, setUser] = useState({});
+  const [appRoutes] = useState(Routes);
+  const { pathname } = router;
 
-    const badgeTemplate = badge => <Badge count={badge.value} className={`${state.direction === 'rtl' ? 'left' : 'right'}`} />;
+  const badgeTemplate = (badge) => (
+    <Badge
+      count={badge.value}
+      className={`${state.direction === "rtl" ? "left" : "right"}`}
+    />
+  );
 
-    useEffect(() => {
-        appRoutes.forEach((route, index) => {
+  useEffect(() => {
+    setUser(authAction.getUser());
+    appRoutes.forEach((route, index) => {
+      const isCurrentPath = pathname.indexOf(lowercase(route.name)) > -1;
+      const key = getKey(route.name, index);
+      rootSubMenuKeys.push(key);
+      if (isCurrentPath) setOpenKeys([...openKeys, key]);
+    });
+  }, []);
 
-            const isCurrentPath = pathname.indexOf(lowercase(route.name)) > -1;
-            const key = getKey(route.name, index);
-            rootSubMenuKeys.push(key);
-            if (isCurrentPath) setOpenKeys([...openKeys, key]);
-        });
-    }, []);
+  const onOpenChange = (openKeys) => {
+    const latestOpenKey = openKeys.slice(-1);
+    if (rootSubMenuKeys.indexOf(latestOpenKey) === -1) {
+      setOpenKeys([...latestOpenKey]);
+    } else {
+      setOpenKeys(latestOpenKey ? [...latestOpenKey] : []);
+    }
+  };
 
-    const onOpenChange = openKeys => {
-        const latestOpenKey = openKeys.slice(-1);
-        if (rootSubMenuKeys.indexOf(latestOpenKey) === -1) {
-            setOpenKeys([...latestOpenKey]);
-        } else {
-            setOpenKeys(latestOpenKey ? [...latestOpenKey] : []);
-        }
-    };
-
-    const menu = (
-        <>
-        <Menu
-            theme={sidebarTheme}
-            className="border-0 scroll-y sidebar"
-            style={{ flex: 1, height: '100%' }}
-            mode={sidebarMode}
-            openKeys={openKeys}
-            onOpenChange={onOpenChange}
-        >
-            {appRoutes.map((route, index) => {
-                const hasChildren = !!route.children;
-                if (!hasChildren){
-                    const isProduct=(route.path.includes("product") && pathname.includes("product"));
-                    return (
-                        <Menu.Item
-                            key={getKey(route.name, index)}
-                            className={
-                                isProduct||pathname === route.path ? 'ant-menu-item-selected' : ''
-                            }
-                            onClick={() => {
-                                setOpenKeys([getKey(route.name, index)]);
-                                if (state.mobile) dispatch({ type: 'mobileDrawer' });
-                            }}
-                            icon={sidebarIcons && route.icon}
-                        >
-                            <Link href={route.path}>
-                                <a>
-                                    <span className="mr-auto">{capitalize(route.name)}</span>
-                                    {route.badge && badgeTemplate(route.badge)}
-                                </a>
-                            </Link>
-                        </Menu.Item>
-                    );
+  const menu = (
+    <>
+      <Menu
+        theme={sidebarTheme}
+        className="border-0 scroll-y sidebar"
+        style={{ flex: 1, height: "100%" }}
+        mode={sidebarMode}
+        openKeys={openKeys}
+        onOpenChange={onOpenChange}
+      >
+        {appRoutes.map((route, index) => {
+          const hasChildren = !!route.children;
+          if (!hasChildren) {
+            const isProduct =
+              route.path.includes("product") && pathname.includes("product");
+            return (
+              <Menu.Item
+                key={getKey(route.name, index)}
+                className={
+                  isProduct || pathname === route.path
+                    ? "ant-menu-item-selected"
+                    : ""
                 }
-
-
-                if (hasChildren)
-                    return (
-                        <SubMenu
-                            key={getKey(route.name, index)}
-                            icon={sidebarIcons && route.icon}
-                            title={<>
-                            <span>{capitalize(route.name)}</span>
-                            {route.badge && badgeTemplate(route.badge)}
-                            </>
-                            }
-                        >
-                            {route.children.map((subitem, index) => {
-                                return <Menu.Item
-                                    key={getKey(subitem.name, index)}
-                                    className={
-                                        pathname === subitem.path ? 'ant-menu-item-selected' : ''
-                                    }
-                                    onClick={() => {
-                                        if (state.mobile) dispatch({ type: 'mobileDrawer' });
-                                    }}
-                                >
-                                    <Link href={`${subitem.path ? subitem.path : ''}`}>
-                                        <a>
-                                            <span className="mr-auto">
-                                              {capitalize(subitem.name)}
-                                            </span>
-                                            {subitem.badge && badgeTemplate(subitem.badge)}
-                                        </a>
-                                    </Link>
-                                </Menu.Item>
-                            })}
-                        </SubMenu>
-                    );
-            })}
-        </Menu>
-
-        <Divider
-            className={`m-0`}
-            style={{
-                display: `${sidebarTheme === 'dark' ? 'none' : ''}`
-            }}
-        />
-        <div className={`py-3 px-4 bg-${sidebarTheme}`}>
-            <Row type="flex" align="middle" justify="space-around">
-                <Dropdown overlay={UserMenu}>
-            <span>
-              <Badge
-                  count={6}
-                  overflowCount={5}
-                  style={{
-                      color: 'rgb(245, 106, 0)',
-                      backgroundColor: 'rgb(253, 227, 207)'
-                  }}
+                onClick={() => {
+                  setOpenKeys([getKey(route.name, index)]);
+                  if (state.mobile) dispatch({ type: "mobileDrawer" });
+                }}
+                icon={sidebarIcons && route.icon}
               >
-                <Avatar
-                    shape="circle"
-                    size={40}
-                    src="/images/avatar.jpg"
-                />
-              </Badge>
-            </span>
-                </Dropdown>
-                {!collapsed && (
-                    <>
-                    <span className="mr-auto" />
-                    <Link href="//one-readme.fusepx.com">
-                        <a
-                            className={`px-3 ${
-                                sidebarTheme === 'dark' ? 'text-white' : 'text-body'
-                                }`}
-                        >
-                            <Tooltip title="Help">
-                                <FolderTwoTone style={{ fontSize: '20px' }} />
-                            </Tooltip>
-                        </a>
-                    </Link>
+                <Link href={route.path}>
+                  <a>
+                    <span className="mr-auto">{capitalize(route.name)}</span>
+                    {route.badge && badgeTemplate(route.badge)}
+                  </a>
+                </Link>
+              </Menu.Item>
+            );
+          }
 
-                    <Popconfirm
-                        placement="top"
-                        title="Are you sure you want to sign out?"
-                        onConfirm={() => {
-                            doLogout();
-                            Routes.push('/signin')
-                        }}
-                        okText="Yes"
-                        cancelText="Cancel"
+          if (hasChildren)
+            return (
+              <SubMenu
+                key={getKey(route.name, index)}
+                icon={sidebarIcons && route.icon}
+                title={
+                  <>
+                    <span>{capitalize(route.name)}</span>
+                    {route.badge && badgeTemplate(route.badge)}
+                  </>
+                }
+              >
+                {route.children.map((subitem, index) => {
+                  return (
+                    <Menu.Item
+                      key={getKey(subitem.name, index)}
+                      className={
+                        pathname === subitem.path
+                          ? "ant-menu-item-selected"
+                          : ""
+                      }
+                      onClick={() => {
+                        if (state.mobile) dispatch({ type: "mobileDrawer" });
+                      }}
                     >
-                        <span
-                            className={`px-3 ${
-                                sidebarTheme === 'dark' ? 'text-white' : 'text-body'
-                                }`}
-                        >
-                            <PoweroffOutlined style={{ fontSize: '16px' }} />
-                           
-                        </span>
-                    </Popconfirm>
-                    </>
-                )}
-            </Row>
-        </div>
-        </>
-    );
+                      <Link href={`${subitem.path ? subitem.path : ""}`}>
+                        <a>
+                          <span className="mr-auto">
+                            {capitalize(subitem.name)}
+                          </span>
+                          {subitem.badge && badgeTemplate(subitem.badge)}
+                        </a>
+                      </Link>
+                    </Menu.Item>
+                  );
+                })}
+              </SubMenu>
+            );
+        })}
+      </Menu>
 
-    return (
-        <>
-        <Inner>
-            {!state.mobile && (
-                <Sider
-                    width={220}
-                    className={`bg-${sidebarTheme}`}
-                    theme={sidebarTheme}
-                    collapsed={collapsed}
-                >
-                    {menu}
-                </Sider>
-            )}
+      <Divider
+        className={`m-0`}
+        style={{
+          display: `${sidebarTheme === "dark" ? "none" : ""}`,
+        }}
+      />
+      <div className={`py-3 px-4 bg-${sidebarTheme}`}>
+        <Row type="flex" align="middle" justify="space-around">
+          <span>
+            <Avatar shape="circle" size={40} src={user.foto}>
+              {user.fullname && general_helper.getInitialName(user.fullname)}
+            </Avatar>
+          </span>
+          {!collapsed && (
+            <>
+              <span className="mr-auto" />
+              <a
+                onClick={() => {
+                  Router.push(StringLink.profile);
+                  if (state.mobile) dispatch({ type: "mobileDrawer" });
+                }}
+                className={`px-3 ${
+                  sidebarTheme === "dark" ? "text-white" : "text-body"
+                }`}
+              >
+                <Tooltip title="Profile">
+                  <FolderTwoTone style={{ fontSize: "20px" }} />
+                </Tooltip>
+              </a>
 
-            {state.mobile && (
-                <Drawer
-                    closable={false}
-                    width={220}
-                    placement={`${state.direction === 'rtl' ? 'right' : 'left'}`}
-                    onClose={() => dispatch({ type: 'mobileDrawer' })}
-                    visible={state.mobileDrawer}
-                    className="chat-drawer"
+              <Popconfirm
+                placement="top"
+                title="Anda yakin akan keluar ?"
+                onConfirm={() => {
+                  console.log("anyaing");
+                  doLogout();
+                  Router.push("/signin");
+                }}
+                okText="Keluar"
+                cancelText="Batal"
+              >
+                <a
+                  style={{ cursor: "pointer" }}
+                  className={`px-3 ${
+                    sidebarTheme === "dark" ? "text-white" : "text-body"
+                  }`}
                 >
-                    <Inner>
-                        <div
-                            style={{
-                                overflow: `hidden`,
-                                flex: `1 1 auto`,
-                                flexDirection: `column`,
-                                display: `flex`,
-                                height: `100vh`,
-                                maxHeight: `-webkit-fill-available`,
-                            }}
-                        >
-                            <DashHeader>
-                                <Header>
-                                    <img src={general_helper.imgDefault} style={{width:"100px"}}/>
-                                </Header>
-                            </DashHeader>
-                            {menu}
-                        </div>
-                    </Inner>
-                </Drawer>)}
+                  <Tooltip title="keluar">
+                    <PoweroffOutlined style={{ fontSize: "16px" }} />
+                  </Tooltip>
+                </a>
+              </Popconfirm>
+            </>
+          )}
+        </Row>
+      </div>
+    </>
+  );
 
-            <Drawer
-                title="Settings"
-                placement={`${state.direction === 'rtl' ? 'left' : 'right'}`}
-                closable={true}
-                width={300}
-                onClose={() => dispatch({ type: 'options' })}
-                visible={state.optionDrawer}
-            >
-                <List.Item
-                    actions={[
-                        <Switch
-                            size="small"
-                            checked={!!state.boxed}
-                            onChange={checked => dispatch({ type: 'boxed' })}
-                        />
-                    ]}
-                >
+  return (
+    <>
+      <Inner>
+        {!state.mobile && (
+          <Sider
+            width={220}
+            className={`bg-${sidebarTheme}`}
+            theme={sidebarTheme}
+            collapsed={collapsed}
+          >
+            {menu}
+          </Sider>
+        )}
+
+        {state.mobile && (
+          <Drawer
+            closable={false}
+            width={220}
+            placement={`${state.direction === "rtl" ? "right" : "left"}`}
+            onClose={() => dispatch({ type: "mobileDrawer" })}
+            visible={state.mobileDrawer}
+            className="chat-drawer"
+          >
+            <Inner>
+              <div
+                style={{
+                  overflow: `hidden`,
+                  flex: `1 1 auto`,
+                  flexDirection: `column`,
+                  display: `flex`,
+                  height: `100vh`,
+                  maxHeight: `-webkit-fill-available`,
+                }}
+              >
+                <DashHeader>
+                  <Header>
+                    <img
+                      src={general_helper.imgDefault}
+                      style={{ width: "100px" }}
+                    />
+                  </Header>
+                </DashHeader>
+                {menu}
+              </div>
+            </Inner>
+          </Drawer>
+        )}
+
+        <Drawer
+          title="Settings"
+          placement={`${state.direction === "rtl" ? "left" : "right"}`}
+          closable={true}
+          width={300}
+          onClose={() => dispatch({ type: "options" })}
+          visible={state.optionDrawer}
+        >
+          <List.Item
+            actions={[
+              <Switch
+                size="small"
+                checked={!!state.boxed}
+                onChange={(checked) => dispatch({ type: "boxed" })}
+              />,
+            ]}
+          >
             <span
-                css={`
+              css={`
                 -webkit-box-flex: 1;
                 -webkit-flex: 1 0;
                 -ms-flex: 1 0;
@@ -287,19 +290,19 @@ const SidebarContent = ({
             >
               Boxed view
             </span>
-                </List.Item>
-                <List.Item
-                    actions={[
-                        <Switch
-                            size="small"
-                            checked={!!state.darkSidebar}
-                            disabled={state.weakColor}
-                            onChange={checked => dispatch({ type: 'sidebarTheme' })}
-                        />
-                    ]}
-                >
+          </List.Item>
+          <List.Item
+            actions={[
+              <Switch
+                size="small"
+                checked={!!state.darkSidebar}
+                disabled={state.weakColor}
+                onChange={(checked) => dispatch({ type: "sidebarTheme" })}
+              />,
+            ]}
+          >
             <span
-                css={`
+              css={`
                 -webkit-box-flex: 1;
                 -webkit-flex: 1 0;
                 -ms-flex: 1 0;
@@ -308,19 +311,19 @@ const SidebarContent = ({
             >
               Dark sidebar menu
             </span>
-                </List.Item>
-                <List.Item
-                    actions={[
-                        <Switch
-                            size="small"
-                            checked={!!state.sidebarPopup}
-                            disabled={state.collapsed}
-                            onChange={checked => dispatch({ type: 'sidebarPopup' })}
-                        />
-                    ]}
-                >
+          </List.Item>
+          <List.Item
+            actions={[
+              <Switch
+                size="small"
+                checked={!!state.sidebarPopup}
+                disabled={state.collapsed}
+                onChange={(checked) => dispatch({ type: "sidebarPopup" })}
+              />,
+            ]}
+          >
             <span
-                css={`
+              css={`
                 -webkit-box-flex: 1;
                 -webkit-flex: 1 0;
                 -ms-flex: 1 0;
@@ -329,19 +332,19 @@ const SidebarContent = ({
             >
               Popup sub menus
             </span>
-                </List.Item>
-                <List.Item
-                    actions={[
-                        <Switch
-                            size="small"
-                            checked={!!state.sidebarIcons}
-                            disabled={state.collapsed}
-                            onChange={checked => dispatch({ type: 'sidebarIcons' })}
-                        />
-                    ]}
-                >
+          </List.Item>
+          <List.Item
+            actions={[
+              <Switch
+                size="small"
+                checked={!!state.sidebarIcons}
+                disabled={state.collapsed}
+                onChange={(checked) => dispatch({ type: "sidebarIcons" })}
+              />,
+            ]}
+          >
             <span
-                css={`
+              css={`
                 -webkit-box-flex: 1;
                 -webkit-flex: 1 0;
                 -ms-flex: 1 0;
@@ -350,18 +353,18 @@ const SidebarContent = ({
             >
               Sidebar menu icons
             </span>
-                </List.Item>
-                <List.Item
-                    actions={[
-                        <Switch
-                            size="small"
-                            checked={!!state.collapsed}
-                            onChange={checked => dispatch({ type: 'collapse' })}
-                        />
-                    ]}
-                >
+          </List.Item>
+          <List.Item
+            actions={[
+              <Switch
+                size="small"
+                checked={!!state.collapsed}
+                onChange={(checked) => dispatch({ type: "collapse" })}
+              />,
+            ]}
+          >
             <span
-                css={`
+              css={`
                 -webkit-box-flex: 1;
                 -webkit-flex: 1 0;
                 -ms-flex: 1 0;
@@ -370,18 +373,20 @@ const SidebarContent = ({
             >
               Collapsed sidebar menu
             </span>
-                </List.Item>
-                <List.Item
-                    actions={[
-                        <Switch
-                            size="small"
-                            checked={!!state.weakColor}
-                            onChange={checked => dispatch({ type: 'weak', value: checked })}
-                        />
-                    ]}
-                >
+          </List.Item>
+          <List.Item
+            actions={[
+              <Switch
+                size="small"
+                checked={!!state.weakColor}
+                onChange={(checked) =>
+                  dispatch({ type: "weak", value: checked })
+                }
+              />,
+            ]}
+          >
             <span
-                css={`
+              css={`
                 -webkit-box-flex: 1;
                 -webkit-flex: 1 0;
                 -ms-flex: 1 0;
@@ -390,18 +395,20 @@ const SidebarContent = ({
             >
               Weak colors
             </span>
-                </List.Item>
-                <List.Item
-                    actions={[
-                        <Switch
-                            size="small"
-                            checked={!!state.direction === 'rtl'}
-                            onChange={checked => dispatch({ type: 'direction', value: checked })}
-                        />
-                    ]}
-                >
+          </List.Item>
+          <List.Item
+            actions={[
+              <Switch
+                size="small"
+                checked={!!state.direction === "rtl"}
+                onChange={(checked) =>
+                  dispatch({ type: "direction", value: checked })
+                }
+              />,
+            ]}
+          >
             <span
-                css={`
+              css={`
                 -webkit-box-flex: 1;
                 -webkit-flex: 1 0;
                 -ms-flex: 1 0;
@@ -410,11 +417,11 @@ const SidebarContent = ({
             >
               RTL/LTR Toggle
             </span>
-                </List.Item>
-            </Drawer>
-        </Inner>
-        </>
-    );
+          </List.Item>
+        </Drawer>
+      </Inner>
+    </>
+  );
 };
 
 export default withRouter(SidebarContent);

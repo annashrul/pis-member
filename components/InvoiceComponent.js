@@ -95,7 +95,7 @@ const convertBase64 = (file) => {
     await handlePut(`transaction/deposit/${btoa(localStorage.kdTrx)}/paymentslip`,data,(res,status,msg)=>{
         setLoadingUpload(false);
         if(status){
-            rmStorageLocal();
+            handleBack();
         }
     })
   }
@@ -111,7 +111,7 @@ const convertBase64 = (file) => {
                     title={`Invoice ${localStorage.typeTrx}`}
                 >
                     <div align="middle">
-                        <Image style={{ verticalAlign: 'middle' }} width={200} src="https://prowara.id/static/media/logo.bc4aea99.png" />
+                        <Image style={{ verticalAlign: 'middle' }} width={200} src={Helper.imgDefault} />
                     </div>
                     <Row style={{margin:"5px"}}><Col/></Row>
                     {tempRow("Kode Transaksi",objData&&objData.kd_trx,false)}

@@ -200,16 +200,14 @@ const SidebarContent = ({
                         okText="Yes"
                         cancelText="Cancel"
                     >
-                        <a
+                        <span
                             className={`px-3 ${
                                 sidebarTheme === 'dark' ? 'text-white' : 'text-body'
                                 }`}
                         >
-                            <Tooltip title="Keluar">
                             <PoweroffOutlined style={{ fontSize: '16px' }} />
-                            </Tooltip>
                            
-                        </a>
+                        </span>
                     </Popconfirm>
                     </>
                 )}

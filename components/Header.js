@@ -66,6 +66,7 @@ const MainHeader = () => {
                 )}
               <Menu.Item>
                 <img src={general_helper.imgDefault} style={{width:"100px"}}/>
+                
               </Menu.Item>
             </Menu>
           </Header>

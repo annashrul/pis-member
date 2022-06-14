@@ -3,8 +3,7 @@ import moment from "moment";
 import { DatePicker } from 'antd';
 const RangePicker = DatePicker.RangePicker;
 
-
-const imgDefault="https://prowara.id/static/media/logo.bc4aea99.png"
+const imgDefault="/logos.png";
 
 const setCookie=(name,data)=>{
     Cookies.set(name, btoa(data), { expires: 1 });

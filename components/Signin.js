@@ -54,6 +54,7 @@ const Signin = () => {
             }
             else if(data.status === 3){
                 if(data.kd_trx!==""||data.kd_trx!=="-"){
+                    localStorage.setItem('linkBack', "/signin");
                     localStorage.setItem('typeTrx', "Recycle");
                     localStorage.setItem("kdTrx",data.kd_trx);
                     Router.push(StringLink.invoiceRecycle);

@@ -1,4 +1,4 @@
-import { Col, PageHeader,Message, Row,Button,Card,List,Avatar,Spin,Modal} from 'antd';
+import { Col, PageHeader,Message, Row,Button,Card,List,Avatar,Spin,Modal,Select} from 'antd';
 import { ExclamationCircleOutlined,CheckCircleOutlined } from '@ant-design/icons';
 import { useAppState } from '../shared/AppProvider';
 import React, { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import Router from 'next/router';
 import Helper from "../../helper/general_helper";
 import {StringLink} from "../../helper/string_link_helper";
 import ModalPin from "../ModalPin";
+const { Option } = Select;
 
 const { confirm } = Modal;
 
@@ -16,10 +17,11 @@ const CheckoutProduct = () =>{
     const [arrKurir,setArrKurir]= useState([]);
     const [arrChannel,setArrChannel]= useState([]);
     const [arrLayanan,setArrLayanan]= useState([]);
+    const [arrAddress,setArrAddress]= useState([]);
     const [idxKurir,setIdxKurir]= useState(0);
     const [idxAddress,setIdxAddress]= useState(0);
     const [idxLayanan,setIdxLayanan]= useState(0);
-    const [objAddress,setObjAddress]=useState([]);
+    const [objAddress,setObjAddress]=useState({});
     const [objProduct,setObjProduct]=useState({});
     const [subtotal,setSubtotal]=useState(0);
     const [ongkir,setOngkir]=useState(0);
@@ -46,8 +48,9 @@ const CheckoutProduct = () =>{
     }, []);
     const handleLoadAddress = async()=>{
         await handleGet("address?page=1",(datum,isLoading)=>{
-            setObjAddress([datum.data[0]]);
+            setObjAddress(datum.data[0]);
             handleLoadKurir();
+            setArrAddress(datum.data);
         })
     };
 
@@ -89,38 +92,24 @@ const CheckoutProduct = () =>{
     const handleCheckout = async(pin)=>{
         // const hide=Message.loading("tunggu sebentar ...");
         const data={
-            "pin":parseInt(pin,10),
+            "member_pin":pin,
             "payment_channel":arrChannel[idxPayment].code,
             "ongkir":ongkir,
             "jasa_pengiriman":arrKurir[idxKurir].kurir,
-            "id_alamat":objAddress[0].id,
+            "id_alamat":objAddress.id,
             "id_paket":objProduct.id_paket
         };
         await handlePost("transaction/checkout",data,(res,status,msg)=>{
             if(status){
-                Message.success('Transaksi Berhasil').then(() => Message.info('anda akan diarahkan ke halaman produk')).then(() => Router.push(StringLink.product));
+                localStorage.setItem('linkBack', StringLink.product);
+                localStorage.setItem('typeTrx', "Produk RO");
+                localStorage.setItem('kdTrx', res.data);
+                Message.success(msg).then(() => Router.push(StringLink.invoiceProduct));
+                // Message.success('Transaksi Berhasil').then(() => Message.info('anda akan diarahkan ke halaman produk')).then(() => Router.push(StringLink.product));
             }
         })
     }
-    const showPin = () => {
-        setIsModal(false);
-        confirm({
-            title: 'Pastikan data anda sudah benar',
-            icon: <ExclamationCircleOutlined />,
-            content: 'Data yang anda masukan akan mempengaruhi proses pengiriman',
-            onOk() {
-
-                return new Promise((resolve, reject) => {
-                    setTimeout(reject, 1000);
-                }).catch(() => handleCheckout());
-
-
-            },
-            onCancel() {
-                setIsModal(false);
-            },
-        });
-    };
+    
 
 
     return (
@@ -139,22 +128,32 @@ const CheckoutProduct = () =>{
                         <Row>
                             <Col xs={24} sm={24} md={24}>
                                 <Card className="mb-2" title="Alamat" extra={
-                                    <Button
-                                        size="small"
-                                        type="primary"
-                                        className={`${state.direction === 'rtl' ? 'ml-4' : ''}`}
-                                        onClick={()=>{}}
-                                    >
-                                        Ganti Alamat
-                                    </Button>
+                                    <Select
+                                    style={{width:"100%"}}
+                                    showSearch
+                                    placeholder="Pilih Alamat"
+                                    optionFilterProp="children"
+                                    onSearch={()=>{}}
+                                    onSelect={(e,i)=>setObjAddress(arrAddress[parseInt(i.key,10)])}
+    
+                                    
+                                >
+                                    {
+                                        arrAddress.map((val,key)=>{
+                                            return (
+                                                <Option key={key} value={val.title}>{val.title}</Option>
+                                            );
+                                        })
+                                    }
+                                </Select>
                                 }>
                                     <List
-                                        dataSource={objAddress}
+                                        dataSource={[objAddress]}
                                         renderItem={(item,key) => (
                                             <List.Item className="border-bottom-0" key={key}>
                                                 <List.Item.Meta
                                                     title={<span>{item.penerima}, {item.no_hp}</span>}
-                                                    description={<span className="">{objAddress.length>0&&`${objAddress[0].main_address}, kecamatan ${objAddress[0].kecamatan}, kota ${objAddress[0].kota}, provinsi ${objAddress[0].provinsi}`}</span>}
+                                                    description={<span className="">{`${objAddress.main_address}, kecamatan ${objAddress.kecamatan}, kota ${objAddress.kota}, provinsi ${objAddress.provinsi}`}</span>}
                                                 />
                                             </List.Item>
                                         )}

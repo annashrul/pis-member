@@ -42,7 +42,11 @@ const InvoiceComponent = () => {
 
   const handleBack = () =>{
     rmStorageLocal();
-    Router.back();
+    if(localStorage.getItem("linkBack")===null||localStorage.getItem("linkBack")===undefined){
+        Router.back();
+    }else{
+        Router.push(localStorage.getItem("linkBack"));
+    }
   }
  
   const tempRow = (title,desc,isRp=true) =>{

@@ -8,6 +8,7 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./styles/GlobalStyles";
 import { useAppState } from "./shared/AppProvider";
 import { withRouter } from "next/router";
+import { StringLink } from "../helper/string_link_helper";
 
 const { Content } = Layout;
 
@@ -18,7 +19,9 @@ const NonDashboardRoutes = [
   "/recycle/invoice",
   "/forgot",
   "/lockscreen",
-  "/_error"
+  "/_error",
+  StringLink.invoiceMitra,
+  StringLink.invoiceProduct
 ];
 
 const Page = ({ router, children }) => {
@@ -27,16 +30,19 @@ const Page = ({ router, children }) => {
   const isNotDashboard = NonDashboardRoutes.includes(router.pathname);
 
   useEffect(() => {
+    console.log("state.mobile",state.mobile)
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  }, [loading]);
+  }, [loading,state]);
+
+  console.log(state.weakColor);
 
   return (
     <Spin tip="Loading..." size="large" spinning={loading}>
       <ThemeProvider theme={theme}>
         <Container
-          className={`${state.weakColor ? "weakColor" : ""} ${
+          className={`weakColor ${
             state.boxed ? "boxed shadow-sm" : ""
           }`}
         >

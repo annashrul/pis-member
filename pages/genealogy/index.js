@@ -1,11 +1,12 @@
-import { Table,Tag,Select,Row,Col,Input,Form} from 'antd';
+import { Table,Tag,Select,Row,Col,Input,Form,Avatar} from 'antd';
 const { Column, ColumnGroup } = Table;
 import Helper from "../../helper/general_helper";
 import React, { useEffect, useState } from 'react';
 const Option = Select.Option;
 const Search = Input.Search;
+import {handleGet} from "../../action/baseAction"
 
-
+import moment from "moment";
 const Genealogy = () => {
     const [status, setStatus] = useState("");
     const [searchby, setSearchBy] = useState('fullname');
@@ -27,12 +28,14 @@ const Genealogy = () => {
         await handleGet(`member/genealogy?perpage=10${where}`,(datum,isLoading)=>{
             let datas=datum.data;
             setMeta(datum.pagination);
+            console.log(datum.data);
             datum.data.map((val,key)=>{
                 Object.assign(val,{
                     key:key,
                     no:Helper.generateNo(key,parseInt(datum.pagination.current_page,10)),
                     jumlah_sponsor:Helper.toRp(parseInt(val.jumlah_sponsor,10),true),
                     saldo_pending:Helper.toRp(parseInt(val.saldo_pending,10),true),
+                    recycle_date:moment(val.recycle_date).format("YYYY-MM-DD hh:mm:ss"),
                 })
             });
             setArrDatum(datas);
@@ -119,28 +122,28 @@ const Genealogy = () => {
                                <Table.Summary.Cell index={1}>
                                    <span style={{float:"right"}}>{Helper.toRp(totalSponsor,true)}</span>
                                </Table.Summary.Cell>
-                               <Table.Summary.Cell index={2}>
-                                   <span style={{float:"right"}}>{Helper.toRp(totalSaldo,true)}</span>
-                               </Table.Summary.Cell>
                            </Table.Summary.Row>
                            </>
                        );
                    }}
             >
                 <Column title="No" dataIndex="no" key="no" />
+                <Column title="Foto" dataIndex="foto" key="foto"  render={(_,record)=>{
+                    return <Avatar
+                   src={record.foto}
+                   style={{
+                   verticalAlign: 'middle'}}
+                  />
+                    
+                  
+                }} />
                 <Column title="Nama" dataIndex="fullname" key="fullname"/>
                 <Column title="No Handphone" dataIndex="mobile_no" key="mobile_no"/>
                 <Column title="Referral" dataIndex="referral" key="referral" />
-                <ColumnGroup title="Sponsor">
-                    <Column title="Referral" dataIndex="sponsor_referral" key="sponsor_referral"/>
-                    <Column title="Jumlah" dataIndex="jumlah_sponsor" key="jumlah_sponsor"  align={"right"}/>
-                </ColumnGroup>
-                <Column title="Saldo Pending" dataIndex="saldo_pending" key="saldo_pending"  align={"right"}/>
-                <Column title="Status" dataIndex="status" key="stauts" render={(_,record)=>{
-                    return <Tag color={record.status===0?"volcano":"blue"}>
-                        {record.status===0?"Tidak Aktif":"Aktif"}
-                    </Tag>
-                }} />
+                <Column title="Jumlah Sponsor" dataIndex="jumlah_sponsor" key="jumlah_sponsor" align="right" />
+                <Column title="Tanggal Recycle" dataIndex="recycle_date" key="recycle_date" />
+               
+               
 
 
             </Table>

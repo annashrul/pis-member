@@ -1,5 +1,5 @@
 import { Avatar, Badge, Layout, List, Menu,Popconfirm } from "antd";
-import { BellTwoTone, InteractionTwoTone, SettingTwoTone } from '@ant-design/icons';
+import { BellTwoTone, PoweroffOutlined,InteractionTwoTone, SettingTwoTone } from '@ant-design/icons';
 import DashHeader, { Notification } from "./styles/Header";
 
 import Link from "next/link";
@@ -65,98 +65,8 @@ const MainHeader = () => {
                     </Menu.Item>
                 )}
               <Menu.Item>
-                <Link href="/">
-                  <a className="brand">
-                    {/* <img src={general_helper.imgDefault} style={{height:"30px",width:"30px"}}/> */}
-                    <Avatar size={{
-                      xs: 24,
-                      sm: 32,
-                      md: 40,
-                      lg: 64,
-                      xl: 64,
-                      xxl: 80,
-                    }} src={general_helper.imgDefault} />
-
-                    {/* <PlaySquareTwoTone style={{fontSize: '20px'}} /> */}
-                    <strong className="text-black">PROWARA</strong>
-                  </a>
-                </Link>
+                <img src={general_helper.imgDefault} style={{width:"100px"}}/>
               </Menu.Item>
-
-
-
-              <span className="mr-auto" />
-
-                {!state.mobile && (
-                    <Menu.Item onClick={() => dispatch({ type: "fullscreen" })}>
-                      <InteractionTwoTone style={{fontSize: '20px'}} />
-                    </Menu.Item>
-                )}
-              {!state.mobile&&(<Menu.Item onClick={() => dispatch({ type: "options" })}>
-                <SettingTwoTone style={{fontSize: '20px'}} />
-              </Menu.Item>)}
-              {!state.mobile&&(<SubMenu
-                  title={
-                    <Badge count={5}>
-                      <span className="submenu-title-wrapper">
-                        <BellTwoTone style={{fontSize: '20px'}} />
-                      </span>
-                    </Badge>
-                  }
-              >
-                <Menu.Item
-                    className="p-0 bg-transparent"
-                    style={{ height: "auto" }}
-                >
-                  <List
-                      className="header-notifications"
-                      itemLayout="horizontal"
-                      dataSource={notifications}
-                      footer={<div>5 Notifications</div>}
-                      renderItem={item => (
-                          <Notification>
-                            <List.Item>
-                              <List.Item.Meta
-                                  avatar={item.avatar}
-                                  title={<a href="/">{item.title}</a>}
-                                  description={<small>{item.description}</small>}
-                              />
-                            </List.Item>
-                          </Notification>
-                      )}
-                  />
-                </Menu.Item>
-              </SubMenu>)}
-
-              {!state.mobile&&(<SubMenu title={<Avatar src="/images/avatar.jpg" />}>
-                <Menu.Item>Settings</Menu.Item>
-                <Menu.Item>Profile</Menu.Item>
-                <Menu.Item>Notifications</Menu.Item>
-                <Menu.Divider />
-                <Menu.Item>
-                  <Link href="//one-readme.fusepx.com">
-                    <a>Help?</a>
-                  </Link>
-                </Menu.Item>
-                <Menu.Item>
-                    <Popconfirm
-                        placement="top"
-                        title="Are you sure you want to sign out?"
-                        onConfirm={() => {
-                            doLogout();
-                            Routes.push('/signin')
-                        }}
-                        okText="Oke"
-                        cancelText="Batal"
-                    >
-                        <a>
-                            Keluar
-                        </a>
-                    </Popconfirm>
-
-
-                </Menu.Item>
-              </SubMenu>)}
             </Menu>
           </Header>
         </DashHeader>

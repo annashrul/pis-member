@@ -1,4 +1,4 @@
-import { Col, Card,Message,PageHeader, Row } from 'antd';
+import { Col,Button, Card,Message,PageHeader, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {handleGet} from "../../action/baseAction";
 import Router from 'next/router';
@@ -82,6 +82,11 @@ const ListProduct = () => {
                     >
                       <Meta description={Helper.toRp(val.price)}/>
                       <small>{Helper.rmHtml(val.caption)}</small>
+                      <Row className='mt-2'>
+                        <Col xs={24} sm={24} md={24}>
+                        <Button type="primary" style={{width:"100%"}}>Checkout</Button>
+                        </Col>
+                      </Row>
                     </Card>
                   </Col>
                 );

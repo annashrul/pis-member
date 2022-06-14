@@ -5,6 +5,7 @@ export const StringLink = {
     address:"/address",
     genealogy:"/genealogy",
     product:"/product",
+    invoiceProduct:"/product/invoice",
     checkout:"/product/checkout",
     withdraw:"/withdraw",
     reportWithdraw:"/withdraw/report",

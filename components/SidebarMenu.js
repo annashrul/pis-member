@@ -12,7 +12,7 @@ import {
     Switch,
     Tooltip
 } from 'antd';
-import { FolderTwoTone, PlaySquareTwoTone, PushpinTwoTone } from '@ant-design/icons';
+import { FolderTwoTone,PoweroffOutlined, PlaySquareTwoTone, PushpinTwoTone } from '@ant-design/icons';
 import { capitalize, lowercase } from '../lib/helpers';
 import { useEffect, useState } from 'react';
 import {doLogout} from "../action/auth.action";
@@ -23,6 +23,7 @@ import Link from 'next/link';
 import Routes from '../lib/routes';
 import { useAppState } from './shared/AppProvider';
 import { withRouter } from 'next/router';
+import general_helper from '../helper/general_helper';
 
 const { SubMenu } = Menu;
 const { Header, Sider } = Layout;
@@ -39,7 +40,6 @@ const UserMenu = (
     <Menu>
         <Menu.Item>Settings</Menu.Item>
         <Menu.Item>Profile</Menu.Item>
-        <Menu.Item>Notifications</Menu.Item>
     </Menu>
 );
 
@@ -206,7 +206,7 @@ const SidebarContent = ({
                                 }`}
                         >
                             <Tooltip title="Keluar">
-                            <PushpinTwoTone style={{ fontSize: '16px' }} />
+                            <PoweroffOutlined style={{ fontSize: '16px' }} />
                             </Tooltip>
                            
                         </a>
@@ -254,12 +254,7 @@ const SidebarContent = ({
                         >
                             <DashHeader>
                                 <Header>
-                                    <Link href="/">
-                                        <a className="brand mx-3">
-                                            <PlaySquareTwoTone style={{fontSize: '20px'}} />
-                                            <strong className="text-black pl-2">{state.name}</strong>
-                                        </a>
-                                    </Link>
+                                    <img src={general_helper.imgDefault} style={{width:"100px"}}/>
                                 </Header>
                             </DashHeader>
                             {menu}

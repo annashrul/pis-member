@@ -33,7 +33,7 @@ const Overview = () => {
       setArrNews(res.data);
     })
   }
- 
+  console.log(parseFloat(objInfo.saldo_pending).toFixed(0))
 
   return (
     <div>
@@ -42,7 +42,7 @@ const Overview = () => {
           <StatCard
             type="fill"
             title="Saldo Bonus"
-            value={Helper.toRp(objInfo.saldo)}
+            value={Helper.toRp(parseFloat(objInfo.saldo).toFixed(0))}
             icon={<WalletOutlined style={{ fontSize: '20px'}} />}
             color={theme.primaryColor}
             clickHandler={() => Message.info('Campaign stat button clicked')}
@@ -52,7 +52,7 @@ const Overview = () => {
           <StatCard
             type="fill"
             title="Saldo Bonus Nasional"
-            value={Helper.toRp(objInfo.saldo_pending)}
+            value={Helper.toRp(parseFloat(objInfo.saldo_pending).toFixed(0))}
             icon={<WalletOutlined style={{ fontSize: '20px'}}  />}
             color={theme.darkColor}
             clickHandler={() => Message.info('Customers stat button clicked')}
@@ -62,7 +62,7 @@ const Overview = () => {
           <StatCard
             type="fill"
             title="Total Penarikan"
-            value={Helper.toRp(objInfo.total_wd)}
+            value={Helper.toRp(parseFloat(objInfo.total_wd).toFixed(0))}
             icon={<WalletOutlined style={{ fontSize: '20px'}} />}
             color={theme.warningColor}
             clickHandler={() => Message.info('Queries stat button clicked')}
@@ -72,7 +72,7 @@ const Overview = () => {
           <StatCard
             type="fill"
             title="Total Omset Nasional"
-            value={Helper.toRp(objInfo.omset_nasional)}
+            value={Helper.toRp(parseFloat(objInfo.omset_nasional).toFixed(0))}
             icon={<WalletOutlined style={{ fontSize: '20px'}} />}
             color={theme.errorColor}
             clickHandler={() => Message.info('Opens stat button clicked')}

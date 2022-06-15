@@ -22,7 +22,7 @@ const { Dragger } = Upload;
 const InvoiceComponent = () => {
   const [state] = useAppState();
   const [objData, setObjData] = useState({});
-  const [fontSize, setFontSize] = useState("14px");
+  const [fontSize, setFontSize] = useState("12px");
   const [showModalUpload, setShowModalUpload] = useState(false);
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [fileList, setFileList] = useState([]);

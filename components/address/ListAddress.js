@@ -393,33 +393,29 @@ const ListAddress = () => {
                         <Tooltip title={`Alamat ${item.title}`}>
                           <Tag color="lime">{item.title}</Tag>
                         </Tooltip>,
-                        <Tooltip title={`Ubah Alamat ${item.penerima}`}>
+                        <Button
+                          onClick={(e) => handleEdit(e, item)}
+                          key="list-edit"
+                          type={"primary"}
+                          size={"small"}
+                        >
+                          Ubah
+                        </Button>,
+                        <Popconfirm
+                          title={`Anda yakin akan menghapus alamat ${item.penerima} ?`}
+                          onConfirm={(e) => handleConfirm(e, item.id)}
+                          onCancel={(e) => {}}
+                          okText="Oke"
+                          cancelText="Batal"
+                        >
                           <Button
-                            onClick={(e) => handleEdit(e, item)}
-                            key="list-edit"
                             type={"primary"}
                             size={"small"}
+                            key="list-delete"
                           >
-                            Ubah
+                            Hapus
                           </Button>
-                        </Tooltip>,
-                        <Tooltip title={`Hapus Alamat ${item.penerima}`}>
-                          <Popconfirm
-                            title={`Anda yakin akan menghapus alamat ${item.penerima} ?`}
-                            onConfirm={(e) => handleConfirm(e, item.id)}
-                            onCancel={(e) => {}}
-                            okText="Oke"
-                            cancelText="Batal"
-                          >
-                            <Button
-                              type={"primary"}
-                              size={"small"}
-                              key="list-delete"
-                            >
-                              Hapus
-                            </Button>
-                          </Popconfirm>
-                        </Tooltip>,
+                        </Popconfirm>,
                       ]}
                     >
                       <Skeleton title={false} loading={loadingAddress} active>

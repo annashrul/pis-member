@@ -8,6 +8,8 @@ import {
   Button,
   Form,
   Select,
+  Popconfirm,
+  Spin,
 } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import React, { useEffect, useState, useRef } from "react";
@@ -43,7 +45,7 @@ const TambahMitra = () => {
   });
   const usernameErrorRef = useRef(usernameError);
   const usernameInput = useRef(null);
-  const [fontSize, setFontSize] = useState("14px");
+  const [fontSize, setFontSize] = useState("12px");
 
   useEffect(() => {
     if (state.mobile) {
@@ -124,15 +126,18 @@ const TambahMitra = () => {
     };
     setIconLoading(true);
     await handlePost("auth/signup", data, (res, status, msg) => {
-      setIconLoading(false);
       if (status) {
         localStorage.setItem("linkBack", StringLink.tambahMitra);
         localStorage.setItem("typeTrx", "Mitra Baru");
         localStorage.setItem("kdTrx", res.data.kd_trx);
-        Message.success(msg).then(() => Router.push(StringLink.invoiceMitra));
-        onReset();
+        // setIconLoading(false);
+        Message.success(msg).then(() =>
+          Router.push(StringLink.invoiceMitra).then(() => setIconLoading(false))
+        );
+        // onReset();
       } else {
-        Message.info(msg);
+        setIconLoading(false);
+        // Message.info(msg).then(() => setIconLoading(false));
       }
     });
   };
@@ -208,6 +213,7 @@ const TambahMitra = () => {
                           message: "Harus Berupa Angka",
                         },
                         { min: 10, message: "no handphone tidak valid" },
+                        { max: 13, message: "no handphone tidak valid" },
                       ]}
                       tooltip={{
                         title: "Minimal 10 Angka",
@@ -373,84 +379,110 @@ const TambahMitra = () => {
           name="formSte2"
           onFinish={handleStep1}
         >
-          <Row type="flex" justify="center" gutter={10}>
-            <Col md={8} xs={24} className={"mb-2"}>
-              <Form.Item
-                hasFeedback
-                name="payment_channel"
-                label="Payment Channel"
-                rules={[{ required: true, message: msgInput }]}
-              >
-                <Select
-                  style={{ width: "100%" }}
-                  showSearch
-                  placeholder="Pilih Payment Channel"
-                  optionFilterProp="children"
-                  onChange={(e) => form1.setFieldsValue({ payment_channel: e })}
-                  onSearch={() => {}}
-                  onSelect={(e, i) =>
-                    setObjPaymentChannel(arrPaymentChannel[parseInt(i.key, 10)])
-                  }
-                >
-                  {arrPaymentChannel.map((val, key) => {
-                    return (
-                      <Option key={key} value={val.code}>
-                        {val.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                hasFeedback
-                name="id_paket"
-                label="Paket"
-                rules={[{ required: true, message: msgInput }]}
-              >
-                <Select
-                  style={{ width: "100%" }}
-                  showSearch
-                  placeholder="Pilih Paket"
-                  optionFilterProp="children"
-                  onChange={(e) => form1.setFieldsValue({ id_paket: e })}
-                  onSearch={() => {}}
-                  onSelect={(e, i) =>
-                    setObjPaket(arrProduct[parseInt(i.key, 10)])
-                  }
-                >
-                  {arrProduct.map((val, key) => {
-                    return (
-                      <Option key={key} value={val.id}>
-                        {val.title} - {general_helper.toRp(val.price)}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-              <Row gutter={6}>
-                <Col xs={12} md={12} sm={12}>
-                  <Button
-                    style={{ width: "100%" }}
-                    type="dashed"
-                    primary
-                    htmlType="button"
-                    className="mt-3"
-                    onClick={() => setStep(0)}
-                  >
-                    Kembali
+          <Row
+            type="flex"
+            justify="center"
+            align="middle"
+            style={{ alignItems: "center" }}
+            gutter={10}
+          >
+            <Col
+              md={8}
+              xs={24}
+              className={"mb-2"}
+              style={{
+                verticalAlign: "middle",
+              }}
+            >
+              <Card
+                title={!state.mobile && "Mitra Baru"}
+                extra={
+                  <Button size={"small"} type={"info"}>
+                    {user.referral}
                   </Button>
-                </Col>
-                <Col xs={12} md={12} sm={12}>
-                  <Button
+                }
+              >
+                <Form.Item
+                  hasFeedback
+                  name="payment_channel"
+                  label="Payment Channel"
+                  rules={[{ required: true, message: msgInput }]}
+                >
+                  <Select
                     style={{ width: "100%" }}
-                    type="primary"
-                    htmlType="submit"
-                    className="mt-3"
+                    showSearch
+                    placeholder="Pilih Payment Channel"
+                    optionFilterProp="children"
+                    onChange={(e) =>
+                      form1.setFieldsValue({ payment_channel: e })
+                    }
+                    onSearch={() => {}}
+                    onSelect={(e, i) =>
+                      setObjPaymentChannel(
+                        arrPaymentChannel[parseInt(i.key, 10)]
+                      )
+                    }
                   >
-                    Lanjut
-                  </Button>
-                </Col>
-              </Row>
+                    {arrPaymentChannel.map((val, key) => {
+                      return (
+                        <Option key={key} value={val.code}>
+                          {val.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  hasFeedback
+                  name="id_paket"
+                  label="Paket"
+                  rules={[{ required: true, message: msgInput }]}
+                >
+                  <Select
+                    style={{ width: "100%" }}
+                    showSearch
+                    placeholder="Pilih Paket"
+                    optionFilterProp="children"
+                    onChange={(e) => form1.setFieldsValue({ id_paket: e })}
+                    onSearch={() => {}}
+                    onSelect={(e, i) =>
+                      setObjPaket(arrProduct[parseInt(i.key, 10)])
+                    }
+                  >
+                    {arrProduct.map((val, key) => {
+                      return (
+                        <Option key={key} value={val.id}>
+                          {val.title} - {general_helper.toRp(val.price)}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </Form.Item>
+                <Row gutter={6}>
+                  <Col xs={12} md={12} sm={12}>
+                    <Button
+                      style={{ width: "100%" }}
+                      type="dashed"
+                      primary
+                      htmlType="button"
+                      className="mt-3"
+                      onClick={() => setStep(0)}
+                    >
+                      Kembali
+                    </Button>
+                  </Col>
+                  <Col xs={12} md={12} sm={12}>
+                    <Button
+                      style={{ width: "100%" }}
+                      type="primary"
+                      htmlType="submit"
+                      className="mt-3"
+                    >
+                      Lanjut
+                    </Button>
+                  </Col>
+                </Row>
+              </Card>
             </Col>
           </Row>
         </Form>
@@ -465,141 +497,166 @@ const TambahMitra = () => {
         >
           <Row type="flex" justify="center" gutter={10}>
             <Col md={8} xs={24} className={"mb-2"}>
-              <small style={{ fontSize: fontSize }}>
-                Total Yang Harus Di Bayar
-              </small>
-              <Row>
-                <Col className="mb-2" md={24} sm={24} xs={24}></Col>
-              </Row>
-              <Button
-                style={{ width: "100%", marginBottom: "2px" }}
-                type="dashed"
-                danger
-                size={"large"}
+              <Spin
+                tip="Tunggu Sebentar..."
+                size="large"
+                spinning={iconLoading}
               >
-                {general_helper.toRp(
-                  parseInt(objPaket.price, 10) +
-                    parseInt(info.fee_aktivasi, 10) +
-                    parseInt(objPaymentChannel.fee_customer.flat, 10)
-                )}
-              </Button>
-              <Row>
-                <Col md={24} sm={24} xs={24}></Col>
-              </Row>
-              {tempRow("Nama", form.getFieldValue("fullname"), false)}
-              <Row>
-                <Col md={24} sm={24} xs={24}>
-                  <hr />
-                </Col>
-              </Row>
-              {tempRow(
-                "No Handphone",
-                general_helper.checkNo(form.getFieldValue("mobile_no")),
-                false
-              )}
-              <Row>
-                <Col md={24} sm={24} xs={24}>
-                  <hr />
-                </Col>
-              </Row>
-
-              {tempRow("Username", form.getFieldValue("username"), false)}
-              <Row>
-                <Col md={24} sm={24} xs={24}>
-                  <hr />
-                </Col>
-              </Row>
-
-              {tempRow("Bank", objBank.name, false)}
-              <Row>
-                <Col md={24} sm={24} xs={24}>
-                  <hr />
-                </Col>
-              </Row>
-
-              {tempRow("Atas Nama", form.getFieldValue("acc_name"), false)}
-              <Row>
-                <Col md={24} sm={24} xs={24}>
-                  <hr />
-                </Col>
-              </Row>
-
-              {tempRow("No Rekening", form.getFieldValue("acc_no"), false)}
-
-              <Row>
-                <Col md={24} sm={24} xs={24}>
-                  <hr />
-                </Col>
-              </Row>
-              <Collapse bordered={false} defaultActiveKey={["0"]}>
-                <Panel
-                  header={
-                    <small style={{ fontSize: fontSize }}>
-                      Informasi Paket
-                    </small>
+                <Card
+                  title={!state.mobile && "Mitra Baru"}
+                  extra={
+                    <Button size={"small"} type={"info"}>
+                      {user.referral}
+                    </Button>
                   }
-                  key={"0"}
                 >
-                  {tempRow("Nama", objPaket.title, false)}
-                  {tempRow("Pin Registrasi", info.fee_aktivasi)}
-                  {tempRow("Harga", objPaket.price)}
-                </Panel>
-              </Collapse>
-              <Collapse bordered={false} defaultActiveKey={["0"]}>
-                <Panel
-                  header={
-                    <small style={{ fontSize: fontSize }}>
-                      Metode Pembayaran
-                    </small>
-                  }
-                  key={"0"}
-                >
+                  <small style={{ fontSize: fontSize }}>
+                    Total Yang Harus Di Bayar
+                  </small>
+                  <Row>
+                    <Col className="mb-2" md={24} sm={24} xs={24}></Col>
+                  </Row>
+                  <Button
+                    style={{ width: "100%", marginBottom: "2px" }}
+                    type="dashed"
+                    danger
+                    size={"large"}
+                  >
+                    {general_helper.toRp(
+                      parseInt(objPaket.price, 10) +
+                        parseInt(info.fee_aktivasi, 10) +
+                        parseInt(objPaymentChannel.fee_customer.flat, 10)
+                    )}
+                  </Button>
+                  <Row>
+                    <Col className="mb-2" md={24} sm={24} xs={24}></Col>
+                  </Row>
+
+                  {tempRow("Nama", form.getFieldValue("fullname"), false)}
+                  <Row>
+                    <Col md={24} sm={24} xs={24}>
+                      <hr />
+                    </Col>
+                  </Row>
                   {tempRow(
-                    objPaymentChannel.code,
-                    objPaymentChannel.name,
+                    "No Handphone",
+                    general_helper.checkNo(form.getFieldValue("mobile_no")),
                     false
                   )}
-                  {tempRow("Admin", objPaymentChannel.fee_customer.flat)}
-                </Panel>
-              </Collapse>
-              <Row>
-                <Col md={24} sm={24} xs={24}></Col>
-              </Row>
+                  <Row>
+                    <Col md={24} sm={24} xs={24}>
+                      <hr />
+                    </Col>
+                  </Row>
 
-              {tempRow(
-                "Total",
-                general_helper.toRp(
-                  parseInt(objPaket.price, 10) +
-                    parseInt(info.fee_aktivasi, 10) +
-                    parseInt(objPaymentChannel.fee_customer.flat, 10)
-                )
-              )}
+                  {tempRow("Username", form.getFieldValue("username"), false)}
+                  <Row>
+                    <Col md={24} sm={24} xs={24}>
+                      <hr />
+                    </Col>
+                  </Row>
 
-              <Row gutter={6}>
-                <Col xs={12} sm={12} md={12}>
-                  <Button
-                    style={{ width: "100%" }}
-                    type="dashed"
-                    primary
-                    htmlType="button"
-                    className="mt-3"
-                    onClick={() => setStep(1)}
-                  >
-                    Kembali
-                  </Button>
-                </Col>
-                <Col xs={12} sm={12} md={12}>
-                  <Button
-                    style={{ width: "100%" }}
-                    type="primary"
-                    htmlType="submit"
-                    className="mt-3"
-                    loading={iconLoading}
-                  >
-                    Lanjut
-                  </Button>
-                </Col>
-              </Row>
+                  {tempRow("Bank", objBank.name, false)}
+                  <Row>
+                    <Col md={24} sm={24} xs={24}>
+                      <hr />
+                    </Col>
+                  </Row>
+
+                  {tempRow("Atas Nama", form.getFieldValue("acc_name"), false)}
+                  <Row>
+                    <Col md={24} sm={24} xs={24}>
+                      <hr />
+                    </Col>
+                  </Row>
+
+                  {tempRow("No Rekening", form.getFieldValue("acc_no"), false)}
+
+                  <Row>
+                    <Col md={24} sm={24} xs={24}>
+                      <hr />
+                    </Col>
+                  </Row>
+                  <Collapse bordered={false}>
+                    <Panel
+                      header={
+                        <small style={{ fontSize: fontSize }}>
+                          Informasi Paket
+                        </small>
+                      }
+                      key={"0"}
+                    >
+                      {tempRow("Nama", objPaket.title, false)}
+                      {tempRow("Pin Registrasi", info.fee_aktivasi)}
+                      {tempRow("Harga", objPaket.price)}
+                    </Panel>
+                  </Collapse>
+                  <Collapse bordered={false}>
+                    <Panel
+                      header={
+                        <small style={{ fontSize: fontSize }}>
+                          Metode Pembayaran
+                        </small>
+                      }
+                      key={"0"}
+                    >
+                      {tempRow(
+                        objPaymentChannel.code,
+                        objPaymentChannel.name,
+                        false
+                      )}
+                      {tempRow("Admin", objPaymentChannel.fee_customer.flat)}
+                    </Panel>
+                  </Collapse>
+                  <Row>
+                    <Col className="mb-2" md={24} sm={24} xs={24}></Col>
+                  </Row>
+
+                  {tempRow(
+                    "Total",
+                    general_helper.toRp(
+                      parseInt(objPaket.price, 10) +
+                        parseInt(info.fee_aktivasi, 10) +
+                        parseInt(objPaymentChannel.fee_customer.flat, 10)
+                    )
+                  )}
+
+                  <Row gutter={6}>
+                    <Col xs={12} sm={12} md={12}>
+                      <Button
+                        style={{ width: "100%" }}
+                        type="dashed"
+                        primary
+                        htmlType="button"
+                        className="mt-3"
+                        onClick={() => setStep(1)}
+                      >
+                        Kembali
+                      </Button>
+                    </Col>
+                    <Col xs={12} sm={12} md={12}>
+                      <Popconfirm
+                        title="harap periksa data anda kembali"
+                        onConfirm={(e) => onFinish(e)}
+                        onCancel={() => {}}
+                        okText="Lanjut"
+                        cancelText="Batal"
+                        okType="submit"
+                      >
+                        <Button
+                          style={{ width: "100%" }}
+                          type="primary"
+                          htmlType="button"
+                          className="mt-3"
+                          // loading={iconLoading}
+                        >
+                          Lanjut
+                        </Button>
+                      </Popconfirm>
+                    </Col>
+                  </Row>
+                </Card>
+              </Spin>
             </Col>
           </Row>
         </Form>

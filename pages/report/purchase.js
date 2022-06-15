@@ -218,9 +218,6 @@ const PurchaseReport = () => {
         <Column title="Alamat" dataIndex="main_address" key="main_address" />
         <Column title="Tanggal" dataIndex="created_at" key="created_at" />
       </Table>
-      {/*<Table columns={columns} dataSource={data} loading={loading} onChange={(page)=>{*/}
-      {/*console.log(page)*/}
-      {/*}}  pagination={{ defaultPageSize: 1,hideOnSinglePage: true,total:data.length }}/>*/}
     </div>
   );
 };

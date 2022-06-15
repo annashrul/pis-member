@@ -52,6 +52,7 @@ const Signin = () => {
         Action.setToken(data.token);
         Action.setUser(res.data);
         setDataUser(res.data);
+
         if (data.pin === "-") {
           Message.success("Anda Belum Mempunya Pin").then(() => {
             setShowModalPin(true);
@@ -72,9 +73,9 @@ const Signin = () => {
             );
           }
         } else {
-          Message.success("Sign complete. Taking you to your dashboard!").then(
-            () => Router.push("/").then(() => setIconLoading(false))
-          );
+          Message.success(
+            "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
+          ).then(() => Router.push("/").then(() => setIconLoading(false)));
         }
       });
       setLoading(false);
@@ -89,6 +90,7 @@ const Signin = () => {
   };
 
   const handlePin = async (pin) => {
+    setLoading(true);
     let data = Object.assign(dataUser, { pin: pin });
     await handlePut(
       `member/pin/${data.id}`,
@@ -97,7 +99,14 @@ const Signin = () => {
         if (status) {
           Message.success(
             "Berhasil membuat Pin. anda akan dialihkan ke halaman dashboard!"
-          ).then(() => Router.push("/"));
+          ).then(() => {
+            Router.push("/").then(() => {
+              setShowModalPin(false);
+              setLoading(false);
+            });
+          });
+        } else {
+          setLoading(false);
         }
       }
     );
@@ -171,8 +180,8 @@ const Signin = () => {
       </Content>
       {showModalPin && (
         <ModalPin
+          loading={loading}
           submit={(pin) => {
-            setShowModalPin(false);
             handlePin(pin);
           }}
           cancel={(isShow) => {

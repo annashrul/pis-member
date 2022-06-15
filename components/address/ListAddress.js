@@ -126,7 +126,6 @@ const ListAddress = () => {
     Object.assign(e, {
       no_hp: general_helper.checkNo(e.no_hp),
     });
-    console.log(e);
     if (isUpdate === "") {
       await handlePost("address", e, (data, status, msg) => {
         setLoadingSave(false);
@@ -142,9 +141,20 @@ const ListAddress = () => {
   };
 
   const handleEdit = (e, val) => {
-    handleLoadKota(val.kd_prov, val.kd_kota);
-    handleLoadKecamatan(val.kd_kota, val.kd_kec);
+    handleLoadKota(val.kd_prov, val.kd_kota).then(() =>
+      handleLoadKecamatan(val.kd_kota, val.kd_kec)
+    );
     titleInput.current.focus();
+    // const datas = val;
+
+    // let no = 0;
+    // if (datas.no_hp.substr(0, 2) === "62") {
+    //   no = datas.no_hp.substr(2, datas.no_hp.length);
+    // } else {
+    //   no = datas.no_hp;
+    // }
+
+    // Object.assign(datas, { no_hp: no });
     form.setFieldsValue(val);
     setBtnDisabled();
     setIsUpdate(val.id);
@@ -233,6 +243,7 @@ const ListAddress = () => {
                         message: "Harus Berupa Angka",
                       },
                       { min: 10, message: "no handphone tidak valid" },
+                      { max: 13, message: "no handphone tidak valid" },
                     ]}
                     tooltip={{
                       title: "Minimal 10 Angka",
@@ -369,6 +380,11 @@ const ListAddress = () => {
                 itemLayout="vertical"
                 dataSource={arrAddress}
                 renderItem={(item, key) => {
+                  if (item.no_hp.substr(0, 2) === "62") {
+                    Object.assign(item, {
+                      no_hp: item.no_hp.substr(2, item.no_hp.length),
+                    });
+                  }
                   return (
                     <List.Item
                       bordered={true}
@@ -408,7 +424,7 @@ const ListAddress = () => {
                     >
                       <Skeleton title={false} loading={loadingAddress} active>
                         <List.Item.Meta
-                          title={`${item.penerima} | ${item.no_hp}`}
+                          title={`${item.penerima} | 62${item.no_hp}`}
                           description={`${item.main_address}, Kecamatan ${item.kecamatan}, kota ${item.kota}, provinsi ${item.provinsi}`}
                         />
                       </Skeleton>

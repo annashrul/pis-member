@@ -194,7 +194,6 @@ const SidebarContent = ({
                 placement="top"
                 title="Anda yakin akan keluar ?"
                 onConfirm={() => {
-                  console.log("anyaing");
                   doLogout();
                   Router.push("/signin");
                 }}

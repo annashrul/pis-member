@@ -17,15 +17,12 @@ export const handleGet = async (url, callback) => {
       message: "Terjadi Kesalahan",
       description: msg,
       key,
-      onClose: () => console.log("close"),
+      onClose: () => {},
     });
   }
 };
 
 export const handlePost = async (url, data, callback) => {
-  // const hide = Message.loading('tunggu sebentar..');
-  console.log("loading .....");
-
   try {
     const submitData = await Action.post(Action.apiUrl + url, data);
     const datum = submitData.data;
@@ -45,7 +42,7 @@ export const handlePost = async (url, data, callback) => {
       message: "Terjadi Kesalahan",
       description: msg,
       key,
-      onClose: () => console.log("close"),
+      onClose: () => {},
     });
   }
 };
@@ -62,7 +59,6 @@ export const handlePut = async (url, data, callback) => {
     }
     setTimeout(hide, 200);
   } catch (err) {
-    console.log("asd");
     setTimeout(hide, 200);
     callback([], false, "gagal");
     let msg = "Terjadi Kesalahan Jaringan";
@@ -74,7 +70,7 @@ export const handlePut = async (url, data, callback) => {
       message: "Terjadi Kesalahan",
       description: msg,
       key,
-      onClose: () => console.log("close"),
+      onClose: () => {},
     });
   }
 };
@@ -101,7 +97,7 @@ export const handleDelete = async (url, callback) => {
       message: "Terjadi Kesalahan",
       description: msg,
       key,
-      onClose: () => console.log("close"),
+      onClose: () => {},
     });
   }
 };

@@ -118,6 +118,8 @@ const checkNo = (val) => {
 
   if (checkIfFirstZero === "0") {
     noHp = "62" + noHp.substr(1, noHp.length);
+  } else if (checkIfFirst62 === "62") {
+    noHp = "62" + noHp.substr(2, noHp.length);
   } else {
     noHp = "62" + noHp;
   }

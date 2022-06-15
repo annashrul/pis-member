@@ -9,6 +9,7 @@ import {
   Image,
   Upload,
   Row,
+  Spin,
 } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import { useAppState } from "./shared/AppProvider";
@@ -130,13 +131,17 @@ const InvoiceComponent = () => {
       `transaction/deposit/${btoa(localStorage.kdTrx)}/paymentslip`,
       data,
       (res, status, msg) => {
-        setLoadingUpload(false);
         if (status) {
           message
             .success(res.meta.status)
             .then(() => message.info(res.meta.message, 2.5))
-            .then(() => handleBack());
+            .then(() => {
+              handleBack();
+              setLoadingUpload(false);
+              setShowModalUpload(false);
+            });
         } else {
+          setLoadingUpload(false);
           message.info(res.meta.status);
         }
       }
@@ -327,24 +332,25 @@ const InvoiceComponent = () => {
           onCancel={() => {
             setShowModalUpload(false);
           }}
-          confirmLoading={loadingUpload}
           okText={`Simpan`}
           cancelText="Batal"
           closable={true}
           destroyOnClose={true}
           maskClosable={false}
         >
-          <Dragger {...props}>
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">
-              Klik atau seret file ke area ini untuk mengunggah
-            </p>
-            <p className="ant-upload-hint">
-              Tipe gambar yang diperbolehkan hanya .PNG, .JPEG, .JPG
-            </p>
-          </Dragger>
+          <Spin tip="Tunggu Sebentar..." size="large" spinning={loadingUpload}>
+            <Dragger {...props}>
+              <p className="ant-upload-drag-icon">
+                <InboxOutlined />
+              </p>
+              <p className="ant-upload-text">
+                Klik atau seret file ke area ini untuk mengunggah
+              </p>
+              <p className="ant-upload-hint">
+                Tipe gambar yang diperbolehkan hanya .PNG, .JPEG, .JPG
+              </p>
+            </Dragger>
+          </Spin>
         </Modal>
       )}
     </>

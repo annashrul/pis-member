@@ -30,7 +30,6 @@ const FormComponent = ({ isModal, ok, cancel, userData }) => {
   const [fileList, setFileList] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    console.log(userData.fullname);
     form.setFieldsValue({ fullname: userData.fullname });
   }, []);
 
@@ -42,7 +41,6 @@ const FormComponent = ({ isModal, ok, cancel, userData }) => {
       Object.assign(datas, { photo: img });
     }
     await handlePut(`member/${userData.id}`, datas, (res, status, msg) => {
-      console.log(res);
       setLoading(false);
       if (status) {
         ok();

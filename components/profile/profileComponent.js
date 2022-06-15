@@ -46,7 +46,6 @@ const ProfileComponent = () => {
     );
   };
 
-  console.log("user", user.fullname);
   return (
     <div>
       <Card

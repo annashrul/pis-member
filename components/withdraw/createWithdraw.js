@@ -10,6 +10,8 @@ import {
   Radio,
   Input,
   Card,
+  message,
+  Spin,
 } from "antd";
 import React, { useRef, useEffect, useState } from "react";
 import { theme } from "../styles/GlobalStyles";
@@ -26,7 +28,6 @@ const CreateWithdraw = () => {
   const [form] = Form.useForm();
   const [idxPayment, setIdxPayment] = useState(0);
   const [modalPin, setModalPin] = useState(false);
-  const [modalConfim, setModalConfirm] = useState(false);
   const [bonus, setBonus] = useState(0);
   const [rekening, setRekening] = useState([]);
   const [bonusNasional, setBonusNasional] = useState(0);
@@ -43,6 +44,7 @@ const CreateWithdraw = () => {
   const nominalInput = useRef(null);
   const [fontSize, setFontSize] = useState("14px");
   const [step, setStep] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const [dataField, setDataField] = useState({
     member_pin: "",
@@ -54,7 +56,6 @@ const CreateWithdraw = () => {
   });
 
   useEffect(() => {
-    console.log("state.mobile", state.mobile);
     if (state.mobile) {
       setFontSize("80%");
     }
@@ -73,8 +74,8 @@ const CreateWithdraw = () => {
 
   const handleLoadInfo = async () => {
     await handleGet("site/info", (datum, isLoading) => {
-      console.log(datum);
       setBonus(parseInt(datum.data.saldo, 10));
+      setAmount(datum.data.saldo);
       setRekening([datum.data.rekening]);
       setBonusNasional(parseInt(datum.data.saldo_pending, 10));
       Action.setInfo(datum.data);
@@ -110,6 +111,7 @@ const CreateWithdraw = () => {
 
   const handleSubmit = async (e) => {
     let nominal = parseInt(e.amount, 10);
+
     if (type === "0") {
       if (nominal < minWd) {
         setNominalError({
@@ -152,42 +154,27 @@ const CreateWithdraw = () => {
     }
 
     setDataField(field);
-    // setModalConfirm(true);
   };
 
   const handleFinish = async (e) => {
     let field = dataField;
     Object.assign(field, { member_pin: e });
+    setLoading(true);
     await handlePost("transaction/withdrawal", field, (res, status, msg) => {
       if (status) {
-        setStep(0);
-        form.resetFields();
-        handleLoadInfo();
         setModalPin(false);
-        setModalConfirm(false);
-        const key = `open${Date.now()}`;
-        const btn = (
-          <Button
-            type="primary"
-            size="small"
-            onClick={() => notification.close(key)}
-          >
-            Confirm
-          </Button>
-        );
         notification.open({
           message: res.meta.status,
           description: res.meta.message,
-          btn,
-          key,
-          onClose: () => console.log("close"),
+          onClose: () => {
+            setStep(0);
+            form.resetFields();
+            handleLoadInfo();
+          },
         });
       }
+      setLoading(false);
     });
-  };
-
-  const handleConfirm = async () => {
-    setModalPin(true);
   };
 
   const tempRow = (title, desc, isRp = true) => {
@@ -297,12 +284,12 @@ const CreateWithdraw = () => {
                     optionFilterProp="children"
                     onChange={(e, i) => form.setFieldsValue({ id_bank: e })}
                     onSearch={() => {}}
-                    // onSelect={(e,i)=>setObjBank(arrBank[parseInt(i.key,10)])}
+                    onSelect={(e, i) => setIdxPayment(parseInt(i.key, 10))}
                   >
                     {rekening.map((val, key) => {
                       return (
                         <Option key={key} value={val.id}>
-                          {val.acc_name} - {val.acc_no}
+                          {val.bank_name}
                         </Option>
                       );
                     })}
@@ -315,7 +302,7 @@ const CreateWithdraw = () => {
                     <Col
                       xs={type === "0" ? 14 : 24}
                       sm={type === "0" ? 14 : 24}
-                      md={type === "0" ? 16 : 24}
+                      md={type === "0" ? 14 : 24}
                     >
                       <Form.Item
                         hasFeedback
@@ -346,7 +333,7 @@ const CreateWithdraw = () => {
                       </Form.Item>
                     </Col>
                     {type === "0" && (
-                      <Col xs={10} sm={10} md={8}>
+                      <Col xs={10} sm={10} md={10}>
                         <Button
                           onClick={(e) => {
                             e.preventDefault();
@@ -356,9 +343,13 @@ const CreateWithdraw = () => {
                           primary
                           style={{ width: "100%" }}
                         >
-                          <small style={{ fontSize: fontSize }}>
-                            Tarik Semua
-                          </small>
+                          {state.mobile ? (
+                            <small style={{ fontSize: fontSize }}>
+                              Tarik Semua
+                            </small>
+                          ) : (
+                            "Tarik Semua"
+                          )}
                         </Button>
                       </Col>
                     )}
@@ -478,10 +469,11 @@ const CreateWithdraw = () => {
           </Row>
         )}
       </Form>
+
       {modalPin && (
         <ModalPin
+          loading={loading}
           submit={(pin) => {
-            setModalPin(false);
             handleFinish(pin);
           }}
           cancel={(isShow) => {

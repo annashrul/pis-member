@@ -203,9 +203,6 @@ const TransactionReport = () => {
         <Column title="Catatan" dataIndex="note" key="note" />
         <Column title="Tanggal" dataIndex="created_at" key="created_at" />
       </Table>
-      {/*<Table columns={columns} dataSource={data} loading={loading} onChange={(page)=>{*/}
-      {/*console.log(page)*/}
-      {/*}}  pagination={{ defaultPageSize: 1,hideOnSinglePage: true,total:data.length }}/>*/}
     </div>
   );
 };

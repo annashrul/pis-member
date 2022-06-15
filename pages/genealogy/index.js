@@ -28,7 +28,6 @@ const Genealogy = () => {
       (datum, isLoading) => {
         let datas = datum.data;
         setMeta(datum.pagination);
-        console.log(datum.data);
         datum.data.map((val, key) => {
           Object.assign(val, {
             key: key,

@@ -37,6 +37,7 @@ const CheckoutProduct = () => {
   const [loadingLayanan, setLoadingLayanan] = useState(true);
   const [idxPayment, setIdxPayment] = useState(0);
   const [isModal, setIsModal] = useState(false);
+  const [loadingPin, setLoadingPin] = useState(false);
 
   useEffect(() => {
     if (Object.keys(Router.query).length > 0) {
@@ -101,7 +102,7 @@ const CheckoutProduct = () => {
   };
 
   const handleCheckout = async (pin) => {
-    // const hide=Message.loading("tunggu sebentar ...");
+    setLoadingPin(true);
     const data = {
       member_pin: pin,
       payment_channel: arrChannel[idxPayment].code,
@@ -115,8 +116,14 @@ const CheckoutProduct = () => {
         localStorage.setItem("linkBack", StringLink.product);
         localStorage.setItem("typeTrx", "Produk RO");
         localStorage.setItem("kdTrx", res.data);
-        Message.success(msg).then(() => Router.push(StringLink.invoiceProduct));
-        // Message.success('Transaksi Berhasil').then(() => Message.info('anda akan diarahkan ke halaman produk')).then(() => Router.push(StringLink.product));
+        Message.success(msg).then(() => {
+          Router.push(StringLink.invoiceProduct).then(() => {
+            setLoadingPin(false);
+            setIsModal(false);
+          });
+        });
+      } else {
+        setLoadingPin(false);
       }
     });
   };
@@ -350,8 +357,8 @@ const CheckoutProduct = () => {
       </Row>
       {isModal && (
         <ModalPin
+          loading={loadingPin}
           submit={(pin) => {
-            setIsModal(false);
             handleCheckout(pin);
           }}
           cancel={(isShow) => {

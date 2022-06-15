@@ -21,7 +21,6 @@ const Overview = () => {
     if (state.mobile) {
       setFont("80%");
     }
-    console.log(isData);
     handleLoadInfo();
   }, [isData]);
 

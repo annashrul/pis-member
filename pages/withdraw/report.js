@@ -34,7 +34,6 @@ const WithdrawReport = () => {
   }, []);
   const handleLoadData = async (where) => {
     setLoading(true);
-    console.log(`transaction/report?perpage=10${where}`);
     await handleGet(
       `transaction/withdrawal?perpage=10${where}`,
       (datum, isLoading) => {
@@ -237,9 +236,6 @@ const WithdrawReport = () => {
         />
         <Column title="Tanggal" dataIndex="created_at" key="created_at" />
       </Table>
-      {/*<Table columns={columns} dataSource={data} loading={loading} onChange={(page)=>{*/}
-      {/*console.log(page)*/}
-      {/*}}  pagination={{ defaultPageSize: 1,hideOnSinglePage: true,total:data.length }}/>*/}
     </div>
   );
 };

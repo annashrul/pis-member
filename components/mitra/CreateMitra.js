@@ -122,7 +122,6 @@ const TambahMitra = () => {
         acc_no: form.getFieldValue("acc_no"),
       },
     };
-    console.log(data);
     setIconLoading(true);
     await handlePost("auth/signup", data, (res, status, msg) => {
       setIconLoading(false);

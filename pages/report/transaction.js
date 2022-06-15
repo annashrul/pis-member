@@ -5,7 +5,7 @@ import Helper from "../../helper/general_helper";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { handleGet } from "../../action/baseAction";
-moment.lang("id");
+moment.locale("id");
 
 const Option = Select.Option;
 const Search = Input.Search;

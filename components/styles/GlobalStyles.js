@@ -5,11 +5,11 @@ import paletteLess from "!!raw-loader!../../assets/antd-custom.less";
 
 const lessVariables = lessToJs(paletteLess, {
     resolveVariables: true,
-    stripPrefix: true
+    stripPrefix: true,
   }),
   camelCasedVariables = objectToCamelCase(lessVariables),
   theme = {
-    ...camelCasedVariables
+    ...camelCasedVariables,
   };
 
 const GlobalStyles = createGlobalStyle`
@@ -18,6 +18,8 @@ const GlobalStyles = createGlobalStyle`
 
   *, *:before, *:after {
     box-sizing: inherit;
+    font-family: 'Poppins', sans-serif!important;
+
   }
 
   #__next > .ant-spin-nested-loading > .ant-spin-blur:after {
@@ -25,6 +27,8 @@ const GlobalStyles = createGlobalStyle`
   }
 
   html {
+        font-family: 'Poppins', sans-serif!important;
+
     box-sizing: border-box;
     -ms-overflow-style: -ms-autohiding-scrollbar;
   }
@@ -36,7 +40,7 @@ const GlobalStyles = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
     text-rendering:optimizeLegibility;
     font-size: 14px;
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Poppins', sans-serif!important;
   }
 
   html, body, #__next {
@@ -103,7 +107,7 @@ const GlobalStyles = createGlobalStyle`
   h1, h2, h3, h4, h5, h6,
   .h1, .h2, .h3, .h4, .h5, .h6 {
     margin-bottom: 0.5rem;
-    font-family: inherit;
+    font-family: 'Poppins', sans-serif!important;
     font-weight: 400;
     line-height: 1.2;
   }

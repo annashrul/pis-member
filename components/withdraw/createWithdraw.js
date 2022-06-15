@@ -35,11 +35,11 @@ const CreateWithdraw = () => {
   const [maxWdBonusNasional, setMaxWdBonusNasional] = useState(3000000);
   const [type, setType] = useState("0");
   const [config, setConfig] = useState({});
-  const [emailError, setEmailError] = useState({
+  const [nominalError, setNominalError] = useState({
     enable: false,
     helpText: "-",
   });
-  const emailErrorRef = useRef(emailError);
+  const nominalErrorRef = useRef(nominalError);
   const nominalInput = useRef(null);
   const [fontSize, setFontSize] = useState("14px");
   const [step, setStep] = useState(0);
@@ -59,17 +59,17 @@ const CreateWithdraw = () => {
       setFontSize("80%");
     }
     // setType("0");
-    emailErrorRef.current = emailError;
-    if (emailError.enable) {
+    nominalErrorRef.current = nominalError;
+    if (nominalError.enable) {
       nominalInput.current.focus();
       form.validateFields();
     } else {
-      if (emailError.helpText === "-") {
+      if (nominalError.helpText === "-") {
         handleLoadConfig();
         handleLoadInfo();
       }
     }
-  }, [emailError, state]);
+  }, [nominalError, state]);
 
   const handleLoadInfo = async () => {
     await handleGet("site/info", (datum, isLoading) => {
@@ -90,7 +90,7 @@ const CreateWithdraw = () => {
   const onChange = (e) => {
     let val = e.target.value;
     if (e.target.type === "radio") {
-      setEmailError({ enable: false, helpText: "" });
+      setNominalError({ enable: false, helpText: "" });
       setType(val);
       if (val === "1") {
         if (bonusNasional < maxWdBonusNasional) {
@@ -112,14 +112,14 @@ const CreateWithdraw = () => {
     let nominal = parseInt(e.amount, 10);
     if (type === "0") {
       if (nominal < minWd) {
-        setEmailError({
+        setNominalError({
           enable: true,
           helpText: "Minimal Penarikan Sebesar " + Helper.toRp(minWd),
         });
         return;
       }
       if (nominal > bonus) {
-        setEmailError({
+        setNominalError({
           enable: true,
           helpText:
             "Nominal Melebihi Bonus Anda. Anda Hanya Bisa Melakukan Penarikan Sebesar " +
@@ -129,7 +129,7 @@ const CreateWithdraw = () => {
       }
     } else {
       if (bonusNasional < maxWdBonusNasional) {
-        setEmailError({
+        setNominalError({
           enable: true,
           helpText:
             "Penarikan Harus Sebesar " + Helper.toRp(maxWdBonusNasional),
@@ -208,14 +208,13 @@ const CreateWithdraw = () => {
       </Row>
     );
   };
-  console.log("rekening", rekening);
 
   return (
     <div>
       <Form
         onChange={() => {
-          if (emailError.enable) {
-            setEmailError({ enable: false, helpText: "" });
+          if (nominalError.enable) {
+            setNominalError({ enable: false, helpText: "" });
           }
         }}
         form={form}
@@ -263,15 +262,24 @@ const CreateWithdraw = () => {
             <Col md={8} xs={24}>
               <Card>
                 <Form.Item
+                  style={{
+                    marginBottom: 0,
+                  }}
                   name="type"
                   label={
                     <small style={{ fontSize: fontSize }}>Tipe Withdraw</small>
                   }
                   onChange={onChange}
                 >
-                  <Radio.Group buttonStyle="outline">
-                    <Radio.Button value="0">Bonus</Radio.Button>
-                    <Radio.Button value="1">Bonus Nasional</Radio.Button>
+                  <Radio.Group buttonStyle="outline" style={{ width: "100%" }}>
+                    <Radio.Button value="0" style={{ width: "50%" }}>
+                      <small style={{ fontSize: fontSize }}>Bonus</small>
+                    </Radio.Button>
+                    <Radio.Button value="1" style={{ width: "50%" }}>
+                      <small style={{ fontSize: fontSize }}>
+                        Bonus Nasional
+                      </small>
+                    </Radio.Button>
                   </Radio.Group>
                 </Form.Item>
                 <Form.Item
@@ -321,8 +329,8 @@ const CreateWithdraw = () => {
                           },
                           {
                             validator(_, value) {
-                              if (emailError.enable) {
-                                return Promise.reject(emailError.helpText);
+                              if (nominalError.enable) {
+                                return Promise.reject(nominalError.helpText);
                               }
                               return Promise.resolve();
                             },

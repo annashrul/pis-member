@@ -1,4 +1,4 @@
-import { FormOutlined, CloseSquareOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import {
   Popconfirm,
   Col,
@@ -20,6 +20,7 @@ import {
   handlePost,
   handlePut,
 } from "../../action/baseAction";
+import general_helper from "../../helper/general_helper";
 const Search = Input.Search;
 const { Option } = Select;
 const msgInput = "Tidak Boleh Kosong";
@@ -122,6 +123,10 @@ const ListAddress = () => {
 
   const onFinish = async (e) => {
     setLoadingSave(true);
+    Object.assign(e, {
+      no_hp: general_helper.checkNo(e.no_hp),
+    });
+    console.log(e);
     if (isUpdate === "") {
       await handlePost("address", e, (data, status, msg) => {
         setLoadingSave(false);
@@ -229,6 +234,10 @@ const ListAddress = () => {
                       },
                       { min: 10, message: "no handphone tidak valid" },
                     ]}
+                    tooltip={{
+                      title: "Minimal 10 Angka",
+                      icon: <InfoCircleOutlined />,
+                    }}
                   >
                     <Input prefix={"+62"} placeholder="81223165XXXX" />
                   </Form.Item>
@@ -335,7 +344,15 @@ const ListAddress = () => {
                     name={"main_address"}
                     onChange={onChange}
                     label="Alamat Lengkap"
-                    rules={[{ required: true, message: msgInput }]}
+                    rules={[
+                      { required: true, message: msgInput },
+                      { min: 20, message: "minimal 20 karakter" },
+                    ]}
+                    tooltip={{
+                      title:
+                        "Masukan alamat anda dari nama jalan,rt,rw,blok rumah, no rumah",
+                      icon: <InfoCircleOutlined />,
+                    }}
                   >
                     <Input.TextArea placeholder="Ex: Jln Kebon Manggu Rt 02/04 No.112" />
                   </Form.Item>
@@ -345,16 +362,7 @@ const ListAddress = () => {
           </Form>
         </Col>
         <Col xs={24} sm={12} md={9}>
-          <Card
-            title={
-              <Search
-                placeholder="Tulis sesuatu disini ..."
-                enterButton
-                onSearch={(val) => {}}
-              />
-            }
-            className="mb-4"
-          >
+          <Card title="Daftar Alamat" className="mb-4">
             {!loadingAddress && arrAddress.length > 0 ? (
               <List
                 loading={loadingAddress}
@@ -363,8 +371,8 @@ const ListAddress = () => {
                 renderItem={(item, key) => {
                   return (
                     <List.Item
+                      bordered={true}
                       key={item.id}
-                      className="border-bottom-0"
                       actions={[
                         <Tooltip title={`Alamat ${item.title}`}>
                           <Tag color="lime">{item.title}</Tag>

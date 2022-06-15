@@ -69,7 +69,7 @@ const SidebarContent = ({
       rootSubMenuKeys.push(key);
       if (isCurrentPath) setOpenKeys([...openKeys, key]);
     });
-  }, []);
+  }, [state]);
 
   const onOpenChange = (openKeys) => {
     const latestOpenKey = openKeys.slice(-1);

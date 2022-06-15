@@ -7,7 +7,7 @@ import { handleGet } from "../../action/baseAction";
 const Option = Select.Option;
 const Search = Input.Search;
 import moment from "moment";
-moment.lang("id");
+moment.locale("id");
 
 const formItemLayout = {
   labelCol: {

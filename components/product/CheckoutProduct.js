@@ -243,9 +243,20 @@ const CheckoutProduct = () => {
                       style={{ cursor: "pointer" }}
                     >
                       <List.Item.Meta
-                        avatar={<Avatar src={item.logo} />}
-                        title={<a href="https://ant.design">{item.name}</a>}
-                        description={`${item.group} - ${Helper.toRp(
+                        avatar={
+                          <img
+                            alt={item.logo}
+                            src={item.logo}
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null; // prevents looping
+                              currentTarget.src = Helper.imgDefault;
+                            }}
+                            width="100px"
+                            height="40px"
+                          />
+                        }
+                        title={item.name}
+                        description={`Admin : ${Helper.toRp(
                           item.fee_customer.flat
                         )}`}
                       />

@@ -6,13 +6,15 @@ import { useState, useEffect } from "react";
 import authAction from "../../action/auth.action";
 import { CopyOutlined } from "@ant-design/icons";
 import general_helper from "../../helper/general_helper";
+import FormComponent from "./formComponent";
 import moment from "moment";
-moment.lang("id");
-const ProfileComponent = ({ children }) => {
+moment.locale("id");
+const ProfileComponent = () => {
   const [state] = useAppState();
   const [user, setUser] = useState({});
   const [info, setInfo] = useState({});
   const [font, setFont] = useState("14px");
+  const [showForm, setShowForm] = useState(false);
   useEffect(() => {
     if (state.mobile) {
       setFont("80%");
@@ -21,8 +23,7 @@ const ProfileComponent = ({ children }) => {
     const infos = authAction.getInfo();
     setUser(users);
     setInfo(infos);
-    console.log(users);
-  }, [state]);
+  }, [state, showForm]);
   const tempRow = (title, desc, isRp = true) => {
     return (
       <Row>
@@ -95,7 +96,9 @@ const ProfileComponent = ({ children }) => {
             align="middle"
             className="p-4"
           >
-            <Button type="primary">Ubah Profile</Button>
+            <Button type="dashed" danger onClick={() => setShowForm(!showForm)}>
+              Ubah Profile
+            </Button>
           </Row>
         }
       >
@@ -107,10 +110,31 @@ const ProfileComponent = ({ children }) => {
         <Row>
           <Col style={{ margin: "1px" }}></Col>
         </Row>
-        {tempRow("Tanggal Recycle", moment(user.recycle_date).format("LLL"))}
+        {tempRow("Tanggal Recycle", moment(user.recycle_date).format("LL"))}
         <Row>
           <Col style={{ margin: "1px" }}></Col>
         </Row>
+        {tempRow("Tanggal Join", moment(user.created_at).format("LL"))}
+        <Row>
+          <Col style={{ margin: "1px" }}></Col>
+        </Row>
+        {tempRow(
+          "Sponsor",
+          user.sponsor_referral !== null ? user.sponsor_referral : "-"
+        )}
+        <Row>
+          <Col style={{ margin: "1px" }}></Col>
+        </Row>
+        {state.mobile && (
+          <Button
+            style={{ width: "100%", marginTop: "10px" }}
+            type="dashed"
+            danger
+            onClick={() => setShowForm(!showForm)}
+          >
+            Ubah Profile
+          </Button>
+        )}
       </Card>
       <Row gutter={4}>
         <Col xs={12} sm={12} md={6} className="mb-1">
@@ -162,6 +186,19 @@ const ProfileComponent = ({ children }) => {
           </Card>
         </Col>
       </Row>
+      <br />
+      {showForm && (
+        <FormComponent
+          isModal={showForm}
+          ok={() => {
+            setShowForm(false);
+          }}
+          cancel={() => {
+            setShowForm(false);
+          }}
+          userData={user}
+        />
+      )}
     </div>
   );
 };

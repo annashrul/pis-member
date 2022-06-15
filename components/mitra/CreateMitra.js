@@ -179,7 +179,7 @@ const TambahMitra = () => {
       >
         {step === 0 && (
           <Row type="flex" justify="center" gutter={10}>
-            <Col md={8} xs={24} className={"mb-2"}>
+            <Col md={24} xs={24} sm={24} className={"mb-2"}>
               <Card
                 title={!state.mobile && "Mitra Baru"}
                 extra={
@@ -188,103 +188,108 @@ const TambahMitra = () => {
                   </Button>
                 }
               >
-                <Form.Item
-                  hasFeedback
-                  name={"fullname"}
-                  label="Name"
-                  rules={[{ required: true, message: msgInput }]}
-                >
-                  <Input placeholder="Ex: Jhon Doe" />
-                </Form.Item>
-                <Form.Item
-                  hasFeedback
-                  name="mobile_no"
-                  label="No Handphone"
-                  rules={[
-                    { required: true, message: "Tidak Boleh Kosong" },
-                    {
-                      pattern: new RegExp(/^[0-9]*$/),
-                      message: "Harus Berupa Angka",
-                    },
-                    { min: 10, message: "no handphone tidak valid" },
-                  ]}
-                  tooltip={{
-                    title: "Minimal 10 Angka",
-                    icon: <InfoCircleOutlined />,
-                  }}
-                >
-                  <Input prefix={"+62"} placeholder="81223165XXXX" />
-                </Form.Item>
-                <Form.Item
-                  hasFeedback
-                  name={"username"}
-                  label="Username"
-                  rules={[
-                    { required: true, message: msgInput },
-                    {
-                      pattern: new RegExp(/^[a-zA-Z0-9]*$/),
-                      message:
-                        "Tidak boleh memasukan selain huruf,angka dan tanpa spasi",
-                    },
-                    {
-                      validator(_, value) {
-                        if (usernameError.enable) {
-                          return Promise.reject(usernameError.helpText);
-                        }
-                        return Promise.resolve();
-                      },
-                    },
-                  ]}
-                  tooltip={{
-                    title: "hanya diperbolehkan huruf,angka dan tanpa spasi",
-                    icon: <InfoCircleOutlined />,
-                  }}
-                >
-                  <Input ref={usernameInput} placeholder="Ex: jhondoe" />
-                </Form.Item>
-                <Form.Item
-                  hasFeedback
-                  name={"password"}
-                  label="Password"
-                  rules={[
-                    { required: true, message: msgInput },
-                    { min: 6, message: "password minimal 6 karakter" },
-                  ]}
-                  tooltip={{
-                    title: "Minimal 6 Karakter",
-                    icon: <InfoCircleOutlined />,
-                  }}
-                >
-                  <Input.Password />
-                </Form.Item>
-                <Form.Item
-                  name="confirm_password"
-                  label="Konfirmasi Password"
-                  dependencies={["password"]}
-                  hasFeedback
-                  rules={[
-                    {
-                      required: true,
-                      message: msgInput,
-                    },
-                    {
-                      min: 6,
-                      message: "konfirmasi password minimal 6 karakter",
-                    },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (!value || getFieldValue("password") === value) {
-                          return Promise.resolve();
-                        }
-                        return Promise.reject(new Error("Password Tidak Sama"));
-                      },
-                    }),
-                  ]}
-                >
-                  <Input.Password />
-                </Form.Item>
-                <Row gutter={4}>
-                  <Col xs={24} md={12}>
+                <Row gutter={6}>
+                  <Col md={8} xs={24} sm={12}>
+                    <Form.Item
+                      hasFeedback
+                      name={"fullname"}
+                      label="Name"
+                      rules={[{ required: true, message: msgInput }]}
+                    >
+                      <Input placeholder="Ex: Jhon Doe" />
+                    </Form.Item>
+                    <Form.Item
+                      hasFeedback
+                      name="mobile_no"
+                      label="No Handphone"
+                      rules={[
+                        { required: true, message: "Tidak Boleh Kosong" },
+                        {
+                          pattern: new RegExp(/^[0-9]*$/),
+                          message: "Harus Berupa Angka",
+                        },
+                        { min: 10, message: "no handphone tidak valid" },
+                      ]}
+                      tooltip={{
+                        title: "Minimal 10 Angka",
+                        icon: <InfoCircleOutlined />,
+                      }}
+                    >
+                      <Input prefix={"+62"} placeholder="81223165XXXX" />
+                    </Form.Item>
+                    <Form.Item
+                      hasFeedback
+                      name={"username"}
+                      label="Username"
+                      rules={[
+                        { required: true, message: msgInput },
+                        {
+                          pattern: new RegExp(/^[a-zA-Z0-9]*$/),
+                          message:
+                            "Tidak boleh memasukan selain huruf,angka dan tanpa spasi",
+                        },
+                        {
+                          validator(_, value) {
+                            if (usernameError.enable) {
+                              return Promise.reject(usernameError.helpText);
+                            }
+                            return Promise.resolve();
+                          },
+                        },
+                      ]}
+                      tooltip={{
+                        title:
+                          "hanya diperbolehkan huruf,angka dan tanpa spasi",
+                        icon: <InfoCircleOutlined />,
+                      }}
+                    >
+                      <Input ref={usernameInput} placeholder="Ex: jhondoe" />
+                    </Form.Item>
+                  </Col>
+                  <Col md={8} xs={24} sm={12}>
+                    <Form.Item
+                      hasFeedback
+                      name={"password"}
+                      label="Password"
+                      rules={[
+                        { required: true, message: msgInput },
+                        { min: 6, message: "password minimal 6 karakter" },
+                      ]}
+                      tooltip={{
+                        title: "Minimal 6 Karakter",
+                        icon: <InfoCircleOutlined />,
+                      }}
+                    >
+                      <Input.Password />
+                    </Form.Item>
+                    <Form.Item
+                      name="confirm_password"
+                      label="Konfirmasi Password"
+                      dependencies={["password"]}
+                      hasFeedback
+                      rules={[
+                        {
+                          required: true,
+                          message: msgInput,
+                        },
+                        {
+                          min: 6,
+                          message: "konfirmasi password minimal 6 karakter",
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (!value || getFieldValue("password") === value) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(
+                              new Error("Password Tidak Sama")
+                            );
+                          },
+                        }),
+                      ]}
+                    >
+                      <Input.Password />
+                    </Form.Item>
                     <Form.Item
                       hasFeedback
                       name={"acc_name"}
@@ -294,7 +299,7 @@ const TambahMitra = () => {
                       <Input placeholder="Ex: Jhon Doe" />
                     </Form.Item>
                   </Col>
-                  <Col xs={24} md={12}>
+                  <Col md={8} xs={24} sm={12}>
                     <Form.Item
                       hasFeedback
                       name="acc_no"
@@ -314,49 +319,48 @@ const TambahMitra = () => {
                     >
                       <Input placeholder="XXXXXXXX" />
                     </Form.Item>
+                    <Form.Item
+                      hasFeedback
+                      name="id_bank"
+                      label="Bank"
+                      rules={[{ required: true, message: msgInput }]}
+                    >
+                      <Select
+                        style={{ width: "100%" }}
+                        showSearch
+                        placeholder="Pilih Bank"
+                        optionFilterProp="children"
+                        onChange={(e, i) => form.setFieldsValue({ id_bank: e })}
+                        onSearch={() => {}}
+                        onSelect={(e, i) =>
+                          setObjBank(arrBank[parseInt(i.key, 10)])
+                        }
+                      >
+                        {arrBank.map((val, key) => {
+                          return (
+                            <Option key={key} value={val.id}>
+                              {val.name}
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </Form.Item>
+
+                    <Form.Item shouldUpdate={true} label={`   `}>
+                      {() => (
+                        <Button
+                          loading={iconLoading}
+                          style={{ width: "100%" }}
+                          type="primary"
+                          htmlType="submit"
+                          className=""
+                        >
+                          Lanjut
+                        </Button>
+                      )}
+                    </Form.Item>
                   </Col>
                 </Row>
-
-                <Form.Item
-                  hasFeedback
-                  name="id_bank"
-                  label="Bank"
-                  rules={[{ required: true, message: msgInput }]}
-                >
-                  <Select
-                    style={{ width: "100%" }}
-                    showSearch
-                    placeholder="Pilih Bank"
-                    optionFilterProp="children"
-                    onChange={(e, i) => form.setFieldsValue({ id_bank: e })}
-                    onSearch={() => {}}
-                    onSelect={(e, i) =>
-                      setObjBank(arrBank[parseInt(i.key, 10)])
-                    }
-                  >
-                    {arrBank.map((val, key) => {
-                      return (
-                        <Option key={key} value={val.id}>
-                          {val.name}
-                        </Option>
-                      );
-                    })}
-                  </Select>
-                </Form.Item>
-
-                <Form.Item shouldUpdate={true}>
-                  {() => (
-                    <Button
-                      loading={iconLoading}
-                      style={{ width: "100%" }}
-                      type="primary"
-                      htmlType="submit"
-                      className="mt-3"
-                    >
-                      Lanjut
-                    </Button>
-                  )}
-                </Form.Item>
               </Card>
             </Col>
           </Row>

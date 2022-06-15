@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import moment from "moment";
-import { DatePicker } from "antd";
+import { DatePicker, message } from "antd";
 const RangePicker = DatePicker.RangePicker;
 
 const imgDefault = "/logos.png";
@@ -118,6 +118,8 @@ const checkNo = (val) => {
 
   if (checkIfFirstZero === "0") {
     noHp = "62" + noHp.substr(1, noHp.length);
+  } else {
+    noHp = "62" + noHp;
   }
   return noHp;
 };
@@ -134,7 +136,45 @@ const getInitialName = (val) => {
   }
 };
 
+const convertBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+};
+const getPropsUpload = (fileList, callback) => {
+  return {
+    name: "file",
+    multiple: false,
+    onRemove: (file) => {
+      callback([]);
+    },
+    beforeUpload: (file) => {
+      if (
+        file.type === "image/png" ||
+        file.type === "image/jpg" ||
+        file.type === "image/jpeg"
+      ) {
+        callback([file]);
+        return false;
+      } else {
+        message.error(`Silahkan Upload Gambar Sesuai Dengan Ketentuan`);
+        return false;
+      }
+    },
+    fileList,
+  };
+};
+
 export default {
+  getPropsUpload,
+  convertBase64,
   getInitialName,
   checkNo,
   imgDefault,

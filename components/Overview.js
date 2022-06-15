@@ -59,7 +59,6 @@ const Overview = () => {
               value={Helper.toRp(parseFloat(objInfo.saldo).toFixed(0))}
               icon={<WalletOutlined style={{ fontSize: "20px" }} />}
               color={theme.primaryColor}
-              clickHandler={() => Message.info("Campaign stat button clicked")}
             />
           )}
         </Col>
@@ -77,7 +76,6 @@ const Overview = () => {
               value={Helper.toRp(parseFloat(objInfo.saldo_pending).toFixed(0))}
               icon={<WalletOutlined style={{ fontSize: "20px" }} />}
               color={theme.darkColor}
-              clickHandler={() => Message.info("Customers stat button clicked")}
             />
           )}
         </Col>
@@ -91,7 +89,6 @@ const Overview = () => {
               value={Helper.toRp(parseFloat(objInfo.total_wd).toFixed(0))}
               icon={<WalletOutlined style={{ fontSize: "20px" }} />}
               color={theme.warningColor}
-              clickHandler={() => Message.info("Queries stat button clicked")}
             />
           )}
         </Col>
@@ -109,7 +106,6 @@ const Overview = () => {
               value={Helper.toRp(parseFloat(objInfo.omset_nasional).toFixed(0))}
               icon={<WalletOutlined style={{ fontSize: "20px" }} />}
               color={theme.errorColor}
-              clickHandler={() => Message.info("Opens stat button clicked")}
             />
           )}
         </Col>

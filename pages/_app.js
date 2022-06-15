@@ -55,9 +55,6 @@ class MyApp extends App {
     pageProps.ieBrowser = ie;
     return { pageProps };
   }
-  UnLoadWindow() {
-    return "We strongly recommends NOT closing this window yet.";
-  }
 
   render() {
     // window.onbeforeunload = this.UnLoadWindow;
@@ -95,17 +92,22 @@ class MyApp extends App {
           <link rel="shortcut icon" href="/images/triangle.png" />
           <title>Prowara Member</title>
 
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+          <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap"
+            rel="stylesheet"
+          />
+
+          {/* <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
           <link
             href="https://fonts.googleapis.com/css2?family=Joan&family=Noto+Sans:wght@600&display=swap"
             rel="stylesheet"
-          />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900|Anonymous+Pro:400,700&display=swap"
-            rel="stylesheet"
-          />
+          /> */}
+
           {pageProps.ieBrowser && (
             <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js" />
           )}

@@ -10,7 +10,7 @@ import { StringLink } from "../helper/string_link_helper";
 
 import Action from "../action/auth.action";
 import ModalPin from "./ModalPin";
-import { handlePut } from "../action/baseAction";
+import { handleGet, handlePut } from "../action/baseAction";
 import general_helper from "../helper/general_helper";
 
 const FormItem = Form.Item;
@@ -45,37 +45,40 @@ const Signin = () => {
         }
       );
       const data = hitLogin.data.data;
-      setDataUser(data);
       Action.http.axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${data.token}`;
-      Action.setUser(data);
-      Action.setToken(data.token);
-      setLoading(false);
-      if (data.pin === "-") {
-        Message.success("Anda Belum Mempunya Pin").then(() => {
-          setShowModalPin(true);
-          setIconLoading(false);
-        });
-        return;
-      } else if (data.status === 3) {
-        if (data.kd_trx !== "" || data.kd_trx !== "-") {
-          localStorage.setItem("linkBack", "/signin");
-          localStorage.setItem("typeTrx", "Recycle");
-          localStorage.setItem("kdTrx", data.kd_trx);
-          Router.push(StringLink.invoiceRecycle).then(() =>
-            setIconLoading(false)
-          );
+      await handleGet(`member/get/${data.id}`, (res, status, msg) => {
+        Action.setToken(data.token);
+        Action.setUser(res.data);
+        setDataUser(res.data);
+        if (data.pin === "-") {
+          Message.success("Anda Belum Mempunya Pin").then(() => {
+            setShowModalPin(true);
+            setIconLoading(false);
+          });
+          return;
+        } else if (data.status === 3) {
+          if (data.kd_trx !== "" || data.kd_trx !== "-") {
+            localStorage.setItem("linkBack", "/signin");
+            localStorage.setItem("typeTrx", "Recycle");
+            localStorage.setItem("kdTrx", data.kd_trx);
+            Router.push(StringLink.invoiceRecycle).then(() =>
+              setIconLoading(false)
+            );
+          } else {
+            Router.push(StringLink.transactionRecycle).then(() =>
+              setIconLoading(false)
+            );
+          }
         } else {
-          Router.push(StringLink.transactionRecycle).then(() =>
-            setIconLoading(false)
+          Message.success("Sign complete. Taking you to your dashboard!").then(
+            () => Router.push("/").then(() => setIconLoading(false))
           );
         }
-      } else {
-        Message.success("Sign complete. Taking you to your dashboard!").then(
-          () => Router.push("/").then(() => setIconLoading(false))
-        );
-      }
+      });
+      setLoading(false);
+      setIconLoading(false);
     } catch (err) {
       setTimeout(() => {
         setLoading(false);

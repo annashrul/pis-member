@@ -1,13 +1,12 @@
-import { Table, Tag, Select, Row, Col, Input, Form, Avatar } from "antd";
+import { Table, Select, Row, Col, Input, Form, Avatar } from "antd";
 const { Column } = Table;
 import Helper from "../../helper/general_helper";
 import React, { useEffect, useState } from "react";
 const Option = Select.Option;
 const Search = Input.Search;
 import { handleGet } from "../../action/baseAction";
-
 import moment from "moment";
-moment.lang("id");
+moment.locale("id");
 
 const Genealogy = () => {
   const [status, setStatus] = useState("");

@@ -1,17 +1,12 @@
-import { Row, Col, Tag, PageHeader, Card, Image } from "antd";
+import { Row, Col, PageHeader, Card, Image } from "antd";
 import React, { useEffect, useState } from "react";
 import { handleGet } from "../../action/baseAction";
 import { useAppState } from "../../components/shared/AppProvider";
 import Helper from "../../helper/general_helper";
-import {
-  UserOutlined,
-  ClockCircleOutlined,
-  CloseSquareOutlined,
-} from "@ant-design/icons";
 import moment from "moment";
 import Router from "next/router";
 
-moment.lang("id");
+moment.locale("id");
 const DetailBerita = () => {
   const [objNews, setObjNews] = useState({});
   const [font, setFont] = useState("14px");

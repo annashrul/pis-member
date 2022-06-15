@@ -6,7 +6,7 @@ import { handleGet } from "../../action/baseAction";
 const Option = Select.Option;
 const Search = Input.Search;
 const { Column, ColumnGroup } = Table;
-moment.lang("id");
+moment.locale("id");
 
 const formItemLayout = {
   labelCol: {

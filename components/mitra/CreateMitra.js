@@ -181,7 +181,8 @@ const TambahMitra = () => {
           <Row type="flex" justify="center" gutter={10}>
             <Col md={8} xs={24} className={"mb-2"}>
               <Card
-                title={
+                title={!state.mobile && "Mitra Baru"}
+                extra={
                   <Button size={"small"} type={"info"}>
                     {user.referral}
                   </Button>
@@ -207,6 +208,10 @@ const TambahMitra = () => {
                     },
                     { min: 10, message: "no handphone tidak valid" },
                   ]}
+                  tooltip={{
+                    title: "Minimal 10 Angka",
+                    icon: <InfoCircleOutlined />,
+                  }}
                 >
                   <Input prefix={"+62"} placeholder="81223165XXXX" />
                 </Form.Item>
@@ -245,6 +250,10 @@ const TambahMitra = () => {
                     { required: true, message: msgInput },
                     { min: 6, message: "password minimal 6 karakter" },
                   ]}
+                  tooltip={{
+                    title: "Minimal 6 Karakter",
+                    icon: <InfoCircleOutlined />,
+                  }}
                 >
                   <Input.Password />
                 </Form.Item>
@@ -298,6 +307,10 @@ const TambahMitra = () => {
                         },
                         { min: 10, message: "no rekening tidak valid" },
                       ]}
+                      tooltip={{
+                        title: "Minimal 10 Angka",
+                        icon: <InfoCircleOutlined />,
+                      }}
                     >
                       <Input placeholder="XXXXXXXX" />
                     </Form.Item>
@@ -411,24 +424,30 @@ const TambahMitra = () => {
                   })}
                 </Select>
               </Form.Item>
-              <Button
-                style={{ width: "100%" }}
-                type="primary"
-                htmlType="submit"
-                className="mt-3"
-              >
-                Lanjut
-              </Button>
-              <Button
-                style={{ width: "100%" }}
-                type="dashed"
-                primary
-                htmlType="button"
-                className="mt-3"
-                onClick={() => setStep(0)}
-              >
-                Kembali
-              </Button>
+              <Row gutter={6}>
+                <Col xs={12} md={12} sm={12}>
+                  <Button
+                    style={{ width: "100%" }}
+                    type="dashed"
+                    primary
+                    htmlType="button"
+                    className="mt-3"
+                    onClick={() => setStep(0)}
+                  >
+                    Kembali
+                  </Button>
+                </Col>
+                <Col xs={12} md={12} sm={12}>
+                  <Button
+                    style={{ width: "100%" }}
+                    type="primary"
+                    htmlType="submit"
+                    className="mt-3"
+                  >
+                    Lanjut
+                  </Button>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Form>
@@ -443,7 +462,12 @@ const TambahMitra = () => {
         >
           <Row type="flex" justify="center" gutter={10}>
             <Col md={8} xs={24} className={"mb-2"}>
-              <p>Total Yang Harus Di Bayar</p>
+              <small style={{ fontSize: fontSize }}>
+                Total Yang Harus Di Bayar
+              </small>
+              <Row>
+                <Col className="mb-2" md={24} sm={24} xs={24}></Col>
+              </Row>
               <Button
                 style={{ width: "100%", marginBottom: "2px" }}
                 type="dashed"
@@ -548,25 +572,31 @@ const TambahMitra = () => {
                 )
               )}
 
-              <Button
-                style={{ width: "100%" }}
-                type="primary"
-                htmlType="submit"
-                className="mt-3"
-                loading={iconLoading}
-              >
-                Lanjut
-              </Button>
-              <Button
-                style={{ width: "100%" }}
-                type="dashed"
-                primary
-                htmlType="button"
-                className="mt-3"
-                onClick={() => setStep(1)}
-              >
-                Kembali
-              </Button>
+              <Row gutter={6}>
+                <Col xs={12} sm={12} md={12}>
+                  <Button
+                    style={{ width: "100%" }}
+                    type="dashed"
+                    primary
+                    htmlType="button"
+                    className="mt-3"
+                    onClick={() => setStep(1)}
+                  >
+                    Kembali
+                  </Button>
+                </Col>
+                <Col xs={12} sm={12} md={12}>
+                  <Button
+                    style={{ width: "100%" }}
+                    type="primary"
+                    htmlType="submit"
+                    className="mt-3"
+                    loading={iconLoading}
+                  >
+                    Lanjut
+                  </Button>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Form>

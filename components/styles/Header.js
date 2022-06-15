@@ -9,7 +9,7 @@ const DashHeader = styled.div`
     align-items: center;
     min-height: 60px;
     z-index: 11;
-    padding: 0 .3rem;
+    padding: 0 0.3rem;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.02), 0 1px 0 rgba(0, 0, 0, 0.02);
   }
   .trigger {
@@ -36,7 +36,7 @@ const DashHeader = styled.div`
     margin: 0;
   }
   .brand > svg {
-    fill: ${props => props.theme.primaryColor};
+    fill: ${(props) => props.theme.primaryColor};
   }
   .ant-menu {
     width: 100%;

@@ -11,7 +11,11 @@ import {
   Switch,
   Tooltip,
 } from "antd";
-import { FolderTwoTone, PoweroffOutlined } from "@ant-design/icons";
+import {
+  FolderTwoTone,
+  IdcardOutlined,
+  PoweroffOutlined,
+} from "@ant-design/icons";
 import { capitalize, lowercase } from "../lib/helpers";
 import { useEffect, useState } from "react";
 import authAction, { doLogout } from "../action/auth.action";
@@ -182,7 +186,7 @@ const SidebarContent = ({
                 }`}
               >
                 <Tooltip title="Profile">
-                  <FolderTwoTone style={{ fontSize: "20px" }} />
+                  <IdcardOutlined style={{ fontSize: "20px" }} />
                 </Tooltip>
               </a>
 

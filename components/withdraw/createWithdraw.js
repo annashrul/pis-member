@@ -212,175 +212,167 @@ const CreateWithdraw = () => {
 
   return (
     <div>
-      <PageHeader
-        className="site-page-header"
-        onBack={() => (step === 1 ? setStep(0) : Router.back())}
-        title="Penarikan"
+      <Form
+        onChange={() => {
+          if (emailError.enable) {
+            setEmailError({ enable: false, helpText: "" });
+          }
+        }}
+        form={form}
+        layout="vertical"
+        name="register"
+        onFinish={handleSubmit}
+        initialValues={{
+          type: "0",
+        }}
       >
-        <Form
-          onChange={() => {
-            if (emailError.enable) {
-              setEmailError({ enable: false, helpText: "" });
-            }
-          }}
-          form={form}
-          layout="vertical"
-          name="register"
-          onFinish={handleSubmit}
-          initialValues={{
-            type: "0",
-          }}
+        <Row
+          type="flex"
+          style={{ alignItems: "center" }}
+          justify="center"
+          gutter={10}
         >
+          <Col md={4} xs={12}>
+            <small style={{ fontSize: fontSize }}>
+              Saldo Bonus <br />
+              <span style={{ fontSize: "18px", color: theme.primaryColor }}>
+                {Helper.toRp(bonus)}
+              </span>
+            </small>
+          </Col>
+          <Col md={4} xs={12}>
+            <small style={{ fontSize: fontSize }}>
+              Saldo Bonus Nasional
+              <br />
+              <span style={{ fontSize: "18px", color: theme.primaryColor }}>
+                {Helper.toRp(parseFloat(bonusNasional).toFixed(0))}
+              </span>
+            </small>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={24} xs={24} sm={24} className="mb-2" />
+        </Row>
+        {step === 0 && (
           <Row
             type="flex"
             style={{ alignItems: "center" }}
             justify="center"
-            gutter={10}
+            gutter={4}
           >
-            <Col md={4} xs={12}>
-              <small style={{ fontSize: fontSize }}>
-                Saldo Bonus <br />
-                <span style={{ fontSize: "18px", color: theme.primaryColor }}>
-                  {Helper.toRp(bonus)}
-                </span>
-              </small>
-            </Col>
-            <Col md={4} xs={12}>
-              <small style={{ fontSize: fontSize }}>
-                Saldo Bonus Nasional
-                <br />
-                <span style={{ fontSize: "18px", color: theme.primaryColor }}>
-                  {Helper.toRp(parseFloat(bonusNasional).toFixed(0))}
-                </span>
-              </small>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={24} xs={24} sm={24} className="mb-2" />
-          </Row>
-          {step === 0 && (
-            <Row
-              type="flex"
-              style={{ alignItems: "center" }}
-              justify="center"
-              gutter={4}
-            >
-              <Col md={8} xs={24}>
-                <Card>
-                  <Form.Item
-                    name="type"
-                    label={
-                      <small style={{ fontSize: fontSize }}>
-                        Tipe Withdraw
-                      </small>
-                    }
-                    onChange={onChange}
-                  >
-                    <Radio.Group buttonStyle="outline">
-                      <Radio.Button value="0">Bonus</Radio.Button>
-                      <Radio.Button value="1">Bonus Nasional</Radio.Button>
-                    </Radio.Group>
-                  </Form.Item>
-                  <Form.Item
-                    hasFeedback
-                    name="id_bank"
-                    label={
-                      <small style={{ fontSize: fontSize }}>Bank Tujuan</small>
-                    }
-                    rules={[{ required: true, message: "Tidak Boleh Kosong" }]}
-                  >
-                    <Select
-                      style={{ width: "100%" }}
-                      showSearch
-                      placeholder="Pilih Bank"
-                      optionFilterProp="children"
-                      onChange={(e, i) => form.setFieldsValue({ id_bank: e })}
-                      onSearch={() => {}}
-                      // onSelect={(e,i)=>setObjBank(arrBank[parseInt(i.key,10)])}
-                    >
-                      {rekening.map((val, key) => {
-                        return (
-                          <Option key={key} value={val.id}>
-                            {val.acc_name} - {val.acc_no}
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    label={
-                      <small style={{ fontSize: fontSize }}>Nominal</small>
-                    }
-                  >
-                    <Row gutter={4}>
-                      <Col
-                        xs={type === "0" ? 14 : 24}
-                        sm={type === "0" ? 14 : 24}
-                        md={type === "0" ? 16 : 24}
-                      >
-                        <Form.Item
-                          hasFeedback
-                          onChange={onChange}
-                          name="amount"
-                          rules={[
-                            { required: true, message: "Tidak Boleh Kosong" },
-                            {
-                              pattern: new RegExp(/^[0-9]*$/),
-                              message: "Harus Berupa Angka",
-                            },
-                            {
-                              validator(_, value) {
-                                if (emailError.enable) {
-                                  return Promise.reject(emailError.helpText);
-                                }
-                                return Promise.resolve();
-                              },
-                            },
-                          ]}
-                        >
-                          <Input
-                            style={{ fontSize: state.mobile ? "12px" : "14px" }}
-                            ref={nominalInput}
-                            disabled={type === "1"}
-                            prefix={"Rp."}
-                          />
-                        </Form.Item>
-                      </Col>
-                      {type === "0" && (
-                        <Col xs={10} sm={10} md={8}>
-                          <Button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              form.setFieldsValue({ amount: bonus });
-                            }}
-                            type="dashed"
-                            primary
-                            style={{ width: "100%" }}
-                          >
-                            <small style={{ fontSize: fontSize }}>
-                              Tarik Semua
-                            </small>
-                          </Button>
-                        </Col>
-                      )}
-                    </Row>
-                  </Form.Item>
-                  <Button
-                    type={"primary"}
-                    size={"medium"}
+            <Col md={8} xs={24}>
+              <Card>
+                <Form.Item
+                  name="type"
+                  label={
+                    <small style={{ fontSize: fontSize }}>Tipe Withdraw</small>
+                  }
+                  onChange={onChange}
+                >
+                  <Radio.Group buttonStyle="outline">
+                    <Radio.Button value="0">Bonus</Radio.Button>
+                    <Radio.Button value="1">Bonus Nasional</Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
+                <Form.Item
+                  hasFeedback
+                  name="id_bank"
+                  label={
+                    <small style={{ fontSize: fontSize }}>Bank Tujuan</small>
+                  }
+                  rules={[{ required: true, message: "Tidak Boleh Kosong" }]}
+                >
+                  <Select
                     style={{ width: "100%" }}
-                    htmlType="submit"
+                    showSearch
+                    placeholder="Pilih Bank"
+                    optionFilterProp="children"
+                    onChange={(e, i) => form.setFieldsValue({ id_bank: e })}
+                    onSearch={() => {}}
+                    // onSelect={(e,i)=>setObjBank(arrBank[parseInt(i.key,10)])}
                   >
-                    Lanjut
-                  </Button>
-                </Card>
-              </Col>
-            </Row>
-          )}
+                    {rekening.map((val, key) => {
+                      return (
+                        <Option key={key} value={val.id}>
+                          {val.acc_name} - {val.acc_no}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  label={<small style={{ fontSize: fontSize }}>Nominal</small>}
+                >
+                  <Row gutter={4}>
+                    <Col
+                      xs={type === "0" ? 14 : 24}
+                      sm={type === "0" ? 14 : 24}
+                      md={type === "0" ? 16 : 24}
+                    >
+                      <Form.Item
+                        hasFeedback
+                        onChange={onChange}
+                        name="amount"
+                        rules={[
+                          { required: true, message: "Tidak Boleh Kosong" },
+                          {
+                            pattern: new RegExp(/^[0-9]*$/),
+                            message: "Harus Berupa Angka",
+                          },
+                          {
+                            validator(_, value) {
+                              if (emailError.enable) {
+                                return Promise.reject(emailError.helpText);
+                              }
+                              return Promise.resolve();
+                            },
+                          },
+                        ]}
+                      >
+                        <Input
+                          style={{ fontSize: state.mobile ? "12px" : "14px" }}
+                          ref={nominalInput}
+                          disabled={type === "1"}
+                          prefix={"Rp."}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {type === "0" && (
+                      <Col xs={10} sm={10} md={8}>
+                        <Button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            form.setFieldsValue({ amount: bonus });
+                          }}
+                          type="dashed"
+                          primary
+                          style={{ width: "100%" }}
+                        >
+                          <small style={{ fontSize: fontSize }}>
+                            Tarik Semua
+                          </small>
+                        </Button>
+                      </Col>
+                    )}
+                  </Row>
+                </Form.Item>
+                <Button
+                  type={"primary"}
+                  size={"medium"}
+                  style={{ width: "100%" }}
+                  htmlType="submit"
+                >
+                  Lanjut
+                </Button>
+              </Card>
+            </Col>
+          </Row>
+        )}
 
-          {step === 1 && (
-            <Row type="flex" justify="center" gutter={10}>
-              <Col md={8} xs={24} className={"mb-2"}>
+        {step === 1 && (
+          <Row type="flex" justify="center" gutter={10}>
+            <Col md={8} xs={24} className={"mb-2"}>
+              <Card>
                 <p>Total Yang Harus Di Bayar</p>
                 <Button
                   style={{ width: "100%", marginBottom: "2px" }}
@@ -391,7 +383,7 @@ const CreateWithdraw = () => {
                   {Helper.toRp(amount - parseInt(config.charge_wd, 10))}
                 </Button>
                 <Row>
-                  <Col md={24} sm={24} xs={24}></Col>
+                  <Col md={24} sm={24} xs={24} className="mt-2"></Col>
                 </Row>
                 {tempRow(
                   "Tipe Penarikan",
@@ -439,28 +431,45 @@ const CreateWithdraw = () => {
                     <hr />
                   </Col>
                 </Row>
-                <Popconfirm
-                  title="harap periksa data anda kembali"
-                  onConfirm={(e) => setModalPin(true)}
-                  onCancel={() => {}}
-                  okText="Lanjut"
-                  cancelText="Batal"
-                >
-                  <Button
-                    className={"mt-2"}
-                    type={"primary"}
-                    size={"medium"}
-                    style={{ width: "100%" }}
-                    htmlType="submit"
-                  >
-                    Simpan
-                  </Button>
-                </Popconfirm>
-              </Col>
-            </Row>
-          )}
-        </Form>
-      </PageHeader>
+                <Row gutter={6}>
+                  <Col md={12} sm={12} xs={12}>
+                    <Button
+                      className={"mt-2"}
+                      type={"dashed"}
+                      primary
+                      size={"medium"}
+                      style={{ width: "100%" }}
+                      htmlType="button"
+                      onClick={() => setStep(0)}
+                    >
+                      Kembali
+                    </Button>
+                  </Col>
+                  <Col md={12} sm={12} xs={12}>
+                    <Popconfirm
+                      title="harap periksa data anda kembali"
+                      onConfirm={(e) => setModalPin(true)}
+                      onCancel={() => {}}
+                      okText="Lanjut"
+                      cancelText="Batal"
+                    >
+                      <Button
+                        className={"mt-2"}
+                        type={"primary"}
+                        size={"medium"}
+                        style={{ width: "100%" }}
+                        htmlType="submit"
+                      >
+                        Simpan
+                      </Button>
+                    </Popconfirm>
+                  </Col>
+                </Row>
+              </Card>
+            </Col>
+          </Row>
+        )}
+      </Form>
       {modalPin && (
         <ModalPin
           submit={(pin) => {

@@ -6,6 +6,7 @@ import { handleGet } from "../../action/baseAction";
 const Option = Select.Option;
 const Search = Input.Search;
 const { Column, ColumnGroup } = Table;
+moment.lang("id");
 
 const formItemLayout = {
   labelCol: {
@@ -48,6 +49,8 @@ const WithdrawReport = () => {
             ),
             amount: Helper.toRp(parseInt(val.amount, 10), true),
             charge: Helper.toRp(parseInt(val.charge, 10), true),
+            charge: Helper.toRp(parseInt(val.charge, 10), true),
+            created_at: moment(val.created_at).format("LLL"),
           });
         });
         setArrDatum(datas);
@@ -156,7 +159,7 @@ const WithdrawReport = () => {
           return (
             <>
               <Table.Summary.Row>
-                <Table.Summary.Cell colSpan={3} index={0}>
+                <Table.Summary.Cell colSpan={2} index={0}>
                   Total Perhalaman
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={1}>
@@ -175,8 +178,21 @@ const WithdrawReport = () => {
         }}
       >
         <Column title="No" dataIndex="no" key="no" />
-        <Column title="Nama" dataIndex="fullname" key="fullname" />
-        <Column title="Kode Transaksi" dataIndex="kd_trx" key="kd_trx" />
+        <Column
+          title="Transaksi"
+          dataIndex="fullname"
+          key="fullname"
+          render={(_, record) => {
+            return (
+              <p>
+                {record.fullname}
+                <br />
+                {record.kd_trx}
+              </p>
+            );
+          }}
+        />
+
         <Column
           title="Nominal"
           dataIndex="amount"
@@ -219,6 +235,7 @@ const WithdrawReport = () => {
             );
           }}
         />
+        <Column title="Tanggal" dataIndex="created_at" key="created_at" />
       </Table>
       {/*<Table columns={columns} dataSource={data} loading={loading} onChange={(page)=>{*/}
       {/*console.log(page)*/}

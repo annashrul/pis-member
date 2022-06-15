@@ -43,78 +43,72 @@ const ListProduct = () => {
 
   return (
     <>
-      <PageHeader
-        className="site-page-header"
-        onBack={() => Router.back()}
-        title="Produk RO"
-      >
-        <Row gutter={16}>
-          {arrDatum.data !== undefined &&
-            arrDatum.data.length > 0 &&
-            arrDatum.data.map((val, key) => {
-              return (
-                <Col
-                  key={key}
-                  xs={12}
-                  sm={8}
-                  md={6}
-                  className="mb-2"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    if (!address) {
-                      Message.success(
-                        "anda belum mempunya alamat, anda akan dialihkan untuk membuat alamat"
-                      ).then(() => Router.push("/alamat"));
+      <Row gutter={16}>
+        {arrDatum.data !== undefined &&
+          arrDatum.data.length > 0 &&
+          arrDatum.data.map((val, key) => {
+            return (
+              <Col
+                key={key}
+                xs={12}
+                sm={8}
+                md={6}
+                className="mb-2"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  if (!address) {
+                    Message.success(
+                      "anda belum mempunya alamat, anda akan dialihkan untuk membuat alamat"
+                    ).then(() => Router.push("/alamat"));
+                  } else {
+                    if (!info) {
+                      Message.info("anda belum memenuhi syarat RO");
                     } else {
-                      if (!info) {
-                        Message.info("anda belum memenuhi syarat RO");
+                      if (parseInt(val.stock, 10) < 1) {
+                        Message.info("stock tidak tersedia");
                       } else {
-                        if (parseInt(val.stock, 10) < 1) {
-                          Message.info("stock tidak tersedia");
-                        } else {
-                          Object.assign(val, { id_paket: val.id });
-                          Object.assign(objAddress, val);
-                          Router.push(
-                            {
-                              pathname: StringLink.checkout,
-                              query: objAddress,
-                            },
-                            StringLink.checkout
-                          );
-                        }
+                        Object.assign(val, { id_paket: val.id });
+                        Object.assign(objAddress, val);
+                        Router.push(
+                          {
+                            pathname: StringLink.checkout,
+                            query: objAddress,
+                          },
+                          StringLink.checkout
+                        );
                       }
                     }
-                  }}
+                  }
+                }}
+              >
+                <Card
+                  title={<small>{val.title}</small>}
+                  hoverable
+                  cover={
+                    <img
+                      alt="example"
+                      src={val.gambar}
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null; // prevents looping
+                        currentTarget.src = Helper.imgDefault;
+                      }}
+                    />
+                  }
                 >
-                  <Card
-                    title={<small>{val.title}</small>}
-                    hoverable
-                    cover={
-                      <img
-                        alt="example"
-                        src={val.gambar}
-                        onError={({ currentTarget }) => {
-                          currentTarget.onerror = null; // prevents looping
-                          currentTarget.src = Helper.imgDefault;
-                        }}
-                      />
-                    }
-                  >
-                    <Meta description={Helper.toRp(val.price)} />
-                    <small>{Helper.rmHtml(val.caption)}</small>
-                    <Row className="mt-2">
-                      <Col xs={24} sm={24} md={24}>
-                        <Button type="primary" style={{ width: "100%" }}>
-                          Checkout
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Card>
-                </Col>
-              );
-            })}
-        </Row>
-      </PageHeader>
+                  <Meta description={Helper.toRp(val.price)} />
+                  <small>{Helper.rmHtml(val.caption)}</small>
+                  <Row className="mt-2">
+                    <Col xs={24} sm={24} md={24}>
+                      <Button type="primary" style={{ width: "100%" }}>
+                        Checkout
+                      </Button>
+                    </Col>
+                  </Row>
+                </Card>
+              </Col>
+            );
+          })}
+      </Row>
     </>
   );
 };

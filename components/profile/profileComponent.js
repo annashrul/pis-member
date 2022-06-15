@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import authAction from "../../action/auth.action";
 import { CopyOutlined } from "@ant-design/icons";
 import general_helper from "../../helper/general_helper";
-
+import moment from "moment";
+moment.lang("id");
 const ProfileComponent = ({ children }) => {
   const [state] = useAppState();
   const [user, setUser] = useState({});
@@ -20,6 +21,7 @@ const ProfileComponent = ({ children }) => {
     const infos = authAction.getInfo();
     setUser(users);
     setInfo(infos);
+    console.log(users);
   }, [state]);
   const tempRow = (title, desc, isRp = true) => {
     return (
@@ -35,7 +37,9 @@ const ProfileComponent = ({ children }) => {
             textAlign: state.mobile ? "right" : "left",
           }}
         >
-          <small style={{ fontSize: font }}>: {desc}</small>
+          <small style={{ fontSize: font }}>
+            {!state.mobile && ":"} {desc}
+          </small>
         </Col>
       </Row>
     );
@@ -103,11 +107,7 @@ const ProfileComponent = ({ children }) => {
         <Row>
           <Col style={{ margin: "1px" }}></Col>
         </Row>
-        {tempRow("Tanggal Gabung", "10 Desember 2022")}
-        <Row>
-          <Col style={{ margin: "1px" }}></Col>
-        </Row>
-        {tempRow("Tanggal Recycle", "27 Januari 2022")}
+        {tempRow("Tanggal Recycle", moment(user.recycle_date).format("LLL"))}
         <Row>
           <Col style={{ margin: "1px" }}></Col>
         </Row>

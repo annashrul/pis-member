@@ -1,13 +1,6 @@
 import { Layout, Menu } from "antd";
 import DashHeader from "./styles/Header";
-import MockNotifications from "../demos/mock/notifications";
 import { useAppState } from "./shared/AppProvider";
-import { useState, useEffect } from "react";
-import Routes from "next/router";
-import Cookies from "js-cookie";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
-import { doLogout } from "../action/auth.action";
 import general_helper from "../helper/general_helper";
 
 const { Header } = Layout;

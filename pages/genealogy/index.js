@@ -7,6 +7,8 @@ const Search = Input.Search;
 import { handleGet } from "../../action/baseAction";
 
 import moment from "moment";
+moment.lang("id");
+
 const Genealogy = () => {
   const [status, setStatus] = useState("");
   const [searchby, setSearchBy] = useState("fullname");
@@ -37,9 +39,7 @@ const Genealogy = () => {
             ),
             jumlah_sponsor: Helper.toRp(parseInt(val.jumlah_sponsor, 10), true),
             saldo_pending: Helper.toRp(parseInt(val.saldo_pending, 10), true),
-            recycle_date: moment(val.recycle_date).format(
-              "YYYY-MM-DD hh:mm:ss"
-            ),
+            recycle_date: moment(val.recycle_date).format("LLL"),
           });
         });
         setArrDatum(datas);

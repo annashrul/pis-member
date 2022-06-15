@@ -30,29 +30,55 @@ const NonDashboardRoutes = [
 
 const Page = ({ router, children }) => {
   const [loading, setLoading] = useState(true);
+  const [isCookie, setIsCookie] = useState(true);
   const [state] = useAppState();
   const isNotDashboard = NonDashboardRoutes.includes(router.pathname);
-  useEffect(() => {
-    // const coo = Cookies.get("_prowara");
-    // if (coo !== undefined) {
-    //   axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
-    //   const decodedToken = jwt_decode(atob(coo));
-    //   const dateNow = new Date();
-    //   if (decodedToken.exp * 1000 < dateNow.getTime()) {
-    //     doLogout();
-    //   } else {
-    //     // Routes.push("/");
-    //   }
-    // } else {
-    //   doLogout();
-    //   Routes.push("/signin");
-    // }
-    // console.log("###########PAGES###########", coo);
 
+  // if (coo !== undefined) {
+  // axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
+  // const decodedToken = jwt_decode(atob(coo));
+  // const dateNow = new Date();
+  // if (decodedToken.exp * 1000 < dateNow.getTime()) {
+  //   doLogout();
+  // } else {
+  //   // Routes.push("/");
+  // }
+  // } else {
+  //   doLogout();
+  //   Routes.push("/signin");
+  // }
+
+  useEffect(() => {
+    const coo = Cookies.get("_prowara");
+    // if (coo !== undefined) {
+    //   setTimeout(() => {
+    //     setIsCookie(false);
+    //     setLoading(false);
+    //   }, 1000);
+    // } else {
+    //   setTimeout(() => {
+    //     setIsCookie(false);
+    //     setLoading(true);
+    //     doLogout();
+    //     Routes.push("/signin").then(() => setLoading(false));
+    //   }, 1000);
+    // }
     setTimeout(() => {
-      setLoading(false);
+      if (coo !== undefined) {
+        setLoading(false);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
+        const decodedToken = jwt_decode(atob(coo));
+        const dateNow = new Date();
+        if (decodedToken.exp * 1000 < dateNow.getTime()) {
+          doLogout();
+        }
+      } else {
+        setLoading(true);
+        doLogout();
+        Routes.push("/signin").then(() => setLoading(false));
+      }
     }, 1000);
-  }, [loading, state]);
+  }, []);
 
   return (
     <Spin tip="Loading..." size="large" spinning={loading}>

@@ -58,7 +58,7 @@ const SidebarContent = ({
   );
 
   useEffect(() => {
-    setUser(authAction.getUser());
+    // setUser(authAction.getUser());
     appRoutes.forEach((route, index) => {
       const isCurrentPath = pathname.indexOf(lowercase(route.name)) > -1;
       const key = getKey(route.name, index);
@@ -164,11 +164,13 @@ const SidebarContent = ({
       />
       <div className={`py-3 px-4 bg-${sidebarTheme}`}>
         <Row type="flex" align="middle" justify="space-around">
-          <span>
-            <Avatar shape="circle" size={40} src={user.foto}>
-              {user.fullname && general_helper.getInitialName(user.fullname)}
-            </Avatar>
-          </span>
+          {user.fullname !== undefined && (
+            <span>
+              <Avatar shape="circle" size={40} src={user.foto}>
+                {user.fullname && general_helper.getInitialName(user.fullname)}
+              </Avatar>
+            </span>
+          )}
           {!collapsed && (
             <>
               <span className="mr-auto" />

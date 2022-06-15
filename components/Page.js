@@ -33,21 +33,21 @@ const Page = ({ router, children }) => {
   const [state] = useAppState();
   const isNotDashboard = NonDashboardRoutes.includes(router.pathname);
   useEffect(() => {
-    const coo = Cookies.get("_prowara");
-    if (coo !== undefined) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
-      const decodedToken = jwt_decode(atob(coo));
-      const dateNow = new Date();
-      if (decodedToken.exp * 1000 < dateNow.getTime()) {
-        doLogout();
-      } else {
-        // Routes.push("/");
-      }
-    } else {
-      doLogout();
-      Routes.push("/signin");
-    }
-    console.log("###########PAGES###########", coo);
+    // const coo = Cookies.get("_prowara");
+    // if (coo !== undefined) {
+    //   axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
+    //   const decodedToken = jwt_decode(atob(coo));
+    //   const dateNow = new Date();
+    //   if (decodedToken.exp * 1000 < dateNow.getTime()) {
+    //     doLogout();
+    //   } else {
+    //     // Routes.push("/");
+    //   }
+    // } else {
+    //   doLogout();
+    //   Routes.push("/signin");
+    // }
+    // console.log("###########PAGES###########", coo);
 
     setTimeout(() => {
       setLoading(false);

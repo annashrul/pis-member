@@ -81,14 +81,14 @@ const Page = ({ router, children }) => {
   }, []);
 
   return (
-    <Spin tip="Loading..." size="large" spinning={loading}>
+    <Spin tip="Tunggu Sebentar..." size="large" spinning={loading}>
       <ThemeProvider theme={theme}>
         <Container
           className={`weakColor ${state.boxed ? "boxed shadow-sm" : ""}`}
         >
           {!isNotDashboard && <Header />}
           <Layout className="workspace">
-            {!isNotDashboard && (
+            {!loading && !isNotDashboard && (
               <SidebarMenu
                 sidebarTheme={state.darkSidebar ? "dark" : "light"}
                 sidebarMode={state.sidebarPopup ? "vertical" : "inline"}
@@ -98,9 +98,11 @@ const Page = ({ router, children }) => {
             )}
 
             <Layout>
-              <Content>
-                {!isNotDashboard ? <Inner>{children}</Inner> : children}
-              </Content>
+              {!loading && (
+                <Content>
+                  {!isNotDashboard ? <Inner>{children}</Inner> : children}
+                </Content>
+              )}
             </Layout>
           </Layout>
         </Container>

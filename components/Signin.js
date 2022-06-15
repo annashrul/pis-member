@@ -52,24 +52,28 @@ const Signin = () => {
       Action.setUser(data);
       Action.setToken(data.token);
       setLoading(false);
-      setIconLoading(false);
       if (data.pin === "-") {
-        Message.success("Anda Belum Mempunya Pin").then(() =>
-          setShowModalPin(true)
-        );
+        Message.success("Anda Belum Mempunya Pin").then(() => {
+          setShowModalPin(true);
+          setIconLoading(false);
+        });
         return;
       } else if (data.status === 3) {
         if (data.kd_trx !== "" || data.kd_trx !== "-") {
           localStorage.setItem("linkBack", "/signin");
           localStorage.setItem("typeTrx", "Recycle");
           localStorage.setItem("kdTrx", data.kd_trx);
-          Router.push(StringLink.invoiceRecycle);
+          Router.push(StringLink.invoiceRecycle).then(() =>
+            setIconLoading(false)
+          );
         } else {
-          Router.push(StringLink.transactionRecycle);
+          Router.push(StringLink.transactionRecycle).then(() =>
+            setIconLoading(false)
+          );
         }
       } else {
         Message.success("Sign complete. Taking you to your dashboard!").then(
-          () => Router.push("/")
+          () => Router.push("/").then(() => setIconLoading(false))
         );
       }
     } catch (err) {

@@ -1,6 +1,5 @@
-import { Avatar, Button, Badge, Card, Col, Message, Row, Tooltip } from "antd";
+import { Avatar, Button, Card, Col, Message, Row, Tooltip } from "antd";
 import { theme } from "../styles/GlobalStyles";
-import { CameraOutlined } from "@ant-design/icons";
 import { useAppState } from "../shared/AppProvider";
 import { useState, useEffect } from "react";
 import authAction from "../../action/auth.action";
@@ -8,6 +7,7 @@ import { CopyOutlined } from "@ant-design/icons";
 import general_helper from "../../helper/general_helper";
 import FormComponent from "./formComponent";
 import moment from "moment";
+import { handleGet } from "../../action/baseAction";
 moment.locale("id");
 const ProfileComponent = () => {
   const [state] = useAppState();
@@ -19,11 +19,21 @@ const ProfileComponent = () => {
     if (state.mobile) {
       setFont("80%");
     }
-    const users = authAction.getUser();
     const infos = authAction.getInfo();
-    setUser(users);
+    const users = authAction.getUser();
     setInfo(infos);
+    setUser(users);
+    // handleUser();
   }, [state, showForm]);
+
+  const handleUser = async (isShow = false) => {
+    await handleGet(`member/get/${user.id}`, (res, msg) => {
+      setUser(res.data);
+      authAction.setUser(res.data);
+      isShow && setShowForm(false);
+    });
+  };
+
   const tempRow = (title, desc, isRp = true) => {
     return (
       <Row>
@@ -190,7 +200,7 @@ const ProfileComponent = () => {
         <FormComponent
           isModal={showForm}
           ok={() => {
-            setShowForm(false);
+            handleUser(true);
           }}
           cancel={() => {
             setShowForm(false);

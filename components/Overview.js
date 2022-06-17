@@ -1,5 +1,9 @@
-import { RightCircleOutlined, WalletOutlined } from "@ant-design/icons";
-import { Col, Message, Row, Card } from "antd";
+import {
+  RightCircleOutlined,
+  WalletOutlined,
+  CopyOutlined,
+} from "@ant-design/icons";
+import { Col, Message, Button, Row, Card } from "antd";
 import StatCard from "./shared/StatCard";
 import { theme } from "./styles/GlobalStyles";
 import React, { useEffect, useState } from "react";
@@ -13,6 +17,7 @@ const { Meta } = Card;
 
 const Overview = () => {
   const [objInfo, setObjInfo] = useState({});
+  const [objUser, setObjUser] = useState({});
   const [isData, setIsData] = useState(false);
   const [font, setFont] = useState("14px");
   const [state] = useAppState();
@@ -28,6 +33,8 @@ const Overview = () => {
     await handleGet("site/info", (res, status, msg) => {
       setObjInfo(res.data);
       Action.setInfo(res.data);
+      const user = Action.getUser();
+      setObjUser(user);
     });
   };
 
@@ -45,9 +52,26 @@ const Overview = () => {
     );
   };
 
+  console.log(objUser);
+
   return (
     <div>
       <Row gutter={4}>
+        <Col xs={24} sm={24} md={24} className="mb-2">
+          <Button
+            type="dashed"
+            danger
+            icon={<CopyOutlined />}
+            style={{ whiteSpace: "normal", height: "auto", width: "100%" }}
+            block={true}
+            onClick={async (e) => {
+              await navigator.clipboard.writeText(objUser.referral_url);
+              Message.success("Referral berhasil di salin");
+            }}
+          >
+            {objUser && objUser.referral_url}
+          </Button>
+        </Col>
         <Col xs={12} sm={12} md={6} className="mb-2">
           {state.mobile ? (
             cardMobile(theme.primaryColor, objInfo.saldo, "Saldo Bonus")
@@ -126,7 +150,7 @@ const Overview = () => {
         </Row>
       )}
 
-      <Row gutter={16}>
+      <Row gutter={16} type="flex">
         <CardNews
           callback={(res) => {
             setIsData(res.data.length > 0);

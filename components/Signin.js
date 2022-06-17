@@ -1,5 +1,5 @@
 import { Button, Form, Input, Message, Row } from "antd";
-import { EyeTwoTone, MailTwoTone } from "@ant-design/icons";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 import Link from "next/link";
 import Router from "next/router";
@@ -10,7 +10,7 @@ import { StringLink } from "../helper/string_link_helper";
 
 import Action from "../action/auth.action";
 import ModalPin from "./ModalPin";
-import { handleGet, handlePut } from "../action/baseAction";
+import { handleGet, handlePost, handlePut } from "../action/baseAction";
 import general_helper from "../helper/general_helper";
 
 const FormItem = Form.Item;
@@ -36,57 +36,49 @@ const Signin = () => {
   const handleSubmit = async (values) => {
     setLoading(true);
     setIconLoading(true);
-    try {
-      const hitLogin = await Action.http.post(
-        Action.http.apiClient + "auth/signin",
-        {
-          username: values.username,
-          password: values.password,
-        }
-      );
-      const data = hitLogin.data.data;
-      Action.http.axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${data.token}`;
-      await handleGet(`member/get/${data.id}`, (res, status, msg) => {
-        Action.setToken(data.token);
-        Action.setUser(res.data);
-        setDataUser(res.data);
-
-        if (data.pin === "-") {
-          Message.success("Anda Belum Mempunya Pin").then(() => {
-            setShowModalPin(true);
+    await handlePost("auth/signin", values, async (res, status, msg) => {
+      if (status) {
+        Action.http.axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${res.data.token}`;
+        let dataLogin = res.data;
+        await handleGet(
+          `member/get/${res.data.id}`,
+          (resUser, statusUser, msgUser) => {
+            setLoading(false);
             setIconLoading(false);
-          });
-          return;
-        } else if (data.status === 3) {
-          if (data.kd_trx !== "" || data.kd_trx !== "-") {
-            localStorage.setItem("linkBack", "/signin");
-            localStorage.setItem("typeTrx", "Recycle");
-            localStorage.setItem("kdTrx", data.kd_trx);
-            Router.push(StringLink.invoiceRecycle).then(() =>
-              setIconLoading(false)
-            );
-          } else {
-            Router.push(StringLink.transactionRecycle).then(() =>
-              setIconLoading(false)
-            );
+            Action.setToken(res.data.token);
+            Object.assign(dataLogin, resUser.data);
+            Action.setUser(dataLogin);
+            setDataUser(dataLogin);
+            if (res.data.pin === "-") {
+              Message.success("Anda Belum Mempunya Pin").then(() => {
+                setShowModalPin(true);
+                setIconLoading(false);
+              });
+              return;
+            } else if (res.data.status === 3) {
+              if (res.data.kd_trx !== "" || res.data.kd_trx !== "-") {
+                localStorage.setItem("linkBack", "/signin");
+                localStorage.setItem("typeTrx", "Recycle");
+                localStorage.setItem("kdTrx", res.data.kd_trx);
+                Router.push(StringLink.invoiceRecycle).then(() =>
+                  setIconLoading(false)
+                );
+              } else {
+                Router.push(StringLink.transactionRecycle).then(() =>
+                  setIconLoading(false)
+                );
+              }
+            } else {
+              Message.success(
+                "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
+              ).then(() => Router.push("/").then(() => setIconLoading(false)));
+            }
           }
-        } else {
-          Message.success(
-            "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
-          ).then(() => Router.push("/").then(() => setIconLoading(false)));
-        }
-      });
-      setLoading(false);
-      setIconLoading(false);
-    } catch (err) {
-      setTimeout(() => {
-        setLoading(false);
-        setIconLoading(false);
-        Message.error(err.message);
-      }, 3000);
-    }
+        );
+      }
+    });
   };
 
   const handlePin = async (pin) => {
@@ -138,7 +130,7 @@ const Signin = () => {
             ]}
           >
             <Input
-              prefix={<MailTwoTone style={{ fontSize: "16px" }} />}
+              prefix={<UserOutlined style={{ fontSize: "16px" }} />}
               type="text"
               placeholder="Username"
             />
@@ -151,11 +143,15 @@ const Signin = () => {
               { required: true, message: "Password tidak boleh kosong!" },
             ]}
           >
-            <Input
+            <Input.Password
+              placeholder="Password"
+              prefix={<LockOutlined style={{ fontSize: "16px" }} />}
+            />
+            {/* <Input
               prefix={<EyeTwoTone style={{ fontSize: "16px" }} />}
               type="password"
               placeholder="Password"
-            />
+            /> */}
           </FormItem>
 
           <Form.Item shouldUpdate={true}>

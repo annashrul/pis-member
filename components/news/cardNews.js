@@ -6,7 +6,7 @@ const { Meta } = Card;
 import Helper from "../../helper/general_helper";
 import { useAppState } from "../shared/AppProvider";
 
-const CardNews = ({ callback }) => {
+const CardNews = ({ callback, wheres = "&page=1&perpage=10&status=1" }) => {
   const [arrNews, setArrNews] = useState([]);
   const [font, setFont] = useState("14px");
   const [state] = useAppState();
@@ -17,18 +17,15 @@ const CardNews = ({ callback }) => {
     if (state.mobile) {
       setFont("80%");
     }
-    handleLoadNews("&page=1");
-  }, [state]);
+    handleLoadNews(wheres);
+  }, [state, wheres]);
 
   const handleLoadNews = async (where) => {
-    await handleGet(
-      `content?page=1&perpage=10&status=1${where}`,
-      (res, status, msg) => {
-        setArrNews(res.data);
-        callback(res);
-        setLoading(false);
-      }
-    );
+    await handleGet(`content?${where}`, (res, status, msg) => {
+      setArrNews(res.data);
+      callback(res);
+      setLoading(false);
+    });
   };
 
   return !loading && arrNews.length
@@ -50,6 +47,7 @@ const CardNews = ({ callback }) => {
             }}
           >
             <Card
+              style={{ gridColumnEnd: "span 4" }}
               title={<small style={{ fontSize: font }}>{val.title}</small>}
               hoverable
               cover={

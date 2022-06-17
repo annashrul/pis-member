@@ -91,7 +91,6 @@ const CreateWithdraw = () => {
   const onChange = (e) => {
     let val = e.target.value;
     if (e.target.type === "radio") {
-      setNominalError({ enable: false, helpText: "" });
       setType(val);
       if (val === "1") {
         if (bonusNasional < maxWdBonusNasional) {
@@ -123,9 +122,7 @@ const CreateWithdraw = () => {
       if (nominal > bonus) {
         setNominalError({
           enable: true,
-          helpText:
-            "Nominal Melebihi Bonus Anda. Anda Hanya Bisa Melakukan Penarikan Sebesar " +
-            Helper.toRp(bonus),
+          helpText: "Nominal Melebihi Bonus Anda",
         });
         return;
       }

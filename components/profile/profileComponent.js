@@ -1,4 +1,4 @@
-import { Avatar, Button, Badge, Card, Col, Row, Tooltip } from "antd";
+import { Avatar, Button, Badge, Card, Col, Message, Row, Tooltip } from "antd";
 import { theme } from "../styles/GlobalStyles";
 import { CameraOutlined } from "@ant-design/icons";
 import { useAppState } from "../shared/AppProvider";
@@ -59,17 +59,11 @@ const ProfileComponent = () => {
         className="mb-4 overflow-hidden w-100"
         title={
           <Row type="flex" align="middle">
-            <Badge
-              count={
-                <CameraOutlined style={{ color: "red", cursor: "pointer" }} />
-              }
-            >
-              <Avatar size={50} shape="square" src={user.foto}>
-                {" "}
-                {user.fullname !== undefined &&
-                  general_helper.getInitialName(user.fullname)}
-              </Avatar>
-            </Badge>
+            <Avatar size={50} src={user.foto}>
+              {" "}
+              {user.fullname !== undefined &&
+                general_helper.getInitialName(user.fullname)}
+            </Avatar>
             <div
               className="px-2 text-light"
               css={`
@@ -79,7 +73,13 @@ const ProfileComponent = () => {
               <h5 className="my-0 text-white">
                 <span>{user.fullname}</span>
               </h5>
-              <small>
+              <small
+                style={{ cursor: "pointer" }}
+                onClick={async () => {
+                  await navigator.clipboard.writeText(user.referral_url);
+                  Message.success("Referral berhasil di salin");
+                }}
+              >
                 {user.referral} &nbsp;
                 <Tooltip title="copy kode referral">
                   <CopyOutlined style={{ marginLeft: "1px" }} />

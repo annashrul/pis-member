@@ -28,8 +28,11 @@ const ProfileComponent = () => {
 
   const handleUser = async (isShow = false) => {
     await handleGet(`member/get/${user.id}`, (res, msg) => {
-      setUser(res.data);
-      authAction.setUser(res.data);
+      const users = res.data;
+      const userState = user;
+      Object.assign(userState, users);
+      setUser(userState);
+      authAction.setUser(userState);
       isShow && setShowForm(false);
     });
   };

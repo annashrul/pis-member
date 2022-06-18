@@ -10,6 +10,7 @@ function setToken(datum) {
   Cookies.set("_prowara", btoa(datum), { expires: 7 });
 }
 export function doLogout() {
+  Helper.removeCookie("__uidInfo");
   Helper.removeCookie("__uid");
   Helper.removeCookie("_prowara");
   Helper.removeCookie("_regist");

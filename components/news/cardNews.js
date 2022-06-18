@@ -47,11 +47,12 @@ const CardNews = ({ callback, wheres = "&page=1&perpage=10&status=1" }) => {
             }}
           >
             <Card
-              style={{ gridColumnEnd: "span 4" }}
+              style={{ height: !state.mobile ? "330px" : "260px" }}
               title={<small style={{ fontSize: font }}>{val.title}</small>}
               hoverable
               cover={
                 <img
+                  style={{ height: !state.mobile ? "180px" : "105px" }}
                   alt="example"
                   src={val.picture}
                   onError={({ currentTarget }) => {

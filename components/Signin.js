@@ -33,6 +33,49 @@ const Signin = () => {
   useEffect(() => {
     forceUpdate({});
   }, []);
+  const handleLoadInfo = async () => {
+    await handleGet("site/info", (res, status, msg) => {
+      Action.setInfo(res.data);
+    });
+  };
+
+  const handleUserDetail = async (dataLogin) => {
+    await handleGet(
+      `member/get/${dataLogin.id}`,
+      (resUser, statusUser, msgUser) => {
+        if (dataLogin.pin === "-") {
+          Message.success("Anda Belum Mempunya Pin").then(() => {
+            setShowModalPin(true);
+            setIconLoading(false);
+          });
+        } else if (dataLogin.status === 3) {
+          if (dataLogin.kd_trx !== "" || dataLogin.kd_trx !== "-") {
+            localStorage.setItem("linkBack", "/signin");
+            localStorage.setItem("typeTrx", "Recycle");
+            localStorage.setItem("kdTrx", res.data.kd_trx);
+            Router.push(StringLink.invoiceRecycle).then(() =>
+              setIconLoading(false)
+            );
+          } else {
+            Router.push(StringLink.transactionRecycle).then(() =>
+              setIconLoading(false)
+            );
+          }
+        } else {
+          Message.success(
+            "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
+          ).then(() => Router.push("/").then(() => setIconLoading(false)));
+        }
+        setLoading(false);
+        setIconLoading(false);
+        Action.setToken(dataLogin.token);
+        Object.assign(dataLogin, resUser.data);
+        Action.setUser(dataLogin);
+        setDataUser(dataLogin);
+      }
+    );
+  };
+
   const handleSubmit = async (values) => {
     setLoading(true);
     setIconLoading(true);
@@ -41,42 +84,9 @@ const Signin = () => {
         Action.http.axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${res.data.token}`;
-        let dataLogin = res.data;
-        await handleGet(
-          `member/get/${res.data.id}`,
-          (resUser, statusUser, msgUser) => {
-            setLoading(false);
-            setIconLoading(false);
-            Action.setToken(res.data.token);
-            Object.assign(dataLogin, resUser.data);
-            Action.setUser(dataLogin);
-            setDataUser(dataLogin);
-            if (res.data.pin === "-") {
-              Message.success("Anda Belum Mempunya Pin").then(() => {
-                setShowModalPin(true);
-                setIconLoading(false);
-              });
-              return;
-            } else if (res.data.status === 3) {
-              if (res.data.kd_trx !== "" || res.data.kd_trx !== "-") {
-                localStorage.setItem("linkBack", "/signin");
-                localStorage.setItem("typeTrx", "Recycle");
-                localStorage.setItem("kdTrx", res.data.kd_trx);
-                Router.push(StringLink.invoiceRecycle).then(() =>
-                  setIconLoading(false)
-                );
-              } else {
-                Router.push(StringLink.transactionRecycle).then(() =>
-                  setIconLoading(false)
-                );
-              }
-            } else {
-              Message.success(
-                "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
-              ).then(() => Router.push("/").then(() => setIconLoading(false)));
-            }
-          }
-        );
+
+        handleUserDetail(res.data);
+        handleLoadInfo();
       }
     });
   };

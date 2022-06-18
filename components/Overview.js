@@ -26,17 +26,11 @@ const Overview = () => {
     if (state.mobile) {
       setFont("80%");
     }
-    handleLoadInfo();
+    const user = Action.getUser();
+    setObjUser(user);
+    const info = Action.getInfo();
+    setObjInfo(info);
   }, [isData]);
-
-  const handleLoadInfo = async () => {
-    await handleGet("site/info", (res, status, msg) => {
-      setObjInfo(res.data);
-      Action.setInfo(res.data);
-      const user = Action.getUser();
-      setObjUser(user);
-    });
-  };
 
   const cardMobile = (bg, saldo, title) => {
     return (
@@ -51,8 +45,6 @@ const Overview = () => {
       </Card>
     );
   };
-
-  console.log(objUser);
 
   return (
     <div>

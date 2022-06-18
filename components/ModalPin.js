@@ -11,7 +11,6 @@ const ModalPin = ({ submit, cancel, modalPin, loading = false }) => {
   const [pin, setPin] = useState("");
   const [focusPin, setFocusPin] = useState(true);
   useEffect(() => {
-    console.log("focus", modalPin);
     setTimeout(() => setFocusPin(true), 300);
   }, [isModal, focusPin, pin]);
 

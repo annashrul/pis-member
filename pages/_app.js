@@ -7,9 +7,6 @@ import NProgress from "nprogress";
 import Page from "../components/Page";
 import Router from "next/router";
 import axios from "axios";
-import Cookies from "js-cookie";
-import jwt_decode from "jwt-decode";
-import Action from "../action/auth.action";
 
 axios.defaults.headers.common[
   "Content-Type"
@@ -18,20 +15,6 @@ axios.defaults.headers.common[
   "X-Project-ID"
 ] = `296cd1b03960e8c8176fe06464c58ab8`;
 axios.defaults.headers.common["X-Requested-From"] = `apps`;
-
-// LogRocket.init('9razfl/prowara');
-// const coo = Cookies.get("_prowara");
-// if (coo !== undefined) {
-//   axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
-//   const decodedToken = jwt_decode(atob(coo));
-//   const dateNow = new Date();
-//   if (decodedToken.exp * 1000 < dateNow.getTime()) {
-//     Action.doLogout();
-//     // window.location.href = '/signin';
-//   } else {
-//   }
-// }
-
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
@@ -53,30 +36,12 @@ class MyApp extends App {
 
     pageProps.query = ctx.query;
     pageProps.ieBrowser = ie;
+    console.log("component", pageProps);
+
     return { pageProps };
   }
 
   render() {
-    // window.onbeforeunload = this.UnLoadWindow;
-    // const coo=Cookies.get('_prowara');
-    // console.log("cookies",coo)
-    // if(coo!==undefined) {
-    //     axios.defaults.headers.common["Authorization"] = `Bearer ${atob(coo)}`;
-    //     const decodedToken = jwt_decode(atob(coo));
-    //     const dateNow = new Date();
-    //     if (decodedToken.exp * 1000 < dateNow.getTime()) {
-    //         Action.doLogout();
-    //         // Router.push("/signin")
-    //     }
-    //     else{
-    //     }
-
-    // }else{
-    //     // window.location.href="/signin"
-    //     // Action.doLogout();
-    //     // Routes.push('/signin')
-    //     // Router.push("/signin")
-    // }
     const { Component, pageProps } = this.props;
 
     return (
@@ -104,14 +69,6 @@ class MyApp extends App {
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap"
             rel="stylesheet"
           />
-
-          {/* <link rel="preconnect" href="https://fonts.gstatic.com" />
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Joan&family=Noto+Sans:wght@600&display=swap"
-            rel="stylesheet"
-          /> */}
 
           {pageProps.ieBrowser && (
             <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.min.js" />

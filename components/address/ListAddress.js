@@ -42,8 +42,8 @@ const ListAddress = () => {
   const [disabledSave, setDisabledSave] = useState(true);
   const [isUpdate, setIsUpdate] = useState("");
   const [, forceUpdate] = useState();
-  const [dummyData, setDummyData] = useState(["a", "a", "a", "a"]);
-
+  // const [dummyData, setDummyData] = useState(["a", "a", "a", "a"]);
+  const dummyData = ["a", "a", "a", "a"];
   const titleInput = useRef(null);
 
   const setBtnDisabled = () => {
@@ -73,9 +73,10 @@ const ListAddress = () => {
   const handleLoadProvinsi = async () => {
     await handleGet("transaction/kurir/get/provinsi", (datum, isLoading) => {
       setArrProvinsi(datum.data);
-      form.setFieldsValue({ kd_prov: datum.data[0].id });
-      handleLoadKota(datum.data[0].id);
-      setLoadingProvinsi(false);
+      handleLoadKota(datum.data[0].id).then(() => {
+        form.setFieldsValue({ kd_prov: datum.data[0].id });
+        setLoadingProvinsi(false);
+      });
     });
   };
   const handleLoadKota = async (id, valId = null) => {
@@ -87,8 +88,9 @@ const ListAddress = () => {
         if (valId !== null) {
           form.setFieldsValue({ kd_kota: valId });
         } else {
-          form.setFieldsValue({ kd_kota: datum.data[0].id });
-          handleLoadKecamatan(datum.data[0].id);
+          handleLoadKecamatan(datum.data[0].id).then(() => {
+            form.setFieldsValue({ kd_kota: datum.data[0].id });
+          });
         }
 
         setLoadingKota(false);
@@ -111,11 +113,13 @@ const ListAddress = () => {
   const onChange = (value, col = "", idx = 0) => {
     setBtnDisabled();
     if (col === "prov") {
-      form.setFieldsValue({ kd_kota: undefined }); //reset product selection
-      setTimeout(() => handleLoadKota(value), 300);
+      form.setFieldsValue({ kd_kota: undefined });
+      handleLoadKota(value);
+      // setTimeout(() => handleLoadKota(value), 100);
     } else if (col === "kota") {
-      form.setFieldsValue({ kd_kec: undefined }); //reset product selection
-      setTimeout(() => handleLoadKecamatan(value), 300);
+      form.setFieldsValue({ kd_kec: undefined });
+      handleLoadKecamatan(value);
+      // setTimeout(() => handleLoadKecamatan(value), 100);
     }
   };
 
@@ -141,20 +145,9 @@ const ListAddress = () => {
   };
 
   const handleEdit = (e, val) => {
-    handleLoadKota(val.kd_prov, val.kd_kota).then(() =>
-      handleLoadKecamatan(val.kd_kota, val.kd_kec)
-    );
+    handleLoadKota(val.kd_prov, val.kd_kota);
+    handleLoadKecamatan(val.kd_kota, val.kd_kec);
     titleInput.current.focus();
-    // const datas = val;
-
-    // let no = 0;
-    // if (datas.no_hp.substr(0, 2) === "62") {
-    //   no = datas.no_hp.substr(2, datas.no_hp.length);
-    // } else {
-    //   no = datas.no_hp;
-    // }
-
-    // Object.assign(datas, { no_hp: no });
     form.setFieldsValue(val);
     setBtnDisabled();
     setIsUpdate(val.id);
@@ -387,7 +380,7 @@ const ListAddress = () => {
                   }
                   return (
                     <List.Item
-                      bordered={true}
+                      bordered
                       key={item.id}
                       actions={[
                         <Tooltip title={`Alamat ${item.title}`}>

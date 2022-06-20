@@ -170,7 +170,7 @@ const ListAddress = () => {
   return (
     <>
       <Row gutter={16}>
-        <Col xs={24} sm={12} md={15}>
+        <Col xs={24} sm={12} md={15} className="mb-4">
           <Form
             form={form}
             layout="vertical"
@@ -367,7 +367,7 @@ const ListAddress = () => {
           </Form>
         </Col>
         <Col xs={24} sm={12} md={9}>
-          <Card title="Daftar Alamat" className="mb-4">
+          <Card title="Daftar Alamat">
             {!loadingAddress ? (
               arrAddress.length > 0 ? (
                 <List

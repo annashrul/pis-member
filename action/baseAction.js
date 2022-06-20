@@ -6,7 +6,7 @@ export const handleGet = async (url, callback) => {
     const getData = await Action.get(Action.apiUrl + url);
     const datum = getData.data;
 
-    callback(datum, false);
+    callback(datum, true);
   } catch (err) {
     callback([], false, "gagal");
     let msg = "Terjadi Kesalahan Jaringan";

@@ -83,7 +83,6 @@ const PurchaseReport = () => {
         {...formItemLayout}
         form={form}
         layout="vertical"
-        name="register"
         onFinish={onFinish}
         initialValues={{
           prefix: "kd_trx",

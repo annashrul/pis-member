@@ -149,6 +149,8 @@ const Overview = () => {
           callback={(res) => {
             setIsData(res.data.length > 0);
           }}
+          isLoadMore={false}
+          pagePer={4}
         />
       </Row>
     </div>

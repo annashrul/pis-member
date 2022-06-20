@@ -1,4 +1,4 @@
-import { Col, Tag, Row, Card, PageHeader } from "antd";
+import { Col, Tag, Button, Message, Row, Card, PageHeader } from "antd";
 import React, { useEffect, useState } from "react";
 import { handleGet } from "../../action/baseAction";
 import Router from "next/router";
@@ -15,7 +15,7 @@ const News = () => {
     if (state.mobile) {
       setFont("80%");
     }
-  }, []);
+  }, [state]);
 
   return state.mobile ? (
     <PageHeader
@@ -24,12 +24,24 @@ const News = () => {
       title="Berita Terbaru"
     >
       <Row gutter={16}>
-        <CardNews callback={(res) => {}} />
+        <CardNews
+          callback={(res) => {
+            setArrNews(res);
+          }}
+          isLoadMore={true}
+          pagePer={8}
+        />
       </Row>
     </PageHeader>
   ) : (
     <Row gutter={16}>
-      <CardNews callback={(res) => {}} />
+      <CardNews
+        callback={(res) => {
+          setArrNews(res);
+        }}
+        isLoadMore={true}
+        pagePer={8}
+      />
     </Row>
   );
 };

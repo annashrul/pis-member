@@ -16,6 +16,8 @@ import {
 import React, { useRef, useEffect, useState } from "react";
 import { theme } from "../styles/GlobalStyles";
 import Helper from "../../helper/general_helper";
+import { StringLink } from "../../helper/string_link_helper";
+
 import { handleGet, handlePost } from "../../action/baseAction";
 import ModalPin from "../ModalPin";
 import Action from "../../action/auth.action";
@@ -28,6 +30,7 @@ const CreateWithdraw = () => {
   const [form] = Form.useForm();
   const [idxPayment, setIdxPayment] = useState(0);
   const [modalPin, setModalPin] = useState(false);
+  const [checkWd, setCheckWd] = useState(false);
   const [bonus, setBonus] = useState(0);
   const [rekening, setRekening] = useState([]);
   const [bonusNasional, setBonusNasional] = useState(0);
@@ -76,6 +79,7 @@ const CreateWithdraw = () => {
     await handleGet("site/info", (datum, isLoading) => {
       setBonus(parseInt(datum.data.saldo, 10));
       setAmount(datum.data.saldo);
+      setCheckWd(datum.data.check_hak_wd);
       setRekening([datum.data.rekening]);
       setBonusNasional(parseInt(datum.data.saldo_pending, 10));
       Action.setInfo(datum.data);
@@ -110,7 +114,6 @@ const CreateWithdraw = () => {
 
   const handleSubmit = async (e) => {
     let nominal = parseInt(e.amount, 10);
-
     if (type === "0") {
       if (nominal < minWd) {
         setNominalError({
@@ -127,6 +130,16 @@ const CreateWithdraw = () => {
         return;
       }
     } else {
+      if (!checkWd) {
+        message
+          .info(
+            "Anda belum memenuhi syarat, anda akan dialihkan ke halaman produk"
+          )
+          .then(() => {
+            Router.push(StringLink.product);
+          });
+        return;
+      }
       if (bonusNasional < maxWdBonusNasional) {
         setNominalError({
           enable: true,

@@ -76,24 +76,23 @@ const ListProduct = () => {
                           StringLink.checkout
                         );
                       }
-
-                      // if (!info) {
-                      //   Message.info("anda belum memenuhi syarat RO");
-                      // } else {
-                      //   if (parseInt(val.stock, 10) < 1) {
-                      //     Message.info("stock tidak tersedia");
-                      //   } else {
-                      //     Object.assign(val, { id_paket: val.id });
-                      //     Object.assign(objAddress, val);
-                      //     Router.push(
-                      //       {
-                      //         pathname: StringLink.checkout,
-                      //         query: objAddress,
-                      //       },
-                      //       StringLink.checkout
-                      //     );
-                      //   }
-                      // }
+                      if (!info) {
+                        Message.info("anda belum memenuhi syarat RO");
+                      } else {
+                        if (parseInt(val.stock, 10) < 1) {
+                          Message.info("stock tidak tersedia");
+                        } else {
+                          Object.assign(val, { id_paket: val.id });
+                          Object.assign(objAddress, val);
+                          Router.push(
+                            {
+                              pathname: StringLink.checkout,
+                              query: objAddress,
+                            },
+                            StringLink.checkout
+                          );
+                        }
+                      }
                     }
                   }}
                 >

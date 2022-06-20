@@ -49,15 +49,15 @@ const Signin = () => {
             setIconLoading(false);
           });
         } else if (dataLogin.status === 3) {
-          if (dataLogin.kd_trx !== "" || dataLogin.kd_trx !== "-") {
+          if (dataLogin.kd_trx === "" || dataLogin.kd_trx === "-") {
+            Router.push(StringLink.transactionRecycle).then(() =>
+              setIconLoading(false)
+            );
+          } else {
             localStorage.setItem("linkBack", "/signin");
             localStorage.setItem("typeTrx", "Recycle");
             localStorage.setItem("kdTrx", dataLogin.kd_trx);
             Router.push(StringLink.invoiceRecycle).then(() =>
-              setIconLoading(false)
-            );
-          } else {
-            Router.push(StringLink.transactionRecycle).then(() =>
               setIconLoading(false)
             );
           }

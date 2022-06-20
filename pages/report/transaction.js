@@ -102,7 +102,7 @@ const TransactionReport = () => {
         }}
       >
         <Row gutter={16}>
-          <Col xs={24} sm={12} md={6}>
+          <Col xs={24} sm={24} md={6}>
             <Form.Item name="periode" label="Periode">
               {Helper.dateRange(
                 (dates, dateStrings) => {

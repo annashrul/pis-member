@@ -103,15 +103,7 @@ const rangeDate = {
 
 const dateRange = (onApply, isLabel = true, value) => {
   return (
-    <div className={`form-group`}>
-      <label
-        style={{ display: isLabel || isLabel === undefined ? "block" : "none" }}
-      >
-        {" "}
-        Periode{" "}
-      </label>
-      <RangePicker defaultValue={value} ranges={rangeDate} onChange={onApply} />
-    </div>
+    <RangePicker defaultValue={value} ranges={rangeDate} onChange={onApply} />
   );
 };
 const generateNo = (i, current_page, perpage = 10) => {

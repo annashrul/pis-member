@@ -21,6 +21,9 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'Signika Negative', sans-serif!important;
 
   }
+  .ant-picker-range{
+    width:100%!important;
+  }
   small{
     font-family: 'Signika Negative', sans-serif!important;
   }

@@ -104,15 +104,6 @@ const CheckoutProduct = () => {
       let dataChannel = [
         {
           active: true,
-          code: "SALDO",
-          fee_customer: { flat: info.saldo, percent: 0 },
-          group: "Saldo",
-          logo: Helper.imgDefault,
-          name: "SALDO",
-          type: "SALDO",
-        },
-        {
-          active: true,
           code: "SALDONASIONAL",
           fee_customer: { flat: info.saldo_pending, percent: 0 },
           group: "Saldo",
@@ -294,8 +285,12 @@ const CheckoutProduct = () => {
                         title={item.name}
                         description={
                           item.type === "direct"
-                            ? `Admin : ${Helper.toRp(item.fee_customer.flat)}`
-                            : Helper.toRp(item.fee_customer.flat)
+                            ? `Admin : ${Helper.toRp(
+                                parseFloat(item.fee_customer.flat).toFixed(0)
+                              )}`
+                            : Helper.toRp(
+                                parseFloat(item.fee_customer.flat).toFixed(0)
+                              )
                         }
                       />
                       {key === idxPayment && (

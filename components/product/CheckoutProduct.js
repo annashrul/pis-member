@@ -19,6 +19,7 @@ import Router from "next/router";
 import Helper from "../../helper/general_helper";
 import { StringLink } from "../../helper/string_link_helper";
 import ModalPin from "../ModalPin";
+import authAction from "../../action/auth.action";
 const { Option } = Select;
 
 const CheckoutProduct = () => {
@@ -41,6 +42,7 @@ const CheckoutProduct = () => {
 
   useEffect(() => {
     if (Object.keys(Router.query).length > 0) {
+      console.log("info", authAction.getInfo());
       setSubtotal(parseInt(Router.query.price, 10));
       setTotal(parseInt(Router.query.price, 10));
       setObjProduct(Router.query);
@@ -97,7 +99,32 @@ const CheckoutProduct = () => {
 
   const handleLoadChannel = async () => {
     await handleGet("transaction/channel", (datum, isLoading) => {
-      setArrChannel(datum.data);
+      console.log(datum.data);
+      const info = authAction.getInfo();
+      let dataChannel = [
+        {
+          active: true,
+          code: "SALDO",
+          fee_customer: { flat: info.saldo, percent: 0 },
+          group: "Saldo",
+          logo: Helper.imgDefault,
+          name: "SALDO",
+          type: "SALDO",
+        },
+        {
+          active: true,
+          code: "SALDONASIONAL",
+          fee_customer: { flat: info.saldo_pending, percent: 0 },
+          group: "Saldo",
+          logo: Helper.imgDefault,
+          name: "SALDO NASIONAL",
+          type: "SALDO NASIONAL",
+        },
+      ];
+      datum.data.map((val, key) => {
+        dataChannel.push(val);
+      });
+      setArrChannel(dataChannel);
     });
   };
 
@@ -127,6 +154,8 @@ const CheckoutProduct = () => {
       }
     });
   };
+
+  console.log(arrChannel[idxPayment]);
 
   return (
     <div>
@@ -263,9 +292,11 @@ const CheckoutProduct = () => {
                           />
                         }
                         title={item.name}
-                        description={`Admin : ${Helper.toRp(
-                          item.fee_customer.flat
-                        )}`}
+                        description={
+                          item.type === "direct"
+                            ? `Admin : ${Helper.toRp(item.fee_customer.flat)}`
+                            : Helper.toRp(item.fee_customer.flat)
+                        }
                       />
                       {key === idxPayment && (
                         <div>

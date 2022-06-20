@@ -27,7 +27,11 @@ function setInfo(datum) {
 
 function getInfo() {
   const coo = Cookies.get("__uidInfo");
-  return JSON.parse(atob(coo));
+  if (coo !== undefined) {
+    return JSON.parse(atob(coo));
+  } else {
+    return undefined;
+  }
 }
 
 function getToken() {

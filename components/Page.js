@@ -35,6 +35,7 @@ const Page = ({ router, children }) => {
 
   useEffect(() => {
     const coo = Cookies.get("_prowara");
+    console.log("bandat");
     setTimeout(() => {
       if (coo !== undefined) {
         setLoading(false);

@@ -8,7 +8,7 @@ import StatCard from "./shared/StatCard";
 import { theme } from "./styles/GlobalStyles";
 import React, { useEffect, useState } from "react";
 import { handleGet } from "../action/baseAction";
-import Action from "../action/auth.action";
+import Action, { doLogout } from "../action/auth.action";
 import Helper from "../helper/general_helper";
 import Router from "next/router";
 import { useAppState } from "./shared/AppProvider";
@@ -26,10 +26,15 @@ const Overview = () => {
     if (state.mobile) {
       setFont("80%");
     }
-    const user = Action.getUser();
-    setObjUser(user);
     const info = Action.getInfo();
-    setObjInfo(info);
+    if (info === undefined) {
+      Router.push("/signin");
+      doLogout();
+    } else {
+      const user = Action.getUser();
+      setObjUser(user);
+      setObjInfo(info);
+    }
   }, [isData]);
 
   const cardMobile = (bg, saldo, title) => {

@@ -59,27 +59,41 @@ const ListProduct = () => {
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     if (!address) {
-                      Message.success(
+                      Message.info(
                         "anda belum mempunya alamat, anda akan dialihkan untuk membuat alamat"
-                      ).then(() => Router.push("/alamat"));
+                      ).then(() => Router.push(StringLink.address));
                     } else {
-                      if (!info) {
-                        Message.info("anda belum memenuhi syarat RO");
+                      if (parseInt(val.stock, 10) < 1) {
+                        Message.info("stock tidak tersedia");
                       } else {
-                        if (parseInt(val.stock, 10) < 1) {
-                          Message.info("stock tidak tersedia");
-                        } else {
-                          Object.assign(val, { id_paket: val.id });
-                          Object.assign(objAddress, val);
-                          Router.push(
-                            {
-                              pathname: StringLink.checkout,
-                              query: objAddress,
-                            },
-                            StringLink.checkout
-                          );
-                        }
+                        Object.assign(val, { id_paket: val.id });
+                        Object.assign(objAddress, val);
+                        Router.push(
+                          {
+                            pathname: StringLink.checkout,
+                            query: objAddress,
+                          },
+                          StringLink.checkout
+                        );
                       }
+
+                      // if (!info) {
+                      //   Message.info("anda belum memenuhi syarat RO");
+                      // } else {
+                      //   if (parseInt(val.stock, 10) < 1) {
+                      //     Message.info("stock tidak tersedia");
+                      //   } else {
+                      //     Object.assign(val, { id_paket: val.id });
+                      //     Object.assign(objAddress, val);
+                      //     Router.push(
+                      //       {
+                      //         pathname: StringLink.checkout,
+                      //         query: objAddress,
+                      //       },
+                      //       StringLink.checkout
+                      //     );
+                      //   }
+                      // }
                     }
                   }}
                 >

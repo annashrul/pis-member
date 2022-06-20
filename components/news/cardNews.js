@@ -31,8 +31,9 @@ const CardNews = ({ callback, wheres = "&page=1&perpage=10&status=1" }) => {
   return !loading && arrNews.length
     ? arrNews.map((val, key) => {
         let desc = Helper.rmHtml(val.caption);
-        if (desc.length > state.mobile ? 50 : 100) {
-          desc = desc.substr(0, state.mobile ? 50 : 100) + " ..";
+        let lengthIsMobile = state.mobile ? 50 : 80;
+        if (desc.length > lengthIsMobile) {
+          desc = desc.substr(0, lengthIsMobile) + " ..";
         }
         return (
           <Col

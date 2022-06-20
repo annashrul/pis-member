@@ -36,7 +36,6 @@ class MyApp extends App {
 
     pageProps.query = ctx.query;
     pageProps.ieBrowser = ie;
-    console.log("component", pageProps);
 
     return { pageProps };
   }

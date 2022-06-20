@@ -87,6 +87,9 @@ const Signin = () => {
 
         handleUserDetail(res.data);
         handleLoadInfo();
+      } else {
+        setLoading(false);
+        setIconLoading(false);
       }
     });
   };

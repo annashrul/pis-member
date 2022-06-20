@@ -12,6 +12,7 @@ import {
   Form,
   Select,
   Skeleton,
+  Empty,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -367,60 +368,64 @@ const ListAddress = () => {
         </Col>
         <Col xs={24} sm={12} md={9}>
           <Card title="Daftar Alamat" className="mb-4">
-            {!loadingAddress && arrAddress.length > 0 ? (
-              <List
-                loading={loadingAddress}
-                itemLayout="vertical"
-                dataSource={arrAddress}
-                renderItem={(item, key) => {
-                  if (item.no_hp.substr(0, 2) === "62") {
-                    Object.assign(item, {
-                      no_hp: item.no_hp.substr(2, item.no_hp.length),
-                    });
-                  }
-                  return (
-                    <List.Item
-                      bordered
-                      key={item.id}
-                      actions={[
-                        <Tooltip title={`Alamat ${item.title}`}>
-                          <Tag color="lime">{item.title}</Tag>
-                        </Tooltip>,
-                        <Button
-                          onClick={(e) => handleEdit(e, item)}
-                          key="list-edit"
-                          type={"primary"}
-                          size={"small"}
-                        >
-                          Ubah
-                        </Button>,
-                        <Popconfirm
-                          title={`Anda yakin akan menghapus alamat ${item.penerima} ?`}
-                          onConfirm={(e) => handleConfirm(e, item.id)}
-                          onCancel={(e) => {}}
-                          okText="Oke"
-                          cancelText="Batal"
-                        >
+            {!loadingAddress ? (
+              arrAddress.length > 0 ? (
+                <List
+                  loading={loadingAddress}
+                  itemLayout="vertical"
+                  dataSource={arrAddress}
+                  renderItem={(item, key) => {
+                    if (item.no_hp.substr(0, 2) === "62") {
+                      Object.assign(item, {
+                        no_hp: item.no_hp.substr(2, item.no_hp.length),
+                      });
+                    }
+                    return (
+                      <List.Item
+                        bordered
+                        key={item.id}
+                        actions={[
+                          <Tooltip title={`Alamat ${item.title}`}>
+                            <Tag color="lime">{item.title}</Tag>
+                          </Tooltip>,
                           <Button
+                            onClick={(e) => handleEdit(e, item)}
+                            key="list-edit"
                             type={"primary"}
                             size={"small"}
-                            key="list-delete"
                           >
-                            Hapus
-                          </Button>
-                        </Popconfirm>,
-                      ]}
-                    >
-                      <Skeleton title={false} loading={loadingAddress} active>
-                        <List.Item.Meta
-                          title={`${item.penerima} | 62${item.no_hp}`}
-                          description={`${item.main_address}, Kecamatan ${item.kecamatan}, kota ${item.kota}, provinsi ${item.provinsi}`}
-                        />
-                      </Skeleton>
-                    </List.Item>
-                  );
-                }}
-              />
+                            Ubah
+                          </Button>,
+                          <Popconfirm
+                            title={`Anda yakin akan menghapus alamat ${item.penerima} ?`}
+                            onConfirm={(e) => handleConfirm(e, item.id)}
+                            onCancel={(e) => {}}
+                            okText="Oke"
+                            cancelText="Batal"
+                          >
+                            <Button
+                              type={"primary"}
+                              size={"small"}
+                              key="list-delete"
+                            >
+                              Hapus
+                            </Button>
+                          </Popconfirm>,
+                        ]}
+                      >
+                        <Skeleton title={false} loading={loadingAddress} active>
+                          <List.Item.Meta
+                            title={`${item.penerima} | 62${item.no_hp}`}
+                            description={`${item.main_address}, Kecamatan ${item.kecamatan}, kota ${item.kota}, provinsi ${item.provinsi}`}
+                          />
+                        </Skeleton>
+                      </List.Item>
+                    );
+                  }}
+                />
+              ) : (
+                <Empty />
+              )
             ) : (
               dummyData.map((val, key) => <Skeleton key={key} />)
             )}

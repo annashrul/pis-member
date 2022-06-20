@@ -2,11 +2,13 @@ import { Layout, Menu } from "antd";
 import DashHeader from "./styles/Header";
 import { useAppState } from "./shared/AppProvider";
 import general_helper from "../helper/general_helper";
-
+import React, { useEffect, useState } from "react";
+import Action from "../action/auth.action";
 const { Header } = Layout;
 
 const MainHeader = () => {
   const [state, dispatch] = useAppState();
+
   return (
     <DashHeader>
       <Header>

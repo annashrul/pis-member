@@ -1,12 +1,19 @@
 import Cookies from "js-cookie";
 import moment from "moment";
 import { DatePicker, message } from "antd";
+import copy from "copy-to-clipboard";
+
 const RangePicker = DatePicker.RangePicker;
 
 const imgDefault = "/logos.png";
 
 const setCookie = (name, data) => {
   Cookies.set(name, btoa(data), { expires: 1 });
+};
+
+const copyText = (text, col = "Referral") => {
+  copy(text);
+  message.success(col + " berhasil di salin");
 };
 
 const removeCookie = (name) => {
@@ -175,6 +182,7 @@ const getPropsUpload = (fileList, callback) => {
 };
 
 export default {
+  copyText,
   getPropsUpload,
   convertBase64,
   getInitialName,

@@ -7,6 +7,8 @@ import NProgress from "nprogress";
 import Page from "../components/Page";
 import Router from "next/router";
 import axios from "axios";
+import Action from "../action/auth.action";
+import { Message } from "antd";
 
 axios.defaults.headers.common[
   "Content-Type"

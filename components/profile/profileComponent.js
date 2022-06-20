@@ -88,10 +88,7 @@ const ProfileComponent = () => {
               </h5>
               <small
                 style={{ cursor: "pointer" }}
-                onClick={async () => {
-                  await navigator.clipboard.writeText(user.referral_url);
-                  Message.success("Referral berhasil di salin");
-                }}
+                onClick={async () => general_helper.copyText(user.referral_url)}
               >
                 {user.referral} &nbsp;
                 <Tooltip title="copy kode referral">

@@ -52,7 +52,7 @@ const Signin = () => {
           if (dataLogin.kd_trx !== "" || dataLogin.kd_trx !== "-") {
             localStorage.setItem("linkBack", "/signin");
             localStorage.setItem("typeTrx", "Recycle");
-            localStorage.setItem("kdTrx", res.data.kd_trx);
+            localStorage.setItem("kdTrx", dataLogin.kd_trx);
             Router.push(StringLink.invoiceRecycle).then(() =>
               setIconLoading(false)
             );

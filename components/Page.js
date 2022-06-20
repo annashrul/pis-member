@@ -13,7 +13,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { doLogout } from "../action/auth.action";
-
+import Action from "../action/auth.action";
 const { Content } = Layout;
 
 const NonDashboardRoutes = [
@@ -35,7 +35,6 @@ const Page = ({ router, children }) => {
 
   useEffect(() => {
     const coo = Cookies.get("_prowara");
-    console.log("bandat");
     setTimeout(() => {
       if (coo !== undefined) {
         setLoading(false);

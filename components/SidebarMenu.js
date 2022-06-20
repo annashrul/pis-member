@@ -10,6 +10,7 @@ import {
   Row,
   Switch,
   Tooltip,
+  Message,
 } from "antd";
 import {
   FolderTwoTone,
@@ -51,6 +52,7 @@ const SidebarContent = ({
   const [state, dispatch] = useAppState();
   const [openKeys, setOpenKeys] = useState([]);
   const [user, setUser] = useState({});
+  const [info, setInfo] = useState({});
   const [appRoutes] = useState(Routes);
   const { pathname } = router;
 
@@ -62,6 +64,7 @@ const SidebarContent = ({
   );
 
   useEffect(() => {
+    setInfo(authAction.getInfo());
     setUser(authAction.getUser());
     appRoutes.forEach((route, index) => {
       const isCurrentPath = pathname.indexOf(lowercase(route.name)) > -1;
@@ -80,6 +83,19 @@ const SidebarContent = ({
     }
   };
 
+  const checkStatusMember = () => {
+    if (info.status_member === 3) {
+      Message.info("Anda Telah Mencapai Limit Bonus")
+        .then(() =>
+          Message.info("Silahkan Login Kembali Untuk Melakukan Recycle")
+        )
+        .then(() => {
+          Router.push("/signin");
+          doLogout();
+        });
+    }
+  };
+
   const menu = (
     <>
       <Menu
@@ -93,17 +109,14 @@ const SidebarContent = ({
         {appRoutes.map((route, index) => {
           const hasChildren = !!route.children;
           if (!hasChildren) {
-            const isProduct =
-              route.path.includes("product") && pathname.includes("product");
             return (
               <Menu.Item
                 key={getKey(route.name, index)}
                 className={
-                  isProduct || pathname === route.path
-                    ? "ant-menu-item-selected"
-                    : ""
+                  pathname === route.path ? "ant-menu-item-selected" : ""
                 }
                 onClick={() => {
+                  // checkStatusMember();
                   setOpenKeys([getKey(route.name, index)]);
                   if (state.mobile) dispatch({ type: "mobileDrawer" });
                 }}
@@ -141,6 +154,7 @@ const SidebarContent = ({
                           : ""
                       }
                       onClick={() => {
+                        // checkStatusMember();
                         if (state.mobile) dispatch({ type: "mobileDrawer" });
                       }}
                     >
@@ -217,7 +231,7 @@ const SidebarContent = ({
       </div>
     </>
   );
-
+  checkStatusMember();
   return (
     <>
       <Inner>

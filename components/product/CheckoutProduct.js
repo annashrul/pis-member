@@ -102,15 +102,15 @@ const CheckoutProduct = () => {
       console.log(datum.data);
       const info = authAction.getInfo();
       let dataChannel = [
-        {
-          active: true,
-          code: "SALDONASIONAL",
-          fee_customer: { flat: info.saldo_pending, percent: 0 },
-          group: "Saldo",
-          logo: Helper.imgDefault,
-          name: "SALDO NASIONAL",
-          type: "SALDO NASIONAL",
-        },
+        // {
+        //   active: true,
+        //   code: "SALDONASIONAL",
+        //   fee_customer: { flat: info.saldo_pending, percent: 0 },
+        //   group: "Saldo",
+        //   logo: Helper.imgDefault,
+        //   name: "SALDO NASIONAL",
+        //   type: "SALDO NASIONAL",
+        // },
       ];
       datum.data.map((val, key) => {
         dataChannel.push(val);

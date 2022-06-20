@@ -61,10 +61,7 @@ const Overview = () => {
             icon={<CopyOutlined />}
             style={{ whiteSpace: "normal", height: "auto", width: "100%" }}
             block={true}
-            onClick={async (e) => {
-              await navigator.clipboard.writeText(objUser.referral_url);
-              Message.success("Referral berhasil di salin");
-            }}
+            onClick={async (e) => Helper.copyText(objUser.referral_url)}
           >
             {objUser && objUser.referral_url}
           </Button>

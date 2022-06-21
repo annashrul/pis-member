@@ -49,7 +49,6 @@ export const handlePost = async (url, data, callback) => {
 };
 
 export const handlePut = async (url, data, callback) => {
-  let hide = Message.loading("tunggu sebentar..");
   try {
     const submitData = await Action.put(Action.apiUrl + url, data);
     const datum = submitData.data;
@@ -58,9 +57,7 @@ export const handlePut = async (url, data, callback) => {
     } else {
       callback(datum, false, "gagal memproses permintaan.");
     }
-    setTimeout(hide, 200);
   } catch (err) {
-    setTimeout(hide, 200);
     callback([], false, "gagal");
     let msg = "Terjadi Kesalahan Jaringan";
     if (err.response.data.meta !== undefined) {

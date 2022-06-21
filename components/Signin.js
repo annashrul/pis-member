@@ -1,4 +1,4 @@
-import { Button, Form, Input, Message, Row } from "antd";
+import { Button, Form, Input, Spin, Message, Row } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 import Link from "next/link";
@@ -66,8 +66,6 @@ const Signin = () => {
             "Login Berhasil. Anda Akan Dialihkan Ke Halaman Dashboard!"
           ).then(() => Router.push("/").then(() => setIconLoading(false)));
         }
-        setLoading(false);
-        setIconLoading(false);
         Action.setToken(dataLogin.token);
         Object.assign(dataLogin, resUser.data);
         Action.setUser(dataLogin);
@@ -77,7 +75,6 @@ const Signin = () => {
   };
 
   const handleSubmit = async (values) => {
-    setLoading(true);
     setIconLoading(true);
     await handlePost("auth/signin", values, async (res, status, msg) => {
       if (status) {
@@ -88,7 +85,6 @@ const Signin = () => {
         handleUserDetail(res.data);
         handleLoadInfo();
       } else {
-        setLoading(false);
         setIconLoading(false);
       }
     });
@@ -134,58 +130,60 @@ const Signin = () => {
           </Link>
           <h5 className="mb-0 mt-3">Sign in Member</h5>
         </div>
-        <Form layout="vertical" onFinish={handleSubmit} form={form}>
-          <FormItem
-            label="Username"
-            name="username"
-            rules={[
-              { required: true, message: "Username tidak boleh kosong!" },
-            ]}
-          >
-            <Input
-              prefix={<UserOutlined style={{ fontSize: "16px" }} />}
-              type="text"
-              placeholder="Username"
-            />
-          </FormItem>
+        <Spin spinning={iconLoading}>
+          <Form layout="vertical" onFinish={handleSubmit} form={form}>
+            <FormItem
+              label="Username"
+              name="username"
+              rules={[
+                { required: true, message: "Username tidak boleh kosong!" },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined style={{ fontSize: "16px" }} />}
+                type="text"
+                placeholder="Username"
+              />
+            </FormItem>
 
-          <FormItem
-            label="Password"
-            name="password"
-            rules={[
-              { required: true, message: "Password tidak boleh kosong!" },
-            ]}
-          >
-            <Input.Password
-              placeholder="Password"
-              prefix={<LockOutlined style={{ fontSize: "16px" }} />}
-            />
-            {/* <Input
+            <FormItem
+              label="Password"
+              name="password"
+              rules={[
+                { required: true, message: "Password tidak boleh kosong!" },
+              ]}
+            >
+              <Input.Password
+                placeholder="Password"
+                prefix={<LockOutlined style={{ fontSize: "16px" }} />}
+              />
+              {/* <Input
               prefix={<EyeTwoTone style={{ fontSize: "16px" }} />}
               type="password"
               placeholder="Password"
             /> */}
-          </FormItem>
+            </FormItem>
 
-          <Form.Item shouldUpdate={true}>
-            {() => (
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="mt-3"
-                style={{ width: "100%" }}
-                loading={iconLoading}
-                disabled={
-                  !form.isFieldsTouched(true) ||
-                  form.getFieldsError().filter(({ errors }) => errors.length)
-                    .length
-                }
-              >
-                Log in
-              </Button>
-            )}
-          </Form.Item>
-        </Form>
+            <Form.Item shouldUpdate={true}>
+              {() => (
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="mt-3"
+                  style={{ width: "100%" }}
+                  loading={iconLoading}
+                  disabled={
+                    !form.isFieldsTouched(true) ||
+                    form.getFieldsError().filter(({ errors }) => errors.length)
+                      .length
+                  }
+                >
+                  Log in
+                </Button>
+              )}
+            </Form.Item>
+          </Form>
+        </Spin>
       </Content>
       {showModalPin && (
         <ModalPin

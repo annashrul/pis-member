@@ -212,8 +212,8 @@ const TambahMitra = () => {
                           pattern: new RegExp(/^[0-9]*$/),
                           message: "Harus Berupa Angka",
                         },
-                        { min: 10, message: "no handphone tidak valid" },
-                        { max: 13, message: "no handphone tidak valid" },
+                        { min: 9, message: "no handphone tidak valid" },
+                        { max: 14, message: "no handphone tidak valid" },
                       ]}
                       tooltip={{
                         title: "Minimal 10 Angka",

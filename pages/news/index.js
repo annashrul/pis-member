@@ -21,7 +21,7 @@ const News = () => {
     <PageHeader
       className="site-page-header"
       onBack={() => Router.back()}
-      title="Berita Terbaru"
+      title="Informasi Terbaru"
     >
       <Row gutter={16}>
         <CardNews

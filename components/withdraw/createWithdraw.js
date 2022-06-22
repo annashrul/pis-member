@@ -62,7 +62,6 @@ const CreateWithdraw = () => {
     if (state.mobile) {
       setFontSize("80%");
     }
-    // setType("0");
     nominalErrorRef.current = nominalError;
     if (nominalError.enable) {
       nominalInput.current.focus();
@@ -73,12 +72,12 @@ const CreateWithdraw = () => {
         handleLoadInfo();
       }
     }
-  }, [nominalError, state]);
+  }, [nominalError, state, type, amount]);
 
   const handleLoadInfo = async () => {
     await handleGet("site/info", (datum, isLoading) => {
       setBonus(parseInt(datum.data.saldo, 10));
-      setAmount(datum.data.saldo);
+      setAmount(parseInt(datum.data.saldo, 10));
       setCheckWd(datum.data.check_hak_wd);
       setRekening([datum.data.rekening]);
       setBonusNasional(parseInt(datum.data.saldo_pending, 10));
@@ -95,19 +94,20 @@ const CreateWithdraw = () => {
   const onChange = (e) => {
     let val = e.target.value;
     if (e.target.type === "radio") {
+      setNominalError({
+        enable: false,
+        helpText: "",
+      });
       setType(val);
       if (val === "1") {
-        if (bonusNasional < maxWdBonusNasional) {
-          form.setFieldsValue({ amount: bonusNasional });
-          setAmount(bonusNasional);
-        } else {
-          form.setFieldsValue({ amount: maxWdBonusNasional });
-          setAmount(maxWdBonusNasional);
-        }
+        form.setFieldsValue({ amount: maxWdBonusNasional });
+        setAmount(maxWdBonusNasional);
       } else {
-        form.setFieldsValue({ amount: bonus });
+        setAmount(0);
+        form.setFieldsValue({ amount: 0 });
       }
     } else {
+      form.setFieldsValue({ amount: val });
       setAmount(val);
     }
   };
@@ -133,7 +133,7 @@ const CreateWithdraw = () => {
       if (!checkWd) {
         message
           .info(
-            "Anda belum memenuhi syarat, anda akan dialihkan ke halaman produk"
+            "Anda belum memenuhi syarat RO, anda akan dialihkan ke halaman produk"
           )
           .then(() => {
             Router.push(StringLink.product);
@@ -346,8 +346,14 @@ const CreateWithdraw = () => {
                       <Col xs={10} sm={10} md={10}>
                         <Button
                           onClick={(e) => {
-                            e.preventDefault();
-                            form.setFieldsValue({ amount: bonus });
+                            setNominalError({
+                              enable: false,
+                              helpText: "",
+                            });
+                            setAmount(parseInt(bonus, 10));
+                            form.setFieldsValue({
+                              amount: parseInt(bonus, 10),
+                            });
                           }}
                           type="dashed"
                           primary
@@ -382,7 +388,7 @@ const CreateWithdraw = () => {
           <Row type="flex" justify="center" gutter={10}>
             <Col md={8} xs={24} className={"mb-2"}>
               <Card>
-                <p>Total Yang Harus Di Bayar</p>
+                <p>Total Yang Akan Ditarik</p>
                 <Button
                   style={{ width: "100%", marginBottom: "2px" }}
                   type="dashed"

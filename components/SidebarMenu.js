@@ -84,15 +84,17 @@ const SidebarContent = ({
   };
 
   const checkStatusMember = () => {
-    if (info.status_member === 3) {
-      Message.info("Anda Telah Mencapai Limit Bonus")
-        .then(() =>
-          Message.info("Silahkan Login Kembali Untuk Melakukan Recycle")
-        )
-        .then(() => {
-          Router.push("/signin");
-          doLogout();
-        });
+    if (info !== undefined) {
+      if (info.status_member === 3) {
+        Message.info("Anda Telah Mencapai Limit Bonus")
+          .then(() =>
+            Message.info("Silahkan Login Kembali Untuk Melakukan Recycle")
+          )
+          .then(() => {
+            Router.push("/signin");
+            doLogout();
+          });
+      }
     }
   };
 

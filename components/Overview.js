@@ -27,6 +27,7 @@ const Overview = () => {
       setFont("80%");
     }
     const info = Action.getInfo();
+    console.log("info", info);
     if (info === undefined) {
       Router.push("/signin");
       doLogout();
@@ -66,7 +67,8 @@ const Overview = () => {
             {objUser && objUser.referral_url}
           </Button>
         </Col>
-        <Col xs={12} sm={12} md={6} className="mb-2">
+
+        <Col xs={12} sm={12} md={4} className="mb-2">
           {state.mobile ? (
             cardMobile(theme.primaryColor, objInfo.saldo, "Saldo Bonus")
           ) : (
@@ -79,7 +81,7 @@ const Overview = () => {
             />
           )}
         </Col>
-        <Col xs={12} sm={12} md={6} className="mb-2">
+        <Col xs={12} sm={12} md={4} className="mb-2">
           {state.mobile ? (
             cardMobile(
               theme.darkColor,
@@ -96,7 +98,7 @@ const Overview = () => {
             />
           )}
         </Col>
-        <Col xs={12} sm={12} md={6} className="mb-2">
+        <Col xs={12} sm={12} md={5} className="mb-2">
           {state.mobile ? (
             cardMobile(theme.warningColor, objInfo.total_wd, "Total Penarikan")
           ) : (
@@ -109,7 +111,7 @@ const Overview = () => {
             />
           )}
         </Col>
-        <Col xs={12} sm={12} md={6} className="mb-2">
+        <Col xs={12} sm={12} md={5} className="mb-2">
           {state.mobile ? (
             cardMobile(
               theme.errorColor,
@@ -123,6 +125,25 @@ const Overview = () => {
               value={Helper.toRp(parseFloat(objInfo.omset_nasional).toFixed(0))}
               icon={<WalletOutlined style={{ fontSize: "20px" }} />}
               color={theme.errorColor}
+            />
+          )}
+        </Col>
+        <Col xs={12} sm={12} md={6} className="mb-2">
+          {state.mobile ? (
+            cardMobile(
+              theme.darkColor,
+              objInfo.total_saldo_nasional,
+              "Total Omset Nasional Yang Diterima"
+            )
+          ) : (
+            <StatCard
+              type="fill"
+              title="Total Omset Nasional Yang Diterima"
+              value={Helper.toRp(
+                parseFloat(objInfo.total_saldo_nasional).toFixed(0)
+              )}
+              icon={<WalletOutlined style={{ fontSize: "20px" }} />}
+              color={theme.darkColor}
             />
           )}
         </Col>

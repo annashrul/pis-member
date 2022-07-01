@@ -31,7 +31,7 @@ const ListProduct = () => {
   }, []);
   const handleLoadInfo = async () => {
     const infos = Action.getInfo();
-    setInfo(infos.check_hak_ro);
+    setInfo(infos);
   };
   const handleLoadAddress = async () => {
     await handleGet("address?page=1", (datum, isLoading) => {
@@ -71,11 +71,13 @@ const ListProduct = () => {
                         "anda belum mempunya alamat, anda akan dialihkan untuk membuat alamat"
                       ).then(() => Router.push(StringLink.address));
                     } else {
-                      if (!info) {
+                      if (!info.check_hak_ro) {
                         Message.info("anda belum memenuhi syarat RO");
                       } else {
                         if (parseInt(val.stock, 10) < 1) {
                           Message.info("stock tidak tersedia");
+                        } else if (val.id_type === info.type_ro) {
+                          Message.info("Paket ini bukan paket RO anda");
                         } else {
                           Object.assign(val, { id_paket: val.id });
                           Object.assign(objAddress, val);

@@ -12,6 +12,7 @@ import Action from "../action/auth.action";
 import ModalPin from "./ModalPin";
 import { handleGet, handlePost, handlePut } from "../action/baseAction";
 import general_helper from "../helper/general_helper";
+import { parse } from "date-fns";
 
 const FormItem = Form.Item;
 
@@ -36,6 +37,15 @@ const Signin = () => {
   const handleLoadInfo = async () => {
     await handleGet("site/info", (res, status, msg) => {
       Action.setInfo(res.data);
+      console.log(res.data);
+      if (
+        res.data.max_wd === parseInt(res.data.count_wd, 10) + 1 &&
+        parseInt(res.data.min_wd, 10) === parseInt(res.data.saldo_pending, 10)
+      ) {
+        Router.push(StringLink.transactionRecycle).then(() =>
+          setIconLoading(false)
+        );
+      }
     });
   };
 
@@ -81,9 +91,9 @@ const Signin = () => {
         Action.http.axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${res.data.token}`;
-
         handleUserDetail(res.data);
         handleLoadInfo();
+        // setIconLoading(false);
       } else {
         setIconLoading(false);
       }

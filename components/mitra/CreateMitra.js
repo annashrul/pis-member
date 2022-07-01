@@ -30,6 +30,7 @@ const TambahMitra = () => {
   const [form2] = Form.useForm();
   const [arrPaymentChannel, setArrPaymentChannel] = useState([]);
   const [arrProduct, setArrProduct] = useState([]);
+  const [arrProductType, setArrProductType] = useState([]);
   const [arrBank, setArrBank] = useState([]);
   const [iconLoading, setIconLoading] = useState(false);
   const [user, setUser] = useState({});
@@ -63,6 +64,7 @@ const TambahMitra = () => {
         handleProduct();
         handleBank();
         handlePaymentChannel();
+        handleProductType();
       }
     }
   }, [form, usernameError]);
@@ -74,6 +76,11 @@ const TambahMitra = () => {
         setArrProduct(datum.data);
       }
     );
+  };
+  const handleProductType = async () => {
+    await handleGet("paket_type", (datum, isLoading) => {
+      setArrProductType(datum.data);
+    });
   };
   const handlePaymentChannel = async () => {
     await handleGet("transaction/channel", (datum, isLoading) => {
@@ -118,6 +125,7 @@ const TambahMitra = () => {
       sponsor: user.referral,
       payment_channel: form1.getFieldValue("payment_channel"),
       id_paket: form1.getFieldValue("id_paket"),
+      type_ro: form1.getFieldValue("type_ro"),
       data_bank: {
         id_bank: objBank.id,
         acc_name: form.getFieldValue("acc_name"),
@@ -297,33 +305,66 @@ const TambahMitra = () => {
                     </Form.Item>
                     <Form.Item
                       hasFeedback
-                      name={"acc_name"}
-                      label="Atas Nama"
+                      name="type_ro"
+                      label="Tipe RO"
                       rules={[{ required: true, message: msgInput }]}
                     >
-                      <Input placeholder="Ex: Jhon Doe" />
+                      <Select
+                        style={{ width: "100%" }}
+                        showSearch
+                        placeholder="Pilih Tipe RO"
+                        optionFilterProp="children"
+                        onChange={(e, i) => form.setFieldsValue({ type_ro: e })}
+                        onSearch={() => {}}
+                      >
+                        {arrProductType.map((val, key) => {
+                          return (
+                            <Option key={key} value={val.id}>
+                              {val.title} -{" "}
+                              {general_helper.toRp(
+                                parseInt(val.limit_bonus_nasional)
+                              )}
+                            </Option>
+                          );
+                        })}
+                      </Select>
                     </Form.Item>
                   </Col>
                   <Col md={8} xs={24} sm={12}>
-                    <Form.Item
-                      hasFeedback
-                      name="acc_no"
-                      label="No Rekening"
-                      rules={[
-                        { required: true, message: "Tidak Boleh Kosong" },
-                        {
-                          pattern: new RegExp(/^[0-9]*$/),
-                          message: "Harus Berupa Angka",
-                        },
-                        { min: 10, message: "no rekening tidak valid" },
-                      ]}
-                      tooltip={{
-                        title: "Minimal 10 Angka",
-                        icon: <InfoCircleOutlined />,
-                      }}
-                    >
-                      <Input placeholder="XXXXXXXX" />
-                    </Form.Item>
+                    <Row gutter={4}>
+                      <Col md={12} xs={24} sm={12}>
+                        <Form.Item
+                          hasFeedback
+                          name={"acc_name"}
+                          label="Atas Nama"
+                          rules={[{ required: true, message: msgInput }]}
+                        >
+                          <Input placeholder="Ex: Jhon Doe" />
+                        </Form.Item>
+                      </Col>
+                      <Col md={12} xs={24} sm={12}>
+                        <Form.Item
+                          hasFeedback
+                          name="acc_no"
+                          label="No Rekening"
+                          rules={[
+                            { required: true, message: "Tidak Boleh Kosong" },
+                            {
+                              pattern: new RegExp(/^[0-9]*$/),
+                              message: "Harus Berupa Angka",
+                            },
+                            { min: 10, message: "no rekening tidak valid" },
+                          ]}
+                          tooltip={{
+                            title: "Minimal 10 Angka",
+                            icon: <InfoCircleOutlined />,
+                          }}
+                        >
+                          <Input placeholder="XXXXXXXX" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
                     <Form.Item
                       hasFeedback
                       name="id_bank"

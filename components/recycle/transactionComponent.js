@@ -22,16 +22,20 @@ const transactionComponent = () => {
   const [, forceUpdate] = useState();
   const [arrPaymentChannel, setArrPaymentChannel] = useState([]);
   const [arrProduct, setArrProduct] = useState([]);
+  const [arrProductType, setArrProductType] = useState([]);
   const [priceProduct, setPriceProduct] = useState(0);
   const [pricePaymentChannel, setPricePaymentChannel] = useState(0);
   const [iconLoading, setIconLoading] = useState(false);
   const [user, setUser] = useState({});
+  const [info, setInfo] = useState({});
 
   useEffect(() => {
     setUser(Action.getUser());
     forceUpdate({});
     handleProduct();
     handlePaymentChannel();
+    handleProductType();
+    setInfo(Action.getInfo());
   }, [form]);
   const handleProduct = async () => {
     await handleGet(
@@ -41,9 +45,26 @@ const transactionComponent = () => {
       }
     );
   };
+  const handleProductType = async () => {
+    await handleGet("paket_type", (datum, isLoading) => {
+      setArrProductType(datum.data);
+    });
+  };
   const handlePaymentChannel = async () => {
     await handleGet("transaction/channel", (datum, isLoading) => {
-      setArrPaymentChannel(datum.data);
+      let data = [
+        {
+          active: true,
+          code: "saldo_nasional",
+          fee_customer: { flat: Helper.toInt(info.saldo_pending), percent: 0 },
+          group: "Saldo",
+          logo: "",
+          name: "SALDO NASIONAL",
+          type: "saldo",
+        },
+      ];
+      datum.data.map((val) => data.push(val));
+      setArrPaymentChannel(data);
     });
   };
 
@@ -52,17 +73,23 @@ const transactionComponent = () => {
       id_member: user.id,
       payment_channel: e.payment_channel,
       id_paket: e.id_paket,
+      type_ro: e.type_ro,
     };
     setIconLoading(true);
     await handlePost("auth/recycle", field, (res, status, msg) => {
       if (status) {
-        localStorage.setItem("typeTrx", "Recycle");
-        localStorage.setItem("kdTrx", res.data.kd_trx);
-        Message.success(
-          "Berhasil. anda akan dialihkan ke halaman invoice!"
-        ).then(() => Router.push(StringLink.invoiceRecycle));
+        if (res.data.type === 1) {
+          Message.success("Berhasil. anda akan dialihkan ke halaman Dashboard!")
+            .then(() => Router.push("/"))
+            .then(() => setIconLoading(false));
+        } else {
+          localStorage.setItem("typeTrx", "Recycle");
+          localStorage.setItem("kdTrx", res.data.kd_trx);
+          Message.success("Berhasil. anda akan dialihkan ke halaman invoice!")
+            .then(() => Router.push(StringLink.invoiceRecycle))
+            .then(() => setIconLoading(false));
+        }
       }
-      setIconLoading(false);
     });
   };
 
@@ -138,6 +165,9 @@ const transactionComponent = () => {
               placeholder="Pilih Payment Channel"
               optionFilterProp="children"
               onSelect={(e, v) => {
+                console.log(
+                  arrPaymentChannel[parseInt(v.key, 10)].fee_customer.flat
+                );
                 setPricePaymentChannel(
                   parseInt(
                     arrPaymentChannel[parseInt(v.key, 10)].fee_customer.flat,
@@ -148,9 +178,40 @@ const transactionComponent = () => {
               onChange={(e) => form.setFieldsValue({ payment_channel: e })}
             >
               {arrPaymentChannel.map((val, key) => {
+                let isSaldo = val.code === "saldo_nasional" ? "" : "Admin :";
                 return (
                   <Option key={key} value={val.code}>
-                    {val.name} - Admin: {Helper.toRp(val.fee_customer.flat)}
+                    {val.name} - {isSaldo + Helper.toRp(val.fee_customer.flat)}
+                  </Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            hasFeedback
+            name="type_ro"
+            label={
+              <span>
+                Tipe RO&nbsp;
+                <Tooltip title="Silahkan Pilih Tipe RO">
+                  <InfoCircleOutlined style={{ fontSize: "16px" }} />
+                </Tooltip>
+              </span>
+            }
+            rules={[{ required: true, message: msgInput }]}
+          >
+            <Select
+              style={{ width: "100%" }}
+              showSearch
+              placeholder="Pilih Tipe RO"
+              optionFilterProp="children"
+              onChange={(e) => form.setFieldsValue({ type_ro: e })}
+            >
+              {arrProductType.map((val, key) => {
+                return (
+                  <Option key={key} value={val.id}>
+                    {val.title} - Limit Bonus:{" "}
+                    {Helper.toRp(val.limit_bonus_nasional)}
                   </Option>
                 );
               })}

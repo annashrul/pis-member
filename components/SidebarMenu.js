@@ -84,7 +84,17 @@ const SidebarContent = ({
   };
 
   const checkStatusMember = () => {
+    console.log(
+      "####################### CHECKING MEMBER ############################"
+    );
+
     if (info !== undefined) {
+      let checkRecycle =
+        info.max_wd === general_helper.toInt(info.count_wd) + 1 &&
+        general_helper.toInt(info.min_wd) ===
+          general_helper.toInt(info.saldo_pending);
+      console.log("check recycle", checkRecycle);
+
       if (info.status_member === 3) {
         Message.info("Anda Telah Mencapai Limit Bonus")
           .then(() =>
@@ -94,6 +104,11 @@ const SidebarContent = ({
             Router.push("/signin");
             doLogout();
           });
+      }
+      if (checkRecycle) {
+        Message.info("Anda akan dialihkan kehalaman recycle").then(() => {
+          Router.push(StringLink.transactionRecycle);
+        });
       }
     }
   };

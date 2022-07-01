@@ -173,8 +173,13 @@ const getPropsUpload = (fileList, callback) => {
   };
 };
 
+const toInt = (val) => {
+  return parseInt(val, 10);
+};
+
 export default {
   copyText,
+  toInt,
   getPropsUpload,
   convertBase64,
   getInitialName,

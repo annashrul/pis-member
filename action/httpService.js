@@ -16,6 +16,6 @@ export default {
   // apiClient: "http://192.168.100.10:6704/",
   noData: "https://www.napro.id/assets/images/placeholder-no-data.png",
   // apiUrl: "http://192.168.111.2:6704/",
-  apiUrl: "https://api.prowara.id/",
-  apiClient: "https://api.prowara.id/",
+  apiUrl: "http://ptnetindo.com:6701/",
+  apiClient: "http://ptnetindo.com:6701/",
 };
